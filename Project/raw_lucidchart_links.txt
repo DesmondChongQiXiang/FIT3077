@@ -1,0 +1,4 @@
+Lucidchart does not export raw files, rather you work on it via links.
+
+Here is the link for the UI Design and Domain model:
+https://lucid.app/lucidchart/2c67adac-595e-4cdd-8e87-7714bac4bbed/edit?viewport_loc=-365%2C-392%2C3567%2C1987%2C0_0&invitationId=inv_6c8bcab4-9c32-426d-b129-74108a75b4aa

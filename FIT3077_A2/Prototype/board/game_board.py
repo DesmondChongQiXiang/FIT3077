@@ -1,5 +1,5 @@
 import pygame
-from .settings import BLACK,ROWS,COLS,WHITE,SQUARE_SIZE
+from .settings import BLACK,ROWS,COLS,WHITE,SQUARE_SIZE, RED
 
 class GameBoard:
     def __init__(self,cave_tiles,chit_cards,players):
@@ -14,16 +14,28 @@ class GameBoard:
         window.fill(BLACK)
         
         for row in range(ROWS):
-            if row == 1:
+            if row == 0:
+                pygame.draw.rect(window,RED,(row*SQUARE_SIZE,4*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,4*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
+            if row == 8:
+                pygame.draw.rect(window,RED,(row*SQUARE_SIZE,4*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,4*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
+            elif row == 1:
                 for col in range(1,COLS-1):
-                    pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                    pygame.draw.rect(window,RED,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                    pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
             elif row == 7:
                 for col in range(1,COLS-1):
-                    pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                    pygame.draw.rect(window,RED,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                    pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
             elif 1 < row < 7:
                 for col in range(1,COLS-1):
-                    if col == 1 | col == 7:
-                        pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                    if col == 1 :
+                        pygame.draw.rect(window,RED,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                        pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
+                    elif col == 7:
+                        pygame.draw.rect(window,RED,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                        pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
 
 
 

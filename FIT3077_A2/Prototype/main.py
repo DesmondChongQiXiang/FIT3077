@@ -1,6 +1,7 @@
 import pygame
 from board.settings import WIDTH,HEIGHT
-
+from board.game_board import GameBoard
+pygame.init()
 WINDOW = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption('Fiery Dragons')
 FPS = 60
@@ -8,6 +9,7 @@ FPS = 60
 def main():
     run = True
     clock = pygame.time.Clock()
+    board = GameBoard([],[],[])
 
     while run:
         clock.tick(FPS)
@@ -17,7 +19,11 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pass
-        pygame.quit()
+        board.draw_board(WINDOW)
+        pygame.display.update()
+
+    
+    pygame.quit()
 
 
 

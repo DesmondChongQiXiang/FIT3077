@@ -42,7 +42,7 @@ class PygameScreenController:
         """
         image = pygame.image.load(f"{ROOT_PATH}/{image_path}")
         if width is not None and height is not None:
-            image = pygame.transform.scale(image, (width, height))
+            image = pygame.transform.smoothscale(image.convert_alpha(), (width, height)) # convert to 24/32 bit surface as required by pygame, and smoothly scale
         image = pygame.transform.rotozoom(image, rotate, 1.0)
         self.__screen.blit(image, (x, y))
 

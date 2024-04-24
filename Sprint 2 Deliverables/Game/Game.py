@@ -22,25 +22,26 @@ class Game:
         self.active_player = player_1
 
     def start_game(self):
+        pygame.init()
         window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Fiery Dragons")
         clock = pygame.time.Clock()
 
         while True:
-            clock.tick(60)
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-
+                    
             self.board.draw_tiles(window)
             self.board.load_tile_images(window)
             pygame.display.update()
+            clock.tick(60)
 
 
 if __name__ == "__main__":
     game = Game()
 
     game.start_game()
+    
 
 

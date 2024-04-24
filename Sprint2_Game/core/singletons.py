@@ -15,7 +15,11 @@ __PygameScreenController_shared = None
 # Singleton instantiations
 def PygameScreenController_instance() -> PygameScreenController:
     """Returns the PygameScreenController instance. Creates the pygame screen controller instance if it doesn't exist 
-    and returns it."""
+    and returns it.
+    
+    Return:
+        The PygameScreenController singleton
+    """
     global __PygameScreenController_shared
 
     if __PygameScreenController_shared is not None:

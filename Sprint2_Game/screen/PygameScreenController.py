@@ -7,6 +7,8 @@ import pygame
 
 class PygameScreenController:
     """Contains useful methods for interacting with pygame's screen.
+    
+    Warning: Should be used as a singleton
 
     Throws:
         Will throw an Exception if the pygame screen does not yet exist.

@@ -1,5 +1,7 @@
 import pygame
 from .settings import BLACK,ROWS,COLS,WHITE,SQUARE_SIZE, RED
+from .non_cave_tile import NonCaveTile
+
 
 class GameBoard:
     def __init__(self,cave_tiles,chit_cards,players):
@@ -29,7 +31,12 @@ class GameBoard:
                     pygame.draw.rect(window,RED,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
                     pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
             elif 1 < row < 7:
-                for col in range(1,COLS-1):
+                if row == 4:
+                    pygame.draw.rect(window,RED,(4*SQUARE_SIZE,0*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                    pygame.draw.rect(window,WHITE,(4*SQUARE_SIZE,0*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
+                    pygame.draw.rect(window,RED,(4*SQUARE_SIZE,8*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+                    pygame.draw.rect(window,WHITE,(4*SQUARE_SIZE,8*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
+                for col in range(0,COLS):
                     if col == 1 :
                         pygame.draw.rect(window,RED,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
                         pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
@@ -38,7 +45,8 @@ class GameBoard:
                         pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
 
 
-
+    def create_board(self):
+        pass
 
     def set_player_start_tile(self,players):
         if len(self.players) == 4:

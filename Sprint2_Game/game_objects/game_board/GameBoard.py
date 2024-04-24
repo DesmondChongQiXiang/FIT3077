@@ -1,11 +1,10 @@
 from abc import abstractmethod
-from typing import Protocol
 from game_objects.tiles.Tile import Tile
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
+from screen.DrawableByAsset import DrawableByAsset
 
-
-class GameBoard(Protocol):
+class GameBoard(DrawableByAsset):
     """Represents a game board that can be played on"""
 
     @abstractmethod
@@ -45,9 +44,4 @@ class GameBoard(Protocol):
             chit_card: The chit card to add
         """
         ...
-
-
-# References
-# https://typing.readthedocs.io/en/latest/spec/protocol.html#explicitly-declaring-implementation
-# https://stackoverflow.com/questions/71531417/defining-an-interface-in-python
-# protocols are used for static-type checking only in python
+        

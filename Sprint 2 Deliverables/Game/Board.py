@@ -26,12 +26,24 @@ class Board:
                 is_second_outer_col = col == 1 or col == COLUMNS - 2
 
                 if is_outer_row or is_outer_col:
-                    # Drawing the cave tiles of the board
-                    pygame.draw.rect(win, BLACK, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
+                    pygame.draw.rect(win, YELLOW, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
                 elif is_second_outer_row or is_second_outer_col:
                     # Drawing the normal tiles of the board
                     pygame.draw.rect(win, WHITE, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
                     pygame.draw.rect(win, BLACK, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
+
+        # Drawing the caves
+        pygame.draw.rect(win, WHITE, (center_col * IMAGE_TILE_SIZE, (row - 8) * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
+        pygame.draw.rect(win, BLACK, (center_col * IMAGE_TILE_SIZE, (row - 8) * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
+
+        pygame.draw.rect(win, WHITE, (center_col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
+        pygame.draw.rect(win, BLACK, (center_col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
+
+        pygame.draw.rect(win, WHITE, ((col - 8) * IMAGE_TILE_SIZE, center_row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
+        pygame.draw.rect(win, BLACK, ((col - 8) * IMAGE_TILE_SIZE, center_row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
+
+        pygame.draw.rect(win, WHITE, (col * IMAGE_TILE_SIZE, center_row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
+        pygame.draw.rect(win, BLACK, (col * IMAGE_TILE_SIZE, center_row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
 
            
         # Drawing the chit cards section of the board
@@ -47,12 +59,14 @@ class Board:
         bat_img = pygame.image.load(os.path.join(images_dir, 'bat.png'))
         spider_img = pygame.image.load(os.path.join(images_dir, 'spider.png'))
         baby_dragon_img = pygame.image.load(os.path.join(images_dir, 'baby_dragon.png'))
+        cave_img = pygame.image.load(os.path.join(images_dir, 'cave.jpeg'))
 
         # Scaling the images
         baby_dragon = pygame.transform.scale(baby_dragon_img, IMAGE_SIZE)
         bat = pygame.transform.scale(bat_img, IMAGE_SIZE)
         spider = pygame.transform.scale(spider_img, IMAGE_SIZE)
         salamander = pygame.transform.scale(salamander_img, IMAGE_SIZE)
+        cave = pygame.transform.scale(cave_img, IMAGE_SIZE)
 
         # Adding the animal image onto the tiles
         win.blit(baby_dragon, (IMAGE_TILE_SIZE + 1, IMAGE_TILE_SIZE + 1))
@@ -80,6 +94,11 @@ class Board:
         win.blit(baby_dragon, (IMAGE_TILE_SIZE + 1, 3 * IMAGE_TILE_SIZE + 1))
         win.blit(salamander, (IMAGE_TILE_SIZE + 1, 2 * IMAGE_TILE_SIZE + 1))
 
+        # Adding the cave tile
+        win.blit(cave, (4 * IMAGE_TILE_SIZE + 1, 0 * IMAGE_TILE_SIZE + 1))
+        win.blit(cave, (4 * IMAGE_TILE_SIZE + 1, 8 * IMAGE_TILE_SIZE + 1))
+        win.blit(cave, (0 * IMAGE_TILE_SIZE + 1, 4 * IMAGE_TILE_SIZE + 1))
+        win.blit(cave, (8 * IMAGE_TILE_SIZE + 1, 4 * IMAGE_TILE_SIZE + 1))
         
 
 

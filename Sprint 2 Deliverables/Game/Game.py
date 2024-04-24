@@ -31,7 +31,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    
+            
             self.board.draw_tiles(window)
             self.board.load_tile_images(window)
             pygame.display.update()

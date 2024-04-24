@@ -17,6 +17,14 @@ class GameBoard:
             if row == 1:
                 for col in range(1,COLS-1):
                     pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+            elif row == 7:
+                for col in range(1,COLS-1):
+                    pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+            elif 1 < row < 7:
+                for col in range(1,COLS-1):
+                    if col == 1 | col == 7:
+                        pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+
 
 
 

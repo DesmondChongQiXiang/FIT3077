@@ -32,8 +32,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
             
-            self.board.draw_tiles(window)
-            self.board.load_tile_images(window)
+            self.board.draw_board(window)
             pygame.display.update()
             clock.tick(60)
 

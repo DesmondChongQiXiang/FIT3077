@@ -1,4 +1,5 @@
 from Constants import *
+from Tile import Tile
 import os
 
 
@@ -6,52 +7,32 @@ class Board:
 
     def __init__(self):
         self.tiles = []
+        self.chit_cards = []
         self.selected_dragon = None
 
-    def draw_tiles(self, win):
-        # Calculate the center of the board
-        center_row = ROWS // 2
-        center_col = COLUMNS // 2
-
-        # Calculate the top-left corner of the rectangle
-        start_row = center_row - 2 
-        start_col = center_col - 2 
-
+    def draw_board(self, win):
+        win.fill(BLACK)
         for row in range(ROWS):
             for col in range(COLUMNS):
-                # Check if the current tile is on the outer row, column, or second outermost layer
-                is_outer_row = row == 0 or row == ROWS - 1
-                is_outer_col = col == 0 or col == COLUMNS - 1
-                is_second_outer_row = row == 1 or row == ROWS - 2
-                is_second_outer_col = col == 1 or col == COLUMNS - 2
-
-                if is_outer_row or is_outer_col:
+                # Drawing caves
+                if (row == 0 and col == CENTER_COL) or (row == ROWS - 1 and col == CENTER_COL) or \
+                (row == CENTER_ROW and col == 0) or (row == CENTER_ROW and col == COLUMNS - 1):
                     pygame.draw.rect(win, YELLOW, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
-                elif is_second_outer_row or is_second_outer_col:
-                    # Drawing the normal tiles of the board
+                    pygame.draw.rect(win, BLACK, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
+                # Drawing normal tiles
+                elif 1 <= row <= ROWS - 2 and 1 <= col <= COLUMNS - 2:
                     pygame.draw.rect(win, WHITE, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
                     pygame.draw.rect(win, BLACK, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
-
-        # Drawing the caves
-        pygame.draw.rect(win, WHITE, (center_col * IMAGE_TILE_SIZE, (row - 8) * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
-        pygame.draw.rect(win, BLACK, (center_col * IMAGE_TILE_SIZE, (row - 8) * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
-
-        pygame.draw.rect(win, WHITE, (center_col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
-        pygame.draw.rect(win, BLACK, (center_col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
-
-        pygame.draw.rect(win, WHITE, ((col - 8) * IMAGE_TILE_SIZE, center_row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
-        pygame.draw.rect(win, BLACK, ((col - 8) * IMAGE_TILE_SIZE, center_row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
-
-        pygame.draw.rect(win, WHITE, (col * IMAGE_TILE_SIZE, center_row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
-        pygame.draw.rect(win, BLACK, (col * IMAGE_TILE_SIZE, center_row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
-
-           
-        # Drawing the chit cards section of the board
+        
+        # Drawing chit card section
         rect_size = 5
         rect_width = rect_size * IMAGE_TILE_SIZE
-        pygame.draw.rect(win, YELLOW, (start_col * IMAGE_TILE_SIZE + 1, start_row * IMAGE_TILE_SIZE + 1, rect_width - 2, rect_width - 2))
+        pygame.draw.rect(win, YELLOW, ((CENTER_COL - 2) * IMAGE_TILE_SIZE + 1, (CENTER_ROW - 2) * IMAGE_TILE_SIZE + 1, rect_width - 2, rect_width - 2))
+                      
+        self.load_images(win)
 
-    def load_tile_images(self, win):
+
+    def load_images(self, win):
         # Getting reference to the images directory
         images_dir = os.path.join(os.path.dirname(__file__), 'images')
 

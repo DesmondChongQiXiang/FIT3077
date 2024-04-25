@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from .DrawClickableAssetInstruction import DrawClickableAssetInstruction
+from screen.DrawClickableAssetInstruction import DrawClickableAssetInstruction
 from definitions import ROOT_PATH
 from utils.pygame_utils import scale_and_rotate_image
 
@@ -18,7 +18,7 @@ class ModularClickableSprite(ABC):
         self.update_click_hitboxes()
 
     @abstractmethod
-    def get_draw_clickable_assets_instructions() -> list[DrawClickableAssetInstruction]:
+    def get_draw_clickable_assets_instructions(self) -> list[DrawClickableAssetInstruction]:
         """Get the instructions to draw the clickable asset.
 
         Returns:
@@ -27,7 +27,7 @@ class ModularClickableSprite(ABC):
         ...
 
     @abstractmethod
-    def on_click() -> None:
+    def on_click(self) -> None:
         """When the sprite is clicked on, do something."""
         ...
 

@@ -1,6 +1,7 @@
 from typing import Optional
-from .DrawAssetInstruction import DrawAssetInstruction
-from .ModularClickableSprite import ModularClickableSprite
+from screen.DrawAssetInstruction import DrawAssetInstruction
+
+import screen.ModularClickableSprite as mcs
 
 class DrawClickableAssetInstruction(DrawAssetInstruction):
     """A data class for organising the data required for drawing a clickable image using an asset.
@@ -11,7 +12,7 @@ class DrawClickableAssetInstruction(DrawAssetInstruction):
     def __init__(
         self,
         asset_path: str,
-        associate_sprite: ModularClickableSprite,
+        associated_sprite: mcs.ModularClickableSprite,
         x: int,
         y: int,
         size: Optional[tuple[int, int]] = None,
@@ -20,14 +21,14 @@ class DrawClickableAssetInstruction(DrawAssetInstruction):
         """
         Args:
             asset_path: The path to the asset relative to the root of the project
+            associated_sprite: Clickable object associated with the asset
             x: The x-coordinate where the image is to be drawn
             y: The y-coordinate where the image is to be drawn
-            size: (width, height) of the image in px
-            rotate: Degrees to rotate the image by anti-clockwise
-            associate_sprite: Clickable object associated with the asset
+            size (Optional): (width, height) of the image in px.
+            rotate (Optional): Degrees to rotate the image by anti-clockwise
         """
         super().__init__(asset_path, x, y, size, rotate)
-        self.__associated_drawable = associate_sprite
+        self.__associated_drawable = associated_sprite
 
-    def get_associated_drawable(self) -> ModularClickableSprite:
+    def get_associated_drawable(self) -> mcs.ModularClickableSprite:
         return self.__associated_drawable

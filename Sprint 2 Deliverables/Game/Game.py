@@ -1,5 +1,5 @@
 from Board import *
-from Player import Player
+from Dragon import Dragon
 
 
 class Game:
@@ -13,10 +13,10 @@ class Game:
             self.active_player = active_player
 
     def default_init(self):
-        player_1 = Player("Rohan", 1)
-        player_2 = Player("Ian", 2)
-        player_3 = Player("Shen", 3)
-        player_4 = Player("Desmond", 4)
+        player_1 = Dragon("Rohan", 1)
+        player_2 = Dragon("Ian", 2)
+        player_3 = Dragon("Shen", 3)
+        player_4 = Dragon("Desmond", 4)
         self.players = [player_1, player_2, player_3, player_4]
         self.board = Board()
         self.active_player = player_1
@@ -38,6 +38,9 @@ class Game:
 
 
 if __name__ == "__main__":
+    players = [Dragon("Rohan", 1), Dragon("Ian", 2), Dragon("Shen", 3), Dragon("Desmond", 4)]
+    tiles = []
+    board = Board()
     game = Game()
 
     game.start_game()

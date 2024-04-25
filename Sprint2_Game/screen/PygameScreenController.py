@@ -1,6 +1,7 @@
 from definitions import ROOT_PATH
 from typing import Optional
 from screen.DrawAssetInstruction import DrawAssetInstruction
+from screen.ModularClickableSprite import ModularClickableSprite
 
 import pygame
 
@@ -27,7 +28,7 @@ class PygameScreenController:
         if self.__screen is None:
             raise Exception("The pygame screen does not yet exist.")
 
-    def draw_asset(self, image_path: str, x: int, y: int, width: Optional[int] = None, height: Optional[int] = None, rotate: float = 0) -> None:
+    def draw_asset(self, image_path: str, x: int, y: int, width: Optional[int] = None, height: Optional[int] = None, rotate: float = 0) -> pygame.Surface:
         """Draw an asset on coordinates (x,y) on the screen.
 
         Args:
@@ -38,6 +39,9 @@ class PygameScreenController:
             height (optional): Height for the image
             rotate: Degrees to rotate anti-clockwise by (default 0)
 
+        Returns:
+            The image (surface) that was drawn
+
         Author: Shen
         """
         image = pygame.image.load(f"{ROOT_PATH}/{image_path}")
@@ -46,16 +50,22 @@ class PygameScreenController:
         image = pygame.transform.rotozoom(image, rotate, 1.0)
         self.__screen.blit(image, (x, y))
 
-    def draw_assets_from_instructions(self, instructions: list[DrawAssetInstruction]) -> None:
+        return image
+
+    def draw_assets_from_instructions(self, instructions: list[DrawAssetInstruction]) -> list[pygame.Surface]:
         """Draw assets based on instructions.
 
         Args:
-            instructions: list containing drawing instructions
+            instructions: List containing drawing instructions
+
+        Returns:
+            The images that were drawn in order of instruction input
 
         Author: Shen
         """
+        images: list[pygame.Surface] = []
         for instruction in instructions:
-            self.draw_asset(
+            image = self.draw_asset(
                 instruction.get_asset_path(),
                 instruction.get_x_coord(),
                 instruction.get_y_coord(),
@@ -63,6 +73,29 @@ class PygameScreenController:
                 instruction.get_height(),
                 instruction.get_rotation(),
             )
+            images.append(image)
+
+        return images
+
+    def draw_clickable_assets_from_instructions(
+        self, instructions: list[tuple[DrawAssetInstruction, ModularClickableSprite]]
+    ) -> list[tuple[pygame.Rect, ModularClickableSprite]]:
+        """Draws clickable assets from instructions and return their hitboxes mapped to an object.
+
+        Args:
+            instructions: List containing tuple of form (drawing instruction, object to return with click)
+
+        Returns:
+            A list of tuples of form (rectangular hitbox, object associated with hitbox)
+        """
+        hitboxes_map: list[tuple[pygame.Rect, ModularClickableSprite]] = []
+        for instruction, clickable in instructions:
+            drawn_img = self.draw_assets_from_instructions([instruction])
+            rect = drawn_img[0].get_rect()
+            rect.x, rect.y = instruction.get_x_coord(), instruction.get_y_coord()
+            hitboxes_map.append((rect, clickable))
+
+        return hitboxes_map
 
     def get_screen_size(self) -> tuple[int, int]:
         """Get the screen size.

@@ -1,10 +1,9 @@
 import pygame
 from core.GameConfig import *
+from core.singletons import PygameScreenController_instance
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.game_board.GameBoard import GameBoard
-
-
 
 class GameWorld:
     """Initialises and manages a game instance. Provides the interface between it and the players."""
@@ -24,6 +23,10 @@ class GameWorld:
 
         # game loop
         while True:
+            pygame.display.get_surface().fill("white")
+
+            PygameScreenController_instance().draw_assets_from_instructions(self.game_board.get_draw_assets_instructions())
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()

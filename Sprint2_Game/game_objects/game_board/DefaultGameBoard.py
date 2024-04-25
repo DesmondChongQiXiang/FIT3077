@@ -10,7 +10,7 @@ from core.singletons import PygameScreenController_instance
 class DefaultGameBoard(GameBoard, DrawableByAsset):
     """Represents the default fiery dragons game board. Cells are drawn in a square, using the width of the screen
     as reference.
-    
+
     Author: Shen
     """
 
@@ -55,6 +55,15 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
     #### DrawableByAsset interface
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
+        """
+        Instructions to draw the game board as a square of square cells, with the number of cells on each dimension equal to 
+        DefaultGameBoard.DIMENSION_CELL_COUNT.
+
+        Returns:
+            The list of drawing instructions
+
+        Author: Shen
+        """
         cell_asset_path = "assets/game_board/game_board_tile.png"
         width, _ = PygameScreenController_instance().get_screen_size()
         square_size: int = width // DefaultGameBoard.DIMENSION_CELL_COUNT
@@ -63,9 +72,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         for row in range(DefaultGameBoard.DIMENSION_CELL_COUNT):
             if row == 0 or row == DefaultGameBoard.DIMENSION_CELL_COUNT - 1:
                 for col in range(DefaultGameBoard.DIMENSION_CELL_COUNT):
-                    draw_instructions.append(DrawAssetInstruction(cell_asset_path, x=square_size*col, y=square_size*row, size=(square_size, square_size)))
+                    draw_instructions.append(DrawAssetInstruction(cell_asset_path, x=square_size * col, y=square_size * row, size=(square_size, square_size)))
             else:
-                draw_instructions.append(DrawAssetInstruction(cell_asset_path, x=0, y=square_size*row, size=(square_size, square_size)))
-                draw_instructions.append(DrawAssetInstruction(cell_asset_path, x=width-square_size, y=square_size*row, size=(square_size, square_size)))
+                draw_instructions.append(DrawAssetInstruction(cell_asset_path, x=0, y=square_size * row, size=(square_size, square_size)))
+                draw_instructions.append(DrawAssetInstruction(cell_asset_path, x=width - square_size, y=square_size * row, size=(square_size, square_size)))
 
         return draw_instructions

@@ -17,9 +17,9 @@ if __name__ == "__main__":
     tiles: list[Tile] = [
         NormalTile(), NormalTile(), NormalTile(), NormalTile(), NormalTile(), NormalTile(), NormalTile(), NormalTile()
     ]
+    chit_cards: list[ChitCard] = [AnimalChitCard(Animal.BABY_DRAGON, 2)]
     starting_tiles: list[Tile] = [CaveTile()]
     game_board: GameBoard = DefaultGameBoard(tiles, [(starting_tiles[0], tiles[0])])
-    chit_cards: list[ChitCard] = [AnimalChitCard(Animal.BABY_DRAGON, game_board, 2)]
 
     # ============ GAME INSTANCE =============
     world = GameWorld(playable_characters, chit_cards, game_board)

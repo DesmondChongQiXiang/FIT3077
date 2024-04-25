@@ -1,7 +1,7 @@
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.animals.Animals import Animal
-from screen.DrawClickableAssetInstruction import DrawClickableAssetInstruction
-from game_objects.game_board.GameBoard import GameBoard
+from screen.DrawAssetInstruction import DrawAssetInstruction
+from screen.ModularClickableSprite import ModularClickableSprite
 
 
 class AnimalChitCard(ChitCard):
@@ -10,20 +10,19 @@ class AnimalChitCard(ChitCard):
     Author: Shen
     """
 
-    def __init__(self, animal: Animal, game_board: GameBoard, symbol_count: int) -> None:
+    def __init__(self, animal: Animal, symbol_count: int) -> None:
         """
         Args:
             animal: The animal associated with the chit card
-            game_board: The gameboard the chit card should be on
             symbol_count: The symbol count for the chit card
         """
         self.__animal = animal
-        super().__init__(game_board, symbol_count)
+        super().__init__(symbol_count)
 
-    def get_draw_clickable_assets_instructions(self) -> list[DrawClickableAssetInstruction]:
-        """Draw the chit card."""
+    def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
+        """Instructions to draw the animal chit card."""
         # test instruction
-        return [DrawClickableAssetInstruction("assets/chit_cards/chit_card_back.png", associated_sprite=self, x=250, y=250)]
+        return [(DrawAssetInstruction("assets/chit_cards/chit_card_back.png", x=250, y=250), self)]
 
     def on_click(self) -> None:
         """On click toggle its flipped state."""

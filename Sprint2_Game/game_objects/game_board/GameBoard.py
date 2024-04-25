@@ -1,11 +1,15 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from game_objects.tiles.Tile import Tile
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.DrawableByAsset import DrawableByAsset
+from game_events.MoveActionHandler import MoveActionHandler
 
-class GameBoard(DrawableByAsset):
-    """Represents a game board that can be played on"""
+class GameBoard(ABC, DrawableByAsset, MoveActionHandler):
+    """Represents a game board that can be played on
+    
+    Author: Shen
+    """
 
     @abstractmethod
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
@@ -45,3 +49,11 @@ class GameBoard(DrawableByAsset):
         """
         ...
         
+    def on_move_action_fired(self, character: PlayableCharacter, steps: int) -> None:
+        """Move the character by a number of steps.
+        
+        Args:
+            character: The character which fired the move action
+            steps: The steps the character should move
+        """
+        self.move_character_by_steps(character, steps)

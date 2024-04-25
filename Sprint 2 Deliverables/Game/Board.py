@@ -1,5 +1,6 @@
 from Constants import *
-from Tile import Tile
+from game_tiles import *
+import pygame
 import os
 
 
@@ -8,13 +9,13 @@ class Board:
     def __init__(self):
         self.tiles = []
         self.chit_cards = []
-        self.selected_dragon = None
+        self.dragons = []
 
     def draw_board(self, win):
         win.fill(BLACK)
         for row in range(ROWS):
             for col in range(COLUMNS):
-                # Drawing caves
+                # Drawing cave tiles
                 if (row == 0 and col == CENTER_COL) or (row == ROWS - 1 and col == CENTER_COL) or \
                 (row == CENTER_ROW and col == 0) or (row == CENTER_ROW and col == COLUMNS - 1):
                     pygame.draw.rect(win, YELLOW, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
@@ -33,8 +34,8 @@ class Board:
 
 
     def load_images(self, win):
-        # Getting reference to the images directory
-        images_dir = os.path.join(os.path.dirname(__file__), 'images')
+        # Getting reference to the assets directory
+        images_dir = os.path.join(os.path.dirname(__file__), 'assets')
 
         salamander_img = pygame.image.load(os.path.join(images_dir, 'salamander.png'))
         bat_img = pygame.image.load(os.path.join(images_dir, 'bat.png'))

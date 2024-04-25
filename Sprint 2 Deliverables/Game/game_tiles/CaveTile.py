@@ -12,6 +12,6 @@ class CaveTile(Tile):
         self.player_number = player_number
         self.is_occupied_by = dragon
 
-    # Check if the dragon has returned to its own cave
-    def perform_check(self):
+    # After placing the dragon on tile, checks if the dragon has returned to its own cave
+    def place_dragon_on_tile(dragon):
         pass

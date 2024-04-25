@@ -1,16 +1,17 @@
 from Board import *
+from game_tiles import *
 from Dragon import Dragon
+import pygame
 
 
 class Game:
 
-    def __init__(self, players=None, board=None, active_player=None):
-        if players is None and board is None and active_player is None:
+    def __init__(self, players=None, board=None):
+        if players is None and board is None:
             self.default_init()
         else:
             self.players = players
             self.board = board
-            self.active_player = active_player
 
     def default_init(self):
         player_1 = Dragon("Rohan", 1)
@@ -19,7 +20,6 @@ class Game:
         player_4 = Dragon("Desmond", 4)
         self.players = [player_1, player_2, player_3, player_4]
         self.board = Board()
-        self.active_player = player_1
 
     def start_game(self):
         pygame.init()
@@ -38,9 +38,6 @@ class Game:
 
 
 if __name__ == "__main__":
-    players = [Dragon("Rohan", 1), Dragon("Ian", 2), Dragon("Shen", 3), Dragon("Desmond", 4)]
-    tiles = []
-    board = Board()
     game = Game()
 
     game.start_game()

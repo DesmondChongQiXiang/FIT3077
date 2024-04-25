@@ -1,5 +1,4 @@
-from Constants import *
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Tile(ABC):
@@ -9,4 +8,6 @@ class Tile(ABC):
         self.tile_symbol = symbol
         self.is_occupied_by = dragon
 
-    
+    @abstractmethod
+    def place_dragon_on_tile(dragon):
+        ...

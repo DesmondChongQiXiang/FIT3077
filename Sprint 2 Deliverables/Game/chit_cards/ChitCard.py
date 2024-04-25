@@ -6,7 +6,7 @@ class ChitCard(ABC):
         self.flipped = False
         self.chit_steps = chit_steps
 
-    def set_flipped(self):
+    def flip(self):
         # Player flipping a chit card
         if self.flipped == False:
             self.flipped = True

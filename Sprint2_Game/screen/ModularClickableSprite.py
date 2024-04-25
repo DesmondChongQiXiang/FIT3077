@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from .DrawableByAsset import DrawableByAsset
 from .DrawClickableAssetInstruction import DrawClickableAssetInstruction
 from definitions import ROOT_PATH
 from utils.pygame_utils import scale_and_rotate_image
@@ -14,7 +13,7 @@ class ModularClickableSprite(ABC):
     """
 
     def __init__(self):
-        self.__rect_to_objects: dict[pygame.rect.Rect, DrawableByAsset] = {}  # stores click hitboxes for drawable objects
+        self.__rect_to_objects: dict[pygame.rect.Rect, ModularClickableSprite] = {}  # stores click hitboxes for drawable objects
 
         self.update_click_hitboxes()
 

@@ -42,7 +42,7 @@ class PygameScreenController:
         """
         image = pygame.image.load(f"{ROOT_PATH}/{image_path}")
         if width is not None and height is not None:
-            image = pygame.transform.smoothscale(image.convert_alpha(), (width, height)) # convert to 24/32 bit surface as required by pygame, and smoothly scale
+            image = pygame.transform.smoothscale(image.convert_alpha(), (width, height))  # convert to 24/32 bit surface as required by pygame, and smoothly scale
         image = pygame.transform.rotozoom(image, rotate, 1.0)
         self.__screen.blit(image, (x, y))
 
@@ -55,7 +55,14 @@ class PygameScreenController:
         Author: Shen
         """
         for instruction in instructions:
-            self.draw_asset(instruction.get_asset_path(), instruction.get_x_coord(), instruction.get_y_coord(), instruction.get_width(), instruction.get_height(), instruction.get_rotation())
+            self.draw_asset(
+                instruction.get_asset_path(),
+                instruction.get_x_coord(),
+                instruction.get_y_coord(),
+                instruction.get_width(),
+                instruction.get_height(),
+                instruction.get_rotation(),
+            )
 
     def get_screen_size(self) -> tuple[int, int]:
         """Get the screen size.

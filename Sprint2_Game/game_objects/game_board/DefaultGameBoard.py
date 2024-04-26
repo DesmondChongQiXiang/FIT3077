@@ -51,7 +51,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """Checks that there is the correct number of main tiles. If incorrect, throws an exception
 
         Throws:
-            Exception if the number of starting tiles is incorect (DIMENSION_CELL_COUNT * 4) - 4
+            Exception if the number of main sequence tiles is incorect (DIMENSION_CELL_COUNT * 4) - 4
         """
         main_tiles_only_len = len(self.__main_tile_sequence) - len(self.__starting_tiles)
         if main_tiles_only_len != DefaultGameBoard.get_tiles_required():

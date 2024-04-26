@@ -53,7 +53,7 @@ class PygameScreenController:
         return image
 
     def draw_assets_from_instructions(self, instructions: list[DrawAssetInstruction]) -> list[pygame.Surface]:
-        """Draw assets based on instructions.
+        """Draw assets in order based on instructions.
 
         Args:
             instructions: List containing drawing instructions
@@ -80,7 +80,7 @@ class PygameScreenController:
     def draw_clickable_assets_from_instructions(
         self, instructions: list[tuple[DrawAssetInstruction, ModularClickableSprite]]
     ) -> list[tuple[pygame.Rect, ModularClickableSprite]]:
-        """Draws clickable assets from instructions and return their hitboxes mapped to an object.
+        """Draws clickable assets from instructions in order and return their hitboxes mapped to an object.
 
         Args:
             instructions: List containing tuple of form (drawing instruction, object to return with click)

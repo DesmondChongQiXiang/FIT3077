@@ -1,10 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from definitions import ROOT_PATH
-from utils.pygame_utils import scale_and_rotate_image
 from screen.DrawAssetInstruction import DrawAssetInstruction
-
-import pygame
 
 
 class ModularClickableSprite(ABC):

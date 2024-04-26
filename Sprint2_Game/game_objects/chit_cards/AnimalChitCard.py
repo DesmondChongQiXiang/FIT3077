@@ -20,9 +20,16 @@ class AnimalChitCard(ChitCard):
         super().__init__(symbol_count)
 
     def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
-        """Instructions to draw the animal chit card."""
-        # test instruction
-        return [(DrawAssetInstruction("assets/chit_cards/chit_card_back.png", x=250, y=250), self)]
+        """Chit card displays back when it is not flipped. Otherwise display its front.
+        
+        Returns:
+            Array containing (instruction to represent flipped state, this object)
+        """
+        asset_path: str = "assets/chit_cards"
+
+        if self.get_flipped():
+            return [(DrawAssetInstruction(f"{asset_path}/chit_card_{self.__animal.value}_{self.get_symbol_count()}.png", x=250, y=250), self)]
+        return [(DrawAssetInstruction(f"{asset_path}/chit_card_back.png", x=250, y=250), self)]
 
     def on_click(self) -> None:
         """On click toggle its flipped state."""

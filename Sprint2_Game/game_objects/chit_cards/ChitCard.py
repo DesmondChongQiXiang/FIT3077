@@ -20,3 +20,7 @@ class ChitCard(ModularClickableSprite):
     def get_flipped(self) -> bool:
         """Gets whether the chit card is flipped."""
         return self.__flipped
+    
+    def get_symbol_count(self) -> int:
+        """Gets the number of symbols the chit card should have."""
+        return self.__symbol_count

@@ -34,16 +34,21 @@ class DrawAssetInstruction:
         return self.__asset_path
 
     def get_x_coord(self) -> int:
+        """Get the x coordinate to draw on."""
         return self.__x
 
     def get_y_coord(self) -> int:
+        """Get the y coordinate to draw on."""
         return self.__y
 
     def get_width(self) -> Optional[int]:
+        """Get the width of the asset if specified. Otherwise returns none."""
         return self.__size[0] if self.__size is not None else None
 
     def get_height(self) -> Optional[int]:
+        """Get the height of the asset if specified. Otherwise returns none."""
         return self.__size[1] if self.__size is not None else None
 
     def get_rotation(self) -> float:
+        """Get the degrees of anticlockwise rotation to draw the image at.."""
         return self.__rotate

@@ -16,8 +16,12 @@ class GameBoard:
         window.fill(BLACK)
         for i in range(len(NON_CAVE_TILE_COORDINATES)):
             tile = NonCaveTile(NON_CAVE_TILE_ANIMALS[i],None,NON_CAVE_TILE_COORDINATES[i][0],NON_CAVE_TILE_COORDINATES[i][1])
-            pygame.draw.rect(window,tile.animal.value,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
-            pygame.draw.rect(window,WHITE,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
+            #pygame.draw.rect(window,tile.animal.value,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+            pygame.draw.rect(window,WHITE,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+            animal = pygame.image.load("./board/assets/"+tile.animal.value).convert_alpha()
+            animal = pygame.transform.scale(animal,(SQUARE_SIZE,SQUARE_SIZE))
+            window.blit(animal,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE))
+            pygame.draw.rect(window,RED,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
         """
         for row in range(ROWS):
             if row == 0:

@@ -1,10 +1,11 @@
 import pygame
-from core.GameConfig import *
+from core.GameConfig import FRAMES_PER_SECOND
 from core.singletons import PygameScreenController_instance
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.game_board.GameBoard import GameBoard
 from screen.ModularClickableSprite import ModularClickableSprite
+from screen.DrawAssetInstruction import DrawAssetInstruction
 
 
 class GameWorld:
@@ -20,16 +21,17 @@ class GameWorld:
             chit_cards: The chit cards the game should start off with
             game_board: The game board
         """
-        self.playable_characters: list[PlayableCharacter] = playable_characters
-        self.chit_cards: list[ChitCard] = chit_cards
-        self.game_board: GameBoard = game_board
+        self.__playable_characters: list[PlayableCharacter] = playable_characters
+        self.__chit_cards: list[ChitCard] = chit_cards
+        self.__game_board: GameBoard = game_board
 
         self.__run()
 
     def __run(self) -> None:
-        """Creates the game instance, and runs the main game loop."""
-        pygame.init()
-        pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        """Initialises the game on the active pygame screen and runs the main game loop.
+        
+        Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
+        """
         clock = pygame.time.Clock()
 
         # GAME LOOP
@@ -37,8 +39,8 @@ class GameWorld:
             # Handle Drawing
             pygame.display.get_surface().fill("white")
 
-            PygameScreenController_instance().draw_assets_from_instructions(self.game_board.get_draw_assets_instructions())
-            hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.chit_cards[0].get_draw_clickable_assets_instructions())
+            PygameScreenController_instance().draw_assets_from_instructions(self.__game_board.get_draw_assets_instructions())
+            hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__get_chit_card_drawing_instructions())
 
             # Handle Events
             for event in pygame.event.get():
@@ -64,3 +66,15 @@ class GameWorld:
             pos = pygame.mouse.get_pos()
             if rect.collidepoint(pos):
                 clickable.on_click()
+
+    def __get_chit_card_drawing_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
+        """Get the drawing instructions for the chit card clickables.
+        
+        Returns:
+            The list representing the collated instructions in form (drawing instruction, associated chit card)
+        """
+        drawing_instructions: list[tuple[DrawAssetInstruction, ModularClickableSprite]] = []
+        for chit_card in self.__chit_cards:
+            for instruction in chit_card.get_draw_clickable_assets_instructions():
+                drawing_instructions.append(instruction)
+        return drawing_instructions

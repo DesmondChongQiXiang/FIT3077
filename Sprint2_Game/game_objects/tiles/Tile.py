@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 from screen.DrawableByAsset import DrawableByAsset
+from screen.DrawAssetInstruction import DrawAssetInstruction
 from game_objects.characters.PlayableCharacter import PlayableCharacter
+from game_objects.tiles.TileDrawData import TileDrawData
 
-# TODO: Incomplete
-
+# TODO: incomplete. refer to class diagram
 
 class Tile(ABC, DrawableByAsset):
     """Represents a tile that a character can stand on.
@@ -12,29 +13,27 @@ class Tile(ABC, DrawableByAsset):
     Author: Shen
     """
 
-    def __init__(self, coordinates: tuple[int, int], size: tuple[int, int], character: Optional[PlayableCharacter] = None):
+    def __init__(self, draw_data: Optional[TileDrawData], character: Optional[PlayableCharacter] = None):
         """
         Args:
-            coordinates: The coordinate of the tile in form (x, y)
-            size: The size of the tile in pixels in form (width, height)
+            draw_data (Optional): The data specifying how to draw the tile
             character (Optional): The character on the tile
         """
-        self.__coordinates = coordinates
-        self.__size = size
+        self.__draw_data = draw_data
         self.__character = character
 
-    def get_coordinates(self) -> tuple[int, int]:
-        """Returns the coordinates of the tile.
+    def get_draw_data(self) -> Optional[TileDrawData]:
+        """Returns the data required to draw the tile if it exists.
 
         Returns:
-            The coordinates of the tile in (x, y)
+            The data required to draw the tile
         """
-        return self.__coordinates
+        return self.__draw_data
 
-    def get_size(self) -> tuple[int, int]:
-        """Returns the size of the tile.
+    def get_character_on_tile(self) -> Optional[PlayableCharacter]:
+        """Returns the character currently on the tile if there is one.
 
         Returns:
-           The size of the tile in form (width px, height px)
+            The character currently on the tile
         """
-        return self.__size
+        return self.__character

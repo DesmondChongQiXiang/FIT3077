@@ -1,7 +1,7 @@
 from game_objects.game_board.DefaultGameBoard import DefaultGameBoard
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.chit_cards.AnimalChitCard import AnimalChitCard
-from game_objects.animals.Animals import Animal
+from game_objects.animals.Animal import Animal
 
 import random
 
@@ -13,7 +13,7 @@ SCREEN_HEIGHT = 750  # Screen height in px
 FRAMES_PER_SECOND = 60  # FPS the game should run at
 
 
-# METHODS FOR CONFIGURING ELEMENTS OF THE GAME
+# METHODS USED FOR CONFIGURING THE GAME
 
 
 def generate_chit_cards_for_default_game_board() -> list[ChitCard]:

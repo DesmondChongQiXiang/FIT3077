@@ -1,5 +1,5 @@
 from game_objects.chit_cards.ChitCard import ChitCard
-from game_objects.animals.Animals import Animal
+from game_objects.animals.Animal import Animal
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 

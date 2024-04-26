@@ -16,6 +16,18 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
     DIMENSION_CELL_COUNT: int = 7  # Cell count for each dimension
 
+    @staticmethod
+    def get_chit_card_safe_area() -> tuple[tuple[int, int], tuple[int, int]]:
+        """Get the square safe area for the chit cards.
+
+        Returns:
+            ((x0, y0), (x1, y1)), where the first & second pair corresponds to the top left & bottom right corner of the square
+            shaped safe area.
+        """
+        width, height = PygameScreenController_instance().get_screen_size()
+        square_size: int = width // DefaultGameBoard.DIMENSION_CELL_COUNT
+        return ((square_size, square_size), (width - square_size, height - square_size))
+
     def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]]):
         """
         Args:
@@ -56,7 +68,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     #### DrawableByAsset interface
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """
-        Instructions to draw the game board as a square of square cells, with the number of cells on each dimension equal to 
+        Instructions to draw the game board as a square of square cells, with the number of cells on each dimension equal to
         DefaultGameBoard.DIMENSION_CELL_COUNT.
 
         Returns:

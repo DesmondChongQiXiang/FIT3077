@@ -92,7 +92,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # setting draw data in clockwise pattern, starting at top left
         i_top, i_right, i_bottom = DefaultGameBoard.DIMENSION_CELL_COUNT, DefaultGameBoard.DIMENSION_CELL_COUNT * 2 - 1, DefaultGameBoard.DIMENSION_CELL_COUNT * 3 - 2
         i_offset = 0
-
         for i, tile in enumerate(self.__main_tile_sequence):
             i = i - i_offset
 
@@ -132,7 +131,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         square_size: int = width // DefaultGameBoard.DIMENSION_CELL_COUNT
         return ((square_size, square_size), (width - square_size, height - square_size))
 
-    ### Static methods
     @staticmethod
     def get_tiles_required() -> int:
         """Get the number of tiles required to construct the default game board.

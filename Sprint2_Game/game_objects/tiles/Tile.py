@@ -30,6 +30,14 @@ class Tile(ABC, DrawableByAsset):
         """
         return self.__draw_data
 
+    def set_draw_data(self, draw_data: TileDrawData) -> None:
+        """Set the data specifying how to draw the tile.
+        
+        Args:
+            draw_data: The draw data
+        """
+        self.__draw_data = draw_data
+
     def get_character_on_tile(self) -> Optional[PlayableCharacter]:
         """Returns the character currently on the tile if there is one.
 

@@ -22,6 +22,15 @@ class NormalTile(Tile):
         self.__animal = animal
         super().__init__(draw_data, character)
 
+    def get_animal(self) -> Animal:
+        """Gets the animal the tile represents.
+
+        Returns:
+            The animal
+        """
+        return self.__animal
+
+    # ------- DrawableByAsset interface --------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """Draw the tile based on the tile's draw data. If there is no data, the tile is not drawn.
 
@@ -33,11 +42,3 @@ class NormalTile(Tile):
             return []
         x, y = draw_data.get_coordinates()
         return [DrawAssetInstruction("assets/game_board/game_board_normal_tile.png", x, y, draw_data.get_size())]
-
-    def get_animal(self) -> Animal:
-        """Gets the animal the tile represents.
-
-        Returns:
-            The animal
-        """
-        return self.__animal

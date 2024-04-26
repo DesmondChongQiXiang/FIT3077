@@ -7,7 +7,7 @@ class TileDrawData:
     def __init__(self, coordinates: tuple[int, int], size: tuple[int, int]):
         """
         Args:
-            coordinates: The coordinates the tile should be draw at in form (x, y)
+            coordinates: The coordinates the tile should be drawn at in form (x, y)
             size: The size of the tile in pixels in form (width, height)
         """
         self.__coordinates = coordinates

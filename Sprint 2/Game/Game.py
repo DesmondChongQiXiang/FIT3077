@@ -6,6 +6,13 @@ import pygame
 
 class Game:
 
+    _instance = None
+    
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(Game, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
+
     def __init__(self, players=None, board=None):
         if players is None and board is None:
             self.default_init()

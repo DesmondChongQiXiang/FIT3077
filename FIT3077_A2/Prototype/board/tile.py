@@ -4,9 +4,11 @@ class Tile(ABC):
     """
     This is the initialiser for the class Tile
     """
-    def __init__(self,animal,dragon) :
+    def __init__(self,animal,dragon,x,y) :
         self.animal = animal
         self.dragon = None
+        self.x = x
+        self.y = y
 
     """
     This method returns the animal enum assigned to the tile

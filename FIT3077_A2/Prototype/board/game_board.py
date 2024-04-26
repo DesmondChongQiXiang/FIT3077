@@ -1,5 +1,5 @@
 import pygame
-from .settings import BLACK,ROWS,COLS,WHITE,SQUARE_SIZE, RED
+from .settings import BLACK,ROWS,COLS,WHITE,SQUARE_SIZE, RED, baby_dragon_1
 from .non_cave_tile import NonCaveTile
 
 
@@ -14,7 +14,8 @@ class GameBoard:
 
     def draw_board(self, window):
         window.fill(BLACK)
-        
+        pygame.draw.rect(window,baby_dragon_1.animal,(baby_dragon_1.x*SQUARE_SIZE,baby_dragon_1.y*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
+        """
         for row in range(ROWS):
             if row == 0:
                 pygame.draw.rect(window,RED,(row*SQUARE_SIZE,4*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
@@ -43,6 +44,8 @@ class GameBoard:
                     elif col == 7:
                         pygame.draw.rect(window,RED,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
                         pygame.draw.rect(window,WHITE,(row*SQUARE_SIZE,col*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE),1)
+        """
+        #pygame.draw.rect(window,baby_dragon_1.animal,(baby_dragon_1.x*SQUARE_SIZE,baby_dragon_1.y*SQUARE_SIZE))
 
 
     def create_board(self):

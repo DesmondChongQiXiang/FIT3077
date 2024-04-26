@@ -8,9 +8,18 @@ from screen.ModularClickableSprite import ModularClickableSprite
 
 
 class GameWorld:
-    """Initialises and manages a game instance. Provides the interface between it and the players."""
+    """Initialises and manages a game instance. Provides the interface between it and the players.
+    
+    Author: Shen
+    """
 
     def __init__(self, playable_characters: list[PlayableCharacter], chit_cards: list[ChitCard], game_board: GameBoard):
+        """
+        Args:
+            playable_charcters: The list of playable characters to initialise the world (game) with
+            chit_cards: The chit cards the game should start off with
+            game_board: The game board
+        """
         self.playable_characters: list[PlayableCharacter] = playable_characters
         self.chit_cards: list[ChitCard] = chit_cards
         self.game_board: GameBoard = game_board
@@ -23,13 +32,15 @@ class GameWorld:
         pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         clock = pygame.time.Clock()
 
-        # game loop
+        # GAME LOOP
         while True:
+            # Handle Drawing
             pygame.display.get_surface().fill("white")
 
             PygameScreenController_instance().draw_assets_from_instructions(self.game_board.get_draw_assets_instructions())
             hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.chit_cards[0].get_draw_clickable_assets_instructions())
 
+            # Handle Events
             for event in pygame.event.get():
                 match event.type:
                     case pygame.QUIT:  # Handle closing of game
@@ -39,6 +50,7 @@ class GameWorld:
                     case pygame.MOUSEBUTTONDOWN:  # handle mouse click
                         self.__handle_clickables_on_mouse_click(hitboxes)
 
+            # Update screen & Set FPS
             pygame.display.flip()  # update screen
             clock.tick(FRAMES_PER_SECOND)
 

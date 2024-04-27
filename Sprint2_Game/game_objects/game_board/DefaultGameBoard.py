@@ -101,16 +101,29 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         draw_instructions: list[DrawAssetInstruction] = []
 
-        # setting draw data in clockwise pattern, starting at top left
+        # setting draw data in clockwise pattern (including starting tiles), starting at top left
         i_top, i_right, i_bottom = DefaultGameBoard.DIMENSION_CELL_COUNT, DefaultGameBoard.DIMENSION_CELL_COUNT * 2 - 1, DefaultGameBoard.DIMENSION_CELL_COUNT * 3 - 2
         i_offset = 0
         for i, tile in enumerate(self.__main_tile_sequence):
             i = i - i_offset
 
-            if tile in self.__starting_tiles_set:  # don't draw starting tiles
+            # setting draw data for starting tiles
+            if tile in self.__starting_tiles_set:
                 i_offset += 1
+                if i < i_top:  # draw for top row
+                    tile.set_draw_data(TileDrawData((int(main_x0 + square_size * i), int(main_y0 - square_size)), (int(square_size), int(square_size))))
+                elif i < i_right:  # draw right column
+                    factor: int = i - i_top + 1
+                    tile.set_draw_data(TileDrawData((int(main_x1), int(main_y0 + square_size * factor)), (int(square_size), int(square_size))))
+                elif i < i_bottom:  # draw bottom column
+                    factor: int = i - i_right + 1
+                    tile.set_draw_data(TileDrawData((int(main_x1 - square_size * (factor + 1)), int(main_y1)), (int(square_size), int(square_size))))
+                else:  # draw left column
+                    factor: int = i - i_bottom + 1
+                    tile.set_draw_data(TileDrawData((int(main_x0 - square_size), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
                 continue
 
+            # setting draw data for main tile sequence
             if i < i_top:  # draw top row
                 tile.set_draw_data(TileDrawData((int(main_x0 + square_size * i), main_y0), (int(square_size), int(square_size))))
             elif i < i_right:  # draw right column

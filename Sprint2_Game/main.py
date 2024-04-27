@@ -21,14 +21,15 @@ if __name__ == "__main__":
     # ============= GAME CONFIG ==============
     playable_characters: list[PlayableCharacter] = [Dragon(), Dragon(), Dragon(), Dragon()]
     tiles: list[Tile] = []
-    starting_tiles: list[Tile] = [CaveTile(Animal.BABY_DRAGON), CaveTile(Animal.BABY_DRAGON)]
+    starting_tiles: list[Tile] = [NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.SALAMANDER), NormalTile(Animal.SPIDER), NormalTile(Animal.BAT)]
     chit_cards: list[ChitCard] = generate_chit_cards_for_default_game_board()
 
     for _ in range(24):
         tiles.append(NormalTile(Animal.BAT))
-    
-    game_board: GameBoard = DefaultGameBoard(tiles, [(starting_tiles[0], tiles[0])])
 
+    game_board: GameBoard = DefaultGameBoard(
+        tiles, [(starting_tiles[0], tiles[3]), (starting_tiles[1], tiles[9]), (starting_tiles[2], tiles[15]), (starting_tiles[3], tiles[21])]
+    )
 
     # ============ GAME INSTANCE =============
     world = GameWorld(playable_characters, chit_cards, game_board)

@@ -2,11 +2,12 @@ from abc import ABC, abstractmethod
 from typing import Optional
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawProperties import DrawProperties
+from screen.DrawAssetInstruction import DrawAssetInstruction
 from game_objects.characters.PlayableCharacter import PlayableCharacter
+from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 
-# TODO: Refactor by implementing asset instructions method and providing a default that can be overrided. Should be called after child class implementations.
-# Reduce repetition in child classes via this way
+# TODO: Implement abstract methods later (see class diagram)
 
 
 class Tile(ABC, DrawableByAsset):
@@ -47,3 +48,26 @@ class Tile(ABC, DrawableByAsset):
             The character currently on the tile
         """
         return self.__character
+
+    def _get_character_draw_instructions(self) -> list[DrawAssetInstruction]:
+        """Get the drawing instructions for showing the character currently on the tile.
+
+        Returns:
+            List of drawing instructions
+        """
+        instructions: list[DrawAssetInstruction] = []
+        if self.__draw_data is None:
+            return instructions
+
+        tile_width, tile_height = self.__draw_data.get_size()
+        character = self.get_character_on_tile()
+
+        if character is not None:
+            char_width, char_height = int(tile_width), int(tile_height)
+            char_x, char_y = get_coords_for_center_drawing_in_rect(self.__draw_data.get_coordinates(), self.__draw_data.get_size(), (char_width, char_height))
+            character.set_draw_properties(DrawProperties((char_x, char_y), (char_width, char_height)))
+
+            for inst in character.get_draw_assets_instructions():
+                instructions.append(inst)
+
+        return instructions

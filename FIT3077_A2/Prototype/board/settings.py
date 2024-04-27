@@ -17,6 +17,18 @@ NON_CAVE_TILE_COORDINATES = [[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],
 
 CAVE_TILE_COORDINATES = [[0,4],[4,0],[8,4],[4,8]]
 
+CHIT_CARD_COORDINATES = [[2,2],[2,3],[2,4],[2,5],[2,6],
+                         [3,2],[4,2],[5,2],[6,2],
+                         [6,3],[6,4],[6,5],[6,6],
+                         [5,6],[4,6],[3,6]]
+
+CHIT_CARD_ANIMALS = [[Animal.BABY_DRAGON,1],[Animal.BABY_DRAGON,2],[Animal.BABY_DRAGON,3],
+                     [Animal.SPIDER,1],[Animal.SPIDER,2],[Animal.SPIDER,3],
+                     [Animal.BAT,1],[Animal.BAT,2],[Animal.BAT,3],
+                     [Animal.SALAMANDER,1],[Animal.SALAMANDER,2],[Animal.SALAMANDER,3]]
+
+CHIT_CARD_DRAGON_PIRATES = [1,1,2,2]
+
 
 VOLCANO_TILE_1 = [Animal.BABY_DRAGON,Animal.BAT,Animal.SPIDER]
 VOLCANO_TILE_2 = [Animal.SALAMANDER,Animal.SPIDER,Animal.BAT]

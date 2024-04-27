@@ -1,5 +1,6 @@
 import pygame
-from .settings import BLACK,ROWS,COLS,WHITE,SQUARE_SIZE, RED, NON_CAVE_TILE_ANIMALS,NON_CAVE_TILE_COORDINATES, CAVE_TILE_ANIMALS,CAVE_TILE_COORDINATES
+import random
+from .settings import BLACK,ROWS,COLS,WHITE,SQUARE_SIZE, RED, NON_CAVE_TILE_ANIMALS,NON_CAVE_TILE_COORDINATES, CAVE_TILE_ANIMALS,CAVE_TILE_COORDINATES, CHIT_CARD_COORDINATES
 from .tiles.non_cave_tile import NonCaveTile
 from .tiles.cave_tile import CaveTile
 
@@ -15,6 +16,7 @@ class GameBoard:
 
     def draw_board(self, window):
         window.fill(WHITE)
+        random.shuffle(CHIT_CARD_COORDINATES)
         for i in range(len(NON_CAVE_TILE_COORDINATES)):
             tile = NonCaveTile(NON_CAVE_TILE_ANIMALS[i],None,NON_CAVE_TILE_COORDINATES[i][0],NON_CAVE_TILE_COORDINATES[i][1])
             #pygame.draw.rect(window,tile.animal.value,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))
@@ -26,6 +28,10 @@ class GameBoard:
             animal = pygame.image.load("./board/assets/"+tile.animal.value).convert_alpha()
             animal = pygame.transform.scale(animal,(SQUARE_SIZE,SQUARE_SIZE))
             window.blit(animal,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE))
+
+        for i in range(len(CHIT_CARD_COORDINATES)):
+            chit_card = None
+
 
         #pygame.draw.rect(window,baby_dragon_1.animal,(baby_dragon_1.x*SQUARE_SIZE,baby_dragon_1.y*SQUARE_SIZE))
 

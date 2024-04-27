@@ -1,4 +1,4 @@
-from BoardConfig import *
+from .BoardConfig import *
 import pygame
 import os
 
@@ -34,7 +34,9 @@ class Board:
 
     def load_images(self, win):
         # Getting reference to the assets directory
-        images_dir = os.path.join(os.path.dirname(__file__), 'src/assets')
+        current_dir = os.path.dirname(__file__)
+        images_dir = os.path.join(current_dir, '..', 'assets')
+        # images_dir = os.path.join(os.path.dirname(__file__), 'assets')
 
         images = {}
 

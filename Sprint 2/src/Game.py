@@ -1,6 +1,5 @@
 from board.Board import Board
 from board.BoardConfig import *
-from game_tiles import *
 from Dragon import Dragon
 import pygame
 

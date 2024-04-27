@@ -23,8 +23,8 @@ def generate_chit_cards_for_default_game_board() -> list[ChitCard]:
         A list of chit cards for the game board
     """
     ##### CONFIG: Edit to change generation variables
-    RAND_FACTOR: int = 45  # random factor in pixels
-    CHIT_CARD_DIMENSIONS: tuple[int, int] = (85, 85)  # chit card dimensions (width, height) in px
+    RAND_FACTOR: int = 40  # random factor in pixels
+    CHIT_CARD_DIMENSIONS: tuple[int, int] = (75, 75)  # chit card dimensions (width, height) in px
 
     ##### GENERATING
     safe_area = DefaultGameBoard.get_chit_card_safe_area()

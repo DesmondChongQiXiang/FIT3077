@@ -153,8 +153,16 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             shaped safe area.
         """
         width, height = PygameScreenController_instance().get_screen_size()
-        square_size: int = width // DefaultGameBoard.DIMENSION_CELL_COUNT
-        return ((square_size, square_size), (width - square_size, height - square_size))
+        main_width, main_height = width - 2 * (width // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2)), height - 2 * (height // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2))
+        square_size: float = main_width / DefaultGameBoard.DIMENSION_CELL_COUNT
+        main_x, main_y = get_coords_for_center_drawing_in_rect((0, 0), (width, height), (main_width, main_height))
+        main_x0, main_x1, main_y0, main_y1 = (
+            main_x,
+            main_x + DefaultGameBoard.DIMENSION_CELL_COUNT * square_size,
+            main_y,
+            main_y + DefaultGameBoard.DIMENSION_CELL_COUNT * square_size,
+        )
+        return ((int(main_x0+square_size), int(main_y0+square_size)), (int(main_x1 - square_size), int(main_y1 - square_size)))
 
     @staticmethod
     def get_tiles_required() -> int:

@@ -1,5 +1,5 @@
 class DrawProperties:
-    """A data class for organising the data required for drawing any object.
+    """A data class for organising the data (coordinates, size, rotation) that is required for drawing any object.
 
     Author: Shen
     """

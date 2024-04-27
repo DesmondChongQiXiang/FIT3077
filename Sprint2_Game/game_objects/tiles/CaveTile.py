@@ -37,6 +37,6 @@ class CaveTile(Tile):
         animal_x, animal_y = get_coords_for_center_drawing_in_rect(draw_data.get_coordinates(), draw_data.get_size(), (animal_size, animal_size))
 
         return [
-            DrawAssetInstruction("assets/tiles/cave_tile.png", tile_x, tile_y, draw_data.get_size()),
+            DrawAssetInstruction("assets/tiles/cave_tile.png", tile_x, tile_y, draw_data.get_size(), draw_data.get_rotation()),
             DrawAssetInstruction(f"assets/animals/{self.__animal.value}.png", animal_x, animal_y, (animal_size, animal_size)),
         ]

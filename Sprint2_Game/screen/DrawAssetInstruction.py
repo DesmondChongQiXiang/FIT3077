@@ -20,7 +20,7 @@ class DrawAssetInstruction:
             asset_path: The path to the asset relative to the root of the project
             x: The x-coordinate where the image is to be drawn
             y: The y-coordinate where the image is to be drawn
-            size: (width, height) of the image in px
+            size (optional): (width, height) of the image in px
             rotate: Degrees to rotate the image by anti-clockwise
         """
         self.__asset_path = asset_path
@@ -50,5 +50,5 @@ class DrawAssetInstruction:
         return self.__size[1] if self.__size is not None else None
 
     def get_rotation(self) -> float:
-        """Get the degrees of anticlockwise rotation to draw the image at.."""
+        """Get the degrees of anticlockwise rotation to draw the image at."""
         return self.__rotate

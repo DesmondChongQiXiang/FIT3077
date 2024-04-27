@@ -86,7 +86,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Author: Shen
         """
         width, height = PygameScreenController_instance().get_screen_size()
-        square_size: int = width // DefaultGameBoard.DIMENSION_CELL_COUNT
+        main_width, main_height = width - width // DefaultGameBoard.DIMENSION_CELL_COUNT, height - height // DefaultGameBoard.DIMENSION_CELL_COUNT
+        square_size: float = main_width / DefaultGameBoard.DIMENSION_CELL_COUNT
+
         draw_instructions: list[DrawAssetInstruction] = []
 
         # setting draw data in clockwise pattern, starting at top left
@@ -100,16 +102,16 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 continue
 
             if i < i_top:  # draw top row
-                tile.set_draw_data(TileDrawData((square_size * i, 0), (square_size, square_size)))
+                tile.set_draw_data(TileDrawData((int(square_size * i), 0), (int(square_size), int(square_size))))
             elif i < i_right:  # draw right column
                 factor: int = i - i_top + 1
-                tile.set_draw_data(TileDrawData((width - square_size, square_size * factor), (square_size, square_size)))
+                tile.set_draw_data(TileDrawData((int(main_width - square_size), int(square_size * factor)), (int(square_size), int(square_size))))
             elif i < i_bottom:  # draw bottom column
                 factor: int = i - i_right + 1
-                tile.set_draw_data(TileDrawData((width - square_size * (factor + 1), height - square_size), (square_size, square_size)))
+                tile.set_draw_data(TileDrawData((int(main_width - square_size * (factor + 1)), int(main_height - square_size)), (int(square_size), int(square_size))))
             else:  # draw left column
                 factor: int = i - i_bottom + 1
-                tile.set_draw_data(TileDrawData((0, height - square_size * (factor+1)), (square_size, square_size)))
+                tile.set_draw_data(TileDrawData((0, int(main_height - square_size * (factor+1))), (int(square_size), int(square_size))))
 
         # getting draw instructions after setting draw data
         for tile in self.__main_tile_sequence:

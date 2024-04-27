@@ -2,8 +2,7 @@ from __future__ import annotations
 from .GameBoard import GameBoard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.tiles.Tile import Tile
-from game_objects.tiles.NormalTile import NormalTile
-from game_objects.tiles.TileDrawData import TileDrawData
+from screen.DrawProperties import DrawProperties
 from game_objects.chit_cards.ChitCard import ChitCard
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawAssetInstruction import DrawAssetInstruction
@@ -103,30 +102,30 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             if tile in self.__starting_tiles_set:
                 i_offset += 1
                 if i < i_top:  # draw for top row
-                    tile.set_draw_data(TileDrawData((int(main_x0 + square_size * i), int(main_y0 - square_size)), (int(square_size), int(square_size))))
+                    tile.set_draw_data(DrawProperties((int(main_x0 + square_size * i), int(main_y0 - square_size)), (int(square_size), int(square_size))))
                 elif i < i_right:  # draw for right column
                     factor: int = i - i_top + 1
-                    tile.set_draw_data(TileDrawData((int(main_x1), int(main_y0 + square_size * factor)), (int(square_size), int(square_size)), 270))
+                    tile.set_draw_data(DrawProperties((int(main_x1), int(main_y0 + square_size * factor)), (int(square_size), int(square_size)), 270))
                 elif i < i_bottom:  # draw for bottom column
                     factor: int = i - i_right + 1
-                    tile.set_draw_data(TileDrawData((int(main_x1 - square_size * (factor + 1)), int(main_y1)), (int(square_size), int(square_size)), 180))
+                    tile.set_draw_data(DrawProperties((int(main_x1 - square_size * (factor + 1)), int(main_y1)), (int(square_size), int(square_size)), 180))
                 else:  # draw for left column
                     factor: int = i - i_bottom + 1
-                    tile.set_draw_data(TileDrawData((int(main_x0 - square_size), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size)), 90))
+                    tile.set_draw_data(DrawProperties((int(main_x0 - square_size), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size)), 90))
                 continue
 
             # setting draw data for main tile sequence
             if i < i_top:  # draw top row
-                tile.set_draw_data(TileDrawData((int(main_x0 + square_size * i), int(main_y0)), (int(square_size), int(square_size))))
+                tile.set_draw_data(DrawProperties((int(main_x0 + square_size * i), int(main_y0)), (int(square_size), int(square_size))))
             elif i < i_right:  # draw right column
                 factor: int = i - i_top + 1
-                tile.set_draw_data(TileDrawData((int(main_x1 - square_size), int(main_y0 + square_size * factor)), (int(square_size), int(square_size))))
+                tile.set_draw_data(DrawProperties((int(main_x1 - square_size), int(main_y0 + square_size * factor)), (int(square_size), int(square_size))))
             elif i < i_bottom:  # draw bottom column
                 factor: int = i - i_right + 1
-                tile.set_draw_data(TileDrawData((int(main_x1 - square_size * (factor + 1)), int(main_y1 - square_size)), (int(square_size), int(square_size))))
+                tile.set_draw_data(DrawProperties((int(main_x1 - square_size * (factor + 1)), int(main_y1 - square_size)), (int(square_size), int(square_size))))
             else:  # draw left column
                 factor: int = i - i_bottom + 1
-                tile.set_draw_data(TileDrawData((int(main_x0), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
+                tile.set_draw_data(DrawProperties((int(main_x0), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
 
         # getting draw instructions after setting draw data
         for tile in self.__main_tile_sequence:

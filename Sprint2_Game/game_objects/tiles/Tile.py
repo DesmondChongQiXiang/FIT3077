@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 from screen.DrawableByAsset import DrawableByAsset
-from screen.DrawAssetInstruction import DrawAssetInstruction
+from screen.DrawProperties import DrawProperties
 from game_objects.characters.PlayableCharacter import PlayableCharacter
-from game_objects.tiles.TileDrawData import TileDrawData
+
 
 # TODO: incomplete. refer to class diagram
+
 
 class Tile(ABC, DrawableByAsset):
     """Represents a tile that a character can stand on.
@@ -13,7 +14,7 @@ class Tile(ABC, DrawableByAsset):
     Author: Shen
     """
 
-    def __init__(self, draw_data: Optional[TileDrawData], character: Optional[PlayableCharacter] = None):
+    def __init__(self, draw_data: Optional[DrawProperties], character: Optional[PlayableCharacter] = None):
         """
         Args:
             draw_data (Optional): The data specifying how to draw the tile
@@ -22,7 +23,7 @@ class Tile(ABC, DrawableByAsset):
         self.__draw_data = draw_data
         self.__character = character
 
-    def get_draw_data(self) -> Optional[TileDrawData]:
+    def get_draw_data(self) -> Optional[DrawProperties]:
         """Returns the data required to draw the tile if it exists.
 
         Returns:
@@ -30,9 +31,9 @@ class Tile(ABC, DrawableByAsset):
         """
         return self.__draw_data
 
-    def set_draw_data(self, draw_data: TileDrawData) -> None:
+    def set_draw_data(self, draw_data: DrawProperties) -> None:
         """Set the data specifying how to draw the tile.
-        
+
         Args:
             draw_data: The draw data
         """

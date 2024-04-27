@@ -1,7 +1,5 @@
-from typing import Optional
-
-class TileDrawData:
-    """A data class for organising the data required for drawing any tile.
+class DrawProperties:
+    """A data class for organising the data required for drawing any object.
 
     Author: Shen
     """
@@ -32,10 +30,10 @@ class TileDrawData:
             The size in form (width, height)
         """
         return self.__size
-    
+
     def get_rotation(self) -> float:
         """Returns the degrees anticlockwise the tile should be drawn at (if specified).
-        
+
         Returns:
             The degrees
         """

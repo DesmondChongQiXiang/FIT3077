@@ -1,6 +1,6 @@
 from game_objects.tiles.Tile import Tile
 from game_objects.characters.PlayableCharacter import PlayableCharacter
-from game_objects.tiles.TileDrawData import TileDrawData
+from screen.DrawProperties import DrawProperties
 from game_objects.animals.Animal import Animal
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
@@ -12,7 +12,7 @@ class CaveTile(Tile):
     
     Author: Shen
     """
-    def __init__(self, animal: Animal, draw_data: Optional[TileDrawData] = None, character: Optional[PlayableCharacter] = None):
+    def __init__(self, animal: Animal, draw_data: Optional[DrawProperties] = None, character: Optional[PlayableCharacter] = None):
         """
         Args:
             animal: The animal to be represented by the tile

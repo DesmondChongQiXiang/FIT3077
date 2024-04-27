@@ -47,6 +47,6 @@ class NormalTile(Tile):
         animal_x, animal_y = get_coords_for_center_drawing_in_rect(draw_data.get_coordinates(), draw_data.get_size(), (animal_size, animal_size))
 
         return [
-            DrawAssetInstruction("assets/game_board/game_board_normal_tile.png", tile_x, tile_y, draw_data.get_size()),
+            DrawAssetInstruction("assets/tiles/normal_tile.png", tile_x, tile_y, draw_data.get_size()),
             DrawAssetInstruction(f"assets/animals/{self.__animal.value}.png", animal_x, animal_y, (animal_size, animal_size)),
         ]

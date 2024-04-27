@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # ============= GAME CONFIG ==============
     playable_characters: list[PlayableCharacter] = [Dragon(), Dragon(), Dragon(), Dragon()]
     tiles: list[Tile] = []
-    starting_tiles: list[Tile] = [NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.SALAMANDER), NormalTile(Animal.SPIDER), NormalTile(Animal.BAT)]
+    starting_tiles: list[Tile] = [CaveTile(Animal.BABY_DRAGON), CaveTile(Animal.SALAMANDER), CaveTile(Animal.SPIDER), CaveTile(Animal.BAT)]
     chit_cards: list[ChitCard] = generate_chit_cards_for_default_game_board()
 
     for _ in range(24):

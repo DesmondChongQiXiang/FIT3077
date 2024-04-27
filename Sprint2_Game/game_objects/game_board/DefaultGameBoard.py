@@ -112,13 +112,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 i_offset += 1
                 if i < i_top:  # draw for top row
                     tile.set_draw_data(TileDrawData((int(main_x0 + square_size * i), int(main_y0 - square_size)), (int(square_size), int(square_size))))
-                elif i < i_right:  # draw right column
+                elif i < i_right:  # draw for right column
                     factor: int = i - i_top + 1
                     tile.set_draw_data(TileDrawData((int(main_x1), int(main_y0 + square_size * factor)), (int(square_size), int(square_size))))
-                elif i < i_bottom:  # draw bottom column
+                elif i < i_bottom:  # draw for bottom column
                     factor: int = i - i_right + 1
                     tile.set_draw_data(TileDrawData((int(main_x1 - square_size * (factor + 1)), int(main_y1)), (int(square_size), int(square_size))))
-                else:  # draw left column
+                else:  # draw for left column
                     factor: int = i - i_bottom + 1
                     tile.set_draw_data(TileDrawData((int(main_x0 - square_size), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
                 continue

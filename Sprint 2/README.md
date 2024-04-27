@@ -6,12 +6,12 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
 
 ## Navigation
 
-- **Deliverables:** [This folder contains all project deliverables.](./deliverables/)
-    - [__**UML Class Diagram:**__](./deliverables/FIT3077%20Sprint%202%20UML%20Class%20Diagram.pdf)
-    - [__**Design Rationale:**__](./deliverables/FIT3077%20Sprint%202%20Design%20Rationale.pdf)
-    - [__**REQ 1 Sequence Diagram:**__](./deliverables/FIT3077%20Sprint%202%20REQ%201%20Sequence%20Diagram.pdf)
-    - [__**REQ 2 Sequence Diagram:**__](./deliverables/FIT3077%20Sprint%202%20REQ%202%20Sequence%20Diagram.pdf)
-    - [__**REQ 3 & 4 Sequence Diagram:**__](./deliverables/FIT3077%20Sprint%202%20REQ%203%20&%204%20Sequence%20Diagram.pdf)
+- [__**Deliverables**__](./deliverables/): This folder contains all project deliverables.
+    - [__**UML Class Diagram**__](./deliverables/FIT3077%20Sprint%202%20UML%20Class%20Diagram.pdf)
+    - [__**Design Rationale**__](./deliverables/FIT3077%20Sprint%202%20Design%20Rationale.pdf)
+    - [__**REQ 1 Sequence Diagram**__](./deliverables/FIT3077%20Sprint%202%20REQ%201%20Sequence%20Diagram.pdf)
+    - [__**REQ 2 Sequence Diagram**__](./deliverables/FIT3077%20Sprint%202%20REQ%202%20Sequence%20Diagram.pdf)
+    - [__**REQ 3 & 4 Sequence Diagram**__](./deliverables/FIT3077%20Sprint%202%20REQ%203%20&%204%20Sequence%20Diagram.pdf)
     - [__**REQ 5 Sequence Diagram**__](./deliverables/FIT3077%20Sprint%202%20Design%20Rationale.pdf)
 
 - **Src:** [This folder contains all the game's code and assets.](./src)

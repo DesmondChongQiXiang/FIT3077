@@ -61,7 +61,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 f"There must be {DefaultGameBoard.get_tiles_required()} tiles in the main tile sequence (len={main_tiles_only_len}). DIMENSION_CELL_COUNT = {DefaultGameBoard.DIMENSION_CELL_COUNT}."
             )
 
-    # ------ GameBoard interface -----------------------------------------------------------------------------------
+    # ------ GameBoard interface -----------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
         pass
 
@@ -76,7 +76,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     def add_chit_card(self, chit_card: ChitCard) -> None:
         pass
 
-    # ------ DrawableByAsset interface -------------------------------------------------------------------------
+    # ------ DrawableByAsset interface -----------------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """
         Instructions to draw the game board as a square of square cells, with the number of cells on each dimension equal to
@@ -135,9 +135,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         return draw_instructions
 
-    # helper methods
-
-    # ------- Static methods -------------------------------------------------------------------------------------
+    # ------- Static methods -----------------------------------------------------------------------------------------
     @staticmethod
     def get_chit_card_safe_area() -> tuple[tuple[int, int], tuple[int, int]]:
         """Get the square safe area for the chit cards.

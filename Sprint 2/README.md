@@ -6,10 +6,11 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
 
 ## Navigation
 
-- **deliverables** This folder contains all project deliverables.
-- **src** The source folder contains all coding-related files.
+- **'deliverables':** This folder contains all project deliverables.
+
+- **'src':** The source folder contains all coding-related files.
 
 ## Tech Stack
 
-- **Language** Python
-- **Libraries** PyGame
+- **Language:** Python
+- **Libraries:** PyGame

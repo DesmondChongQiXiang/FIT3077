@@ -1,5 +1,5 @@
 import pygame
-from core.GameConfig import FRAMES_PER_SECOND
+from core.GameConfig import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
 from core.singletons import PygameScreenController_instance
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.chit_cards.ChitCard import ChitCard
@@ -13,8 +13,6 @@ class GameWorld:
 
     Author: Shen
     """
-
-    __SCREEN_FILL_COLOUR = (255, 255, 255)  # screen fill colour in (R, G, B)
 
     def __init__(self, playable_characters: list[PlayableCharacter], chit_cards: list[ChitCard], game_board: GameBoard):
         """
@@ -39,7 +37,7 @@ class GameWorld:
         # GAME LOOP
         while True:
             # Handle Drawing
-            pygame.display.get_surface().fill(GameWorld.__SCREEN_FILL_COLOUR)
+            pygame.display.get_surface().fill(SCREEN_BACKGROUND_COLOUR)
 
             PygameScreenController_instance().draw_assets_from_instructions(self.__game_board.get_draw_assets_instructions())
             hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__get_chit_card_drawing_instructions())

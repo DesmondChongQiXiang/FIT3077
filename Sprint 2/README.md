@@ -6,7 +6,7 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
 
 ## Navigation
 
-- [**Deliverables**](./deliverables/): This folder contains all project deliverables.
+- **Deliverables**: This folder contains all project deliverables.
     - [**UML Class Diagram**](./deliverables/FIT3077%20Sprint%202%20UML%20Class%20Diagram.pdf)
     - [**Design Rationale**](./deliverables/FIT3077%20Sprint%202%20Design%20Rationale.pdf)
     - [**REQ 1 Sequence Diagram**](./deliverables/FIT3077%20Sprint%202%20REQ%201%20Sequence%20Diagram.pdf)
@@ -14,7 +14,7 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
     - [**REQ 3 & 4 Sequence Diagram**](./deliverables/FIT3077%20Sprint%202%20REQ%203%20&%204%20Sequence%20Diagram.pdf)
     - [**REQ 5 Sequence Diagram**](./deliverables/FIT3077%20Sprint%202%20Design%20Rationale.pdf)
 
-- [**Src:**](./src): This folder contains all the game's code and assets.
+- **Src:**: This folder contains all the game's code and assets.
 
 ## Tech Stack
 

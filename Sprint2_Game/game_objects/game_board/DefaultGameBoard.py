@@ -7,6 +7,7 @@ from game_objects.chit_cards.ChitCard import ChitCard
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from core.singletons import PygameScreenController_instance
+from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
@@ -59,7 +60,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 f"There must be {DefaultGameBoard.get_tiles_required()} tiles in the main tile sequence (len={main_tiles_only_len}). DIMENSION_CELL_COUNT = {DefaultGameBoard.DIMENSION_CELL_COUNT}."
             )
 
-    #### GameBoard interface
+    # ------ GameBoard interface -----------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
         pass
 
@@ -74,7 +75,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     def add_chit_card(self, chit_card: ChitCard) -> None:
         pass
 
-    #### DrawableByAsset interface
+    # ------ DrawableByAsset interface -------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """
         Instructions to draw the game board as a square of square cells, with the number of cells on each dimension equal to
@@ -88,6 +89,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         width, height = PygameScreenController_instance().get_screen_size()
         main_width, main_height = width - width // DefaultGameBoard.DIMENSION_CELL_COUNT, height - height // DefaultGameBoard.DIMENSION_CELL_COUNT
         square_size: float = main_width / DefaultGameBoard.DIMENSION_CELL_COUNT
+        main_x, main_y = get_coords_for_center_drawing_in_rect((0, 0), (width, height), (main_width, main_height))
+        main_x0, main_x1, main_y0, main_y1 = main_x, main_x + DefaultGameBoard.DIMENSION_CELL_COUNT * square_size, main_y, main_y + DefaultGameBoard.DIMENSION_CELL_COUNT * square_size
 
         draw_instructions: list[DrawAssetInstruction] = []
 
@@ -97,21 +100,21 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         for i, tile in enumerate(self.__main_tile_sequence):
             i = i - i_offset
 
-            if tile in self.__starting_tiles_set:   # don't draw starting tiles
+            if tile in self.__starting_tiles_set:  # don't draw starting tiles
                 i_offset += 1
                 continue
 
             if i < i_top:  # draw top row
-                tile.set_draw_data(TileDrawData((int(square_size * i), 0), (int(square_size), int(square_size))))
+                tile.set_draw_data(TileDrawData((int(main_x0 + square_size * i), main_y0), (int(square_size), int(square_size))))
             elif i < i_right:  # draw right column
                 factor: int = i - i_top + 1
-                tile.set_draw_data(TileDrawData((int(main_width - square_size), int(square_size * factor)), (int(square_size), int(square_size))))
+                tile.set_draw_data(TileDrawData((int(main_x1 - square_size), int(main_y0 + square_size * factor)), (int(square_size), int(square_size))))
             elif i < i_bottom:  # draw bottom column
                 factor: int = i - i_right + 1
-                tile.set_draw_data(TileDrawData((int(main_width - square_size * (factor + 1)), int(main_height - square_size)), (int(square_size), int(square_size))))
+                tile.set_draw_data(TileDrawData((int(main_x1 - square_size * (factor + 1)), int(main_y1 - square_size)), (int(square_size), int(square_size))))
             else:  # draw left column
                 factor: int = i - i_bottom + 1
-                tile.set_draw_data(TileDrawData((0, int(main_height - square_size * (factor+1))), (int(square_size), int(square_size))))
+                tile.set_draw_data(TileDrawData((main_x0, int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
 
         # getting draw instructions after setting draw data
         for tile in self.__main_tile_sequence:
@@ -120,7 +123,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         return draw_instructions
 
-    ### Static methods
+    # ------- Static methods -------------------------------------------------------------------------------------
     @staticmethod
     def get_chit_card_safe_area() -> tuple[tuple[int, int], tuple[int, int]]:
         """Get the square safe area for the chit cards.

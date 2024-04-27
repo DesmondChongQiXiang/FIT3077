@@ -12,7 +12,7 @@ def get_coords_for_center_drawing_in_rect(rect_coords: tuple[int, int], rect_siz
     Args:
         rect_coords: The coordinates of the rectangle in form (x, y)
         rect_size: The size of the rectangle in form in pixels in form (width, height)
-        draw_size: The size of the element to draw in pixels in form(width, height)
+        draw_size: The size of the element to draw in pixels in form (width, height)
 
     Returns:
         The coordinates to draw at in form (x, y)

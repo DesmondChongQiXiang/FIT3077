@@ -5,7 +5,8 @@ from screen.DrawProperties import DrawProperties
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 
 
-# TODO: incomplete. refer to class diagram
+# TODO: Refactor by implementing asset instructions method and providing a default that can be overrided. Should be called after child class implementations.
+# Reduce repetition in child classes via this way
 
 
 class Tile(ABC, DrawableByAsset):

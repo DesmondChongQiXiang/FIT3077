@@ -9,9 +9,10 @@ from typing import Optional
 
 class CaveTile(Tile):
     """Tile that can trigger a win condition upon entering for a second time.
-    
+
     Author: Shen
     """
+
     def __init__(self, animal: Animal, draw_data: Optional[DrawProperties] = None, character: Optional[PlayableCharacter] = None):
         """
         Args:
@@ -28,15 +29,21 @@ class CaveTile(Tile):
         Returns:
             [Instructions to draw the game board tile]
         """
-        draw_data = self.get_draw_data()
-        if draw_data is None:  # don't draw anything if no draw data
+        instructions = []
+
+        tile_draw_data = self.get_draw_data()
+        if tile_draw_data is None:  # don't draw anything if no draw data
             return []
 
-        tile_x, tile_y = draw_data.get_coordinates()
-        animal_size = int(draw_data.get_size()[0] // 1.45)
-        animal_x, animal_y = get_coords_for_center_drawing_in_rect(draw_data.get_coordinates(), draw_data.get_size(), (animal_size, animal_size))
+        tile_x, tile_y = tile_draw_data.get_coordinates()
+        animal_size = int(tile_draw_data.get_size()[0] // 1.45)
+        animal_x, animal_y = get_coords_for_center_drawing_in_rect(tile_draw_data.get_coordinates(), tile_draw_data.get_size(), (animal_size, animal_size))
+        character = self.get_character_on_tile()
 
-        return [
-            DrawAssetInstruction("assets/tiles/cave_tile.png", tile_x, tile_y, draw_data.get_size(), draw_data.get_rotation()),
-            DrawAssetInstruction(f"assets/animals/{self.__animal.value}.png", animal_x, animal_y, (animal_size, animal_size)),
-        ]
+        instructions.append(DrawAssetInstruction("assets/tiles/cave_tile.png", tile_x, tile_y, tile_draw_data.get_size(), tile_draw_data.get_rotation()))
+        instructions.append(DrawAssetInstruction(f"assets/animals/{self.__animal.value}.png", animal_x, animal_y, (animal_size, animal_size)))
+        if character is not None:
+            for inst in character.get_draw_assets_instructions():
+                instructions.append(inst)
+
+        return instructions

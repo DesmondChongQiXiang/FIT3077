@@ -8,8 +8,8 @@ import random
 # GAME SETTINGS: Edit to change the settings of the game
 
 
-SCREEN_WIDTH = 750  # Screen width in px
-SCREEN_HEIGHT = 750  # Screen height in px
+SCREEN_WIDTH = 850  # Screen width in px
+SCREEN_HEIGHT = 850  # Screen height in px
 FRAMES_PER_SECOND = 60  # FPS the game should run at
 
 

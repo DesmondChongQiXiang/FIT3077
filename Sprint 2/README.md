@@ -14,7 +14,7 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
     - [**REQ 3 & 4 Sequence Diagram**](./deliverables/FIT3077%20Sprint%202%20REQ%203%20&%204%20Sequence%20Diagram.pdf)
     - [**REQ 5 Sequence Diagram**](./deliverables/FIT3077%20Sprint%202%20Design%20Rationale.pdf)
 
-- **Src:**: This folder contains all the game's code and assets.
+- **Src**: This folder contains all the game's code and assets.
 
 ## Tech Stack
 

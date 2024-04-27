@@ -17,6 +17,7 @@ if __name__ == "__main__":
     # Initialise pygame, and pygame screen
     pygame.init()
     pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Fiery Dragons: Shen Jiang")
 
     # ============= GAME CONFIG ==============
     playable_characters: list[PlayableCharacter] = [Dragon(), Dragon(), Dragon(), Dragon()]

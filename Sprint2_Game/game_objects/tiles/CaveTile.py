@@ -52,5 +52,3 @@ class CaveTile(Tile):
                 instructions.append(inst)
 
         return instructions
-
-        i

@@ -1,3 +1,4 @@
+from __future__ import annotations
 from .GameBoard import GameBoard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.tiles.Tile import Tile
@@ -86,18 +87,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         Author: Shen
         """
-        # calculate dimensions for drawing
-        # main_width, main_height: +2 to account for caves on each dimension
-        width, height = PygameScreenController_instance().get_screen_size()
-        main_width, main_height = width - 2 * (width // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2)), height - 2 * (height // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2))
-        square_size: float = main_width / DefaultGameBoard.DIMENSION_CELL_COUNT
-        main_x, main_y = get_coords_for_center_drawing_in_rect((0, 0), (width, height), (main_width, main_height))
-        main_x0, main_x1, main_y0, main_y1 = (
-            main_x,
-            main_x + DefaultGameBoard.DIMENSION_CELL_COUNT * square_size,
-            main_y,
-            main_y + DefaultGameBoard.DIMENSION_CELL_COUNT * square_size,
-        )
+        main_properties = self.__get_main_tile_sequence_properties()
+        main_x0, main_x1, main_y0, main_y1 = main_properties.main_x0, main_properties.main_x1, main_properties.main_y0, main_properties.main_y1
+        square_size = main_properties.square_size
 
         draw_instructions: list[DrawAssetInstruction] = []
 
@@ -125,7 +117,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
             # setting draw data for main tile sequence
             if i < i_top:  # draw top row
-                tile.set_draw_data(TileDrawData((int(main_x0 + square_size * i), main_y0), (int(square_size), int(square_size))))
+                tile.set_draw_data(TileDrawData((int(main_x0 + square_size * i), int(main_y0)), (int(square_size), int(square_size))))
             elif i < i_right:  # draw right column
                 factor: int = i - i_top + 1
                 tile.set_draw_data(TileDrawData((int(main_x1 - square_size), int(main_y0 + square_size * factor)), (int(square_size), int(square_size))))
@@ -134,7 +126,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 tile.set_draw_data(TileDrawData((int(main_x1 - square_size * (factor + 1)), int(main_y1 - square_size)), (int(square_size), int(square_size))))
             else:  # draw left column
                 factor: int = i - i_bottom + 1
-                tile.set_draw_data(TileDrawData((main_x0, int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
+                tile.set_draw_data(TileDrawData((int(main_x0), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
 
         # getting draw instructions after setting draw data
         for tile in self.__main_tile_sequence:
@@ -142,6 +134,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 draw_instructions.append(instruction)
 
         return draw_instructions
+
+    # helper methods
 
     # ------- Static methods -------------------------------------------------------------------------------------
     @staticmethod
@@ -151,6 +145,27 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Returns:
             ((x0, y0), (x1, y1)), where the first & second pair corresponds to the top left & bottom right corner of the square
             shaped safe area.
+        """
+        main_properties = DefaultGameBoard.__get_main_tile_sequence_properties()
+        main_x0, main_x1, main_y0, main_y1 = main_properties.main_x0, main_properties.main_x1, main_properties.main_y0, main_properties.main_y1
+        square_size = main_properties.square_size
+        return ((int(main_x0 + square_size), int(main_y0 + square_size)), (int(main_x1 - square_size), int(main_y1 - square_size)))
+
+    @staticmethod
+    def get_tiles_required() -> int:
+        """Get the number of tiles required to construct the default game board.
+
+        Returns:
+            The number of tiles required
+        """
+        return DefaultGameBoard.DIMENSION_CELL_COUNT * 4 - 4
+
+    @staticmethod
+    def __get_main_tile_sequence_properties() -> _MainTileSequenceProperties:
+        """Get the properties (bounds, size, square size) of the main tile sequence.
+
+        Returns:
+            The properties of the main tile sequence
         """
         width, height = PygameScreenController_instance().get_screen_size()
         main_width, main_height = width - 2 * (width // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2)), height - 2 * (height // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2))
@@ -162,13 +177,30 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             main_y,
             main_y + DefaultGameBoard.DIMENSION_CELL_COUNT * square_size,
         )
-        return ((int(main_x0+square_size), int(main_y0+square_size)), (int(main_x1 - square_size), int(main_y1 - square_size)))
+        return _MainTileSequenceProperties(width, height, main_x0, main_x1, main_y0, main_y1, square_size)
 
-    @staticmethod
-    def get_tiles_required() -> int:
-        """Get the number of tiles required to construct the default game board.
 
-        Returns:
-            The number of tiles required
+class _MainTileSequenceProperties:
+    """Private data class for organising main tile sequence data for the default game board.
+
+    Author: Shen
+    """
+
+    def __init__(self, width: int, height: int, x0: float, x1: float, y0: float, y1: float, square_size: float):
         """
-        return DefaultGameBoard.DIMENSION_CELL_COUNT * 4 - 4
+        Args:
+            width: The width of the main tile sequence
+            height: The height of the main tile sequence
+            x0: The left bound x coordinate for the main tile sequence
+            x1: The right bound x coordinate for the main tile sequence
+            y0: The top bound y coordinate for the main tile sequence
+            y1: The bottom bound y coordinate for the main tile sequence
+            square_size: The size of each dimension of the square tile
+        """
+        self.main_width = width
+        self.main_height = height
+        self.main_x0 = x0
+        self.main_x1 = x1
+        self.main_y0 = y0
+        self.main_y1 = y1
+        self.square_size = square_size

@@ -25,13 +25,13 @@ class PlayableCharacter(ABC, DrawableByAsset):
         """
         return self.__draw_properties
 
-    def set_draw_data(self, draw_data: DrawProperties) -> None:
-        """Set the data specifying how to draw the character.
+    def set_draw_properties(self, draw_properties: DrawProperties) -> None:
+        """Set the properties specifying how to draw the character.
 
         Args:
             draw_data: The draw data
         """
-        self.__draw_data = draw_data
+        self.__draw_properties = draw_properties
 
     @abstractmethod
     def take_turn(self) -> None:

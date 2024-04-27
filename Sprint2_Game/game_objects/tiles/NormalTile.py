@@ -46,13 +46,18 @@ class NormalTile(Tile):
             return []
 
         tile_x, tile_y = tile_draw_data.get_coordinates()
-        animal_size = int(tile_draw_data.get_size()[0] // 1.45)
+        tile_width, tile_height = tile_draw_data.get_size()
+        animal_size = int(tile_width // 1.45)
         animal_x, animal_y = get_coords_for_center_drawing_in_rect(tile_draw_data.get_coordinates(), tile_draw_data.get_size(), (animal_size, animal_size))
         character = self.get_character_on_tile()
 
         instructions.append(DrawAssetInstruction("assets/tiles/normal_tile.png", tile_x, tile_y, tile_draw_data.get_size()))
         instructions.append(DrawAssetInstruction(f"assets/animals/{self.__animal.value}.png", animal_x, animal_y, (animal_size, animal_size)))
         if character is not None:
+            char_width, char_height = int(tile_width), int(tile_height)
+            char_x, char_y = get_coords_for_center_drawing_in_rect(tile_draw_data.get_coordinates(), tile_draw_data.get_size(), (char_width, char_height))
+            character.set_draw_properties(DrawProperties((char_x, char_y), (char_width, char_height)))
+
             for inst in character.get_draw_assets_instructions():
                 instructions.append(inst)
 

@@ -10,9 +10,11 @@ from screen.DrawAssetInstruction import DrawAssetInstruction
 
 class GameWorld:
     """Initialises and manages a game instance. Provides the interface between it and the players.
-    
+
     Author: Shen
     """
+
+    __SCREEN_FILL_COLOUR = (255, 255, 255)  # screen fill colour in (R, G, B)
 
     def __init__(self, playable_characters: list[PlayableCharacter], chit_cards: list[ChitCard], game_board: GameBoard):
         """
@@ -29,7 +31,7 @@ class GameWorld:
 
     def __run(self) -> None:
         """Initialises the game on the active pygame screen and runs the main game loop.
-        
+
         Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
         """
         clock = pygame.time.Clock()
@@ -37,7 +39,7 @@ class GameWorld:
         # GAME LOOP
         while True:
             # Handle Drawing
-            pygame.display.get_surface().fill("white")
+            pygame.display.get_surface().fill(GameWorld.__SCREEN_FILL_COLOUR)
 
             PygameScreenController_instance().draw_assets_from_instructions(self.__game_board.get_draw_assets_instructions())
             hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__get_chit_card_drawing_instructions())
@@ -69,7 +71,7 @@ class GameWorld:
 
     def __get_chit_card_drawing_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
         """Get the drawing instructions for the chit card clickables.
-        
+
         Returns:
             The list representing the collated instructions in form (drawing instruction, associated chit card)
         """

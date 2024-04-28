@@ -11,6 +11,8 @@ def main():
     clock = pygame.time.Clock()
     board = GameBoard([],[],[])
     board.shuffle_chit_cards()
+    chit_card = board.get_piece(2,6)
+    board.flip_chit_card(chit_card)
 
     while run:
         clock.tick(FPS)

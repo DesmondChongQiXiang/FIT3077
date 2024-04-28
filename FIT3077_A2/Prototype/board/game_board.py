@@ -89,12 +89,10 @@ class GameBoard:
     def draw_game(self,window):
         self.draw_tiles(window)
         self.draw_chit_cards(window)
-                    
-        
-        
 
 
-                
+    def get_piece(self,row,col):
+        return self.chit_cards[row][col]           
 
     def set_player_start_tile(self,players):
         if len(self.players) == 4:
@@ -113,3 +111,9 @@ class GameBoard:
     
     def set_active_player(self,player):
         self.active_player = player
+
+    def flip_chit_card(self,chit_card):
+        self.chit_cards[chit_card.x][chit_card.y].is_flipped = True
+        chit_card.set_is_flipped()
+        
+

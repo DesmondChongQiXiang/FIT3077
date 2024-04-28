@@ -18,6 +18,9 @@ class ChitCard(ABC):
         elif self.is_flipped == True & self.flipped_this_turn == False:
             self.is_flipped = False
 
+    def set_flipped_this_turn(self):
+        self.flipped_this_turn = False
+
     @abstractmethod
     def carry_out_task(self,dragon):
         pass

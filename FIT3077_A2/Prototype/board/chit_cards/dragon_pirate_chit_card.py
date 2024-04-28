@@ -12,5 +12,15 @@ class DragonPirateChitCard(ChitCard):
         self.x = x
         self.y = y
 
+    def set_is_flipped(self):
+        if self.is_flipped == False:
+            self.is_flipped = True
+            self.flipped_this_turn = True
+        elif self.is_flipped == True & self.flipped_this_turn == False:
+            self.is_flipped = False
+
+    def set_flipped_this_turn(self):
+        self.flipped_this_turn = False
+
     def carry_out_task(self, dragon):
         pass

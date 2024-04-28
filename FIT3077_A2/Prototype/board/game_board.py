@@ -55,23 +55,27 @@ class GameBoard:
 
 
     def create_board(self):
-        random.shuffle(CHIT_CARD_COORDINATES) 
+        random.shuffle(CHIT_CARD_COORDINATES)
         for row in range(ROWS):
             self.chit_cards.append([])
             for col in range(COLS):
-                coordinates = [row,col]
-                if coordinates not in CHIT_CARD_COORDINATES:
-                    self.chit_cards[row].append(0)
+                self.chit_cards[row].append(0)
+        #for row in range(ROWS):
+            #self.chit_cards.append([])
+            # col in range(COLS):
+                #coordinates = [row,col]
+                #if coordinates not in CHIT_CARD_COORDINATES:
+                    #self.chit_cards[row].append(0)
         coordinate_pointer = 0
         for i in range(len(CHIT_CARD_ANIMALS)):
             chit_card = AnimalChitCard(CHIT_CARD_ANIMALS[i][1],CHIT_CARD_ANIMALS[i][0],CHIT_CARD_COORDINATES[coordinate_pointer][0],CHIT_CARD_COORDINATES[coordinate_pointer][1])
             coordinate_pointer += 1
-            self.chit_cards[chit_card.x].append(chit_card)
+            self.chit_cards[chit_card.x][chit_card.y] = chit_card
         
         for i in range(len(CHIT_CARD_DRAGON_PIRATES)):
             chit_card = DragonPirateChitCard(Animal.DRAGON_PIRATE,CHIT_CARD_DRAGON_PIRATES[i],CHIT_CARD_COORDINATES[coordinate_pointer][0],CHIT_CARD_COORDINATES[coordinate_pointer][1])
             coordinate_pointer += 1
-            self.chit_cards[chit_card.x].append(chit_card)
+            self.chit_cards[chit_card.x][chit_card.y] = chit_card
 
     def draw_chit_cards(self,window):
         for row in range(ROWS):
@@ -113,7 +117,6 @@ class GameBoard:
         self.active_player = player
 
     def flip_chit_card(self,chit_card):
-        self.chit_cards[chit_card.x][chit_card.y].is_flipped = True
         chit_card.set_is_flipped()
         
 

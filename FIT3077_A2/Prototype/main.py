@@ -12,6 +12,7 @@ def main():
     board = GameBoard([],[],[])
     board.shuffle_chit_cards()
     chit_card = board.get_piece(2,6)
+    print(chit_card.x,chit_card.y)
     board.flip_chit_card(chit_card)
 
     while run:

@@ -1,3 +1,5 @@
+Author: Rohan Sivam 32880316 29-04-2024
+
 How the directories are organised
 
 - FIT3077_SPRINT2/FIT3077_A2 is the main folder that contains all my work for Sprint 2

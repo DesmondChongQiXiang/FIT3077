@@ -38,6 +38,9 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.board.flip_chit_cards()
             
             self.board.draw_board(window)
             pygame.display.update()

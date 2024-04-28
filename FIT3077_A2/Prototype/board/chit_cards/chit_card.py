@@ -23,6 +23,14 @@ class ChitCard(ABC):
         self.x = x
         self.y = y
 
+
+    """
+    This is a function that is used to flip the chit cards over. If the chit card is_flipped is false then we can flip it so we set is_flipped to be true
+    At the end of a turn, we want to be able to flip all the chit cards back to un-flipped. So, i have an alternate if that checks if the chit_cards flipped
+    this turn is true. Ths will be reset to false at the end of a players turn so that they can be flipped back to false
+
+    Method testing: In my main function, I retrieved a chit card and called this method. Chit card then displayed the flipped side.
+    """
     def set_is_flipped(self):
         if self.is_flipped == False:
             self.is_flipped = True
@@ -30,6 +38,10 @@ class ChitCard(ABC):
         elif self.is_flipped == True & self.flipped_this_turn == False:
             self.is_flipped = False
 
+
+    """
+    This is a function that sets the chit cards flipped this turn to false. This is used so that chit cards can all be flipped back at the end of a players turn.
+    """
     def set_flipped_this_turn(self):
         self.flipped_this_turn = False
 

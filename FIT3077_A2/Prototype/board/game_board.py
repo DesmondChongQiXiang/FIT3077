@@ -1,6 +1,6 @@
 import pygame
 import random
-from .settings import BLACK,ROWS,COLS,WHITE,SQUARE_SIZE, RED, NON_CAVE_TILE_ANIMALS,NON_CAVE_TILE_COORDINATES, CAVE_TILE_ANIMALS,CAVE_TILE_COORDINATES, CHIT_CARD_COORDINATES, CHIT_CARD_ANIMALS, CHIT_CARD_DRAGON_PIRATES, CHIT_CARD_BACK
+from .settings import BLACK,ROWS,COLS,WHITE,SQUARE_SIZE, RED, NON_CAVE_TILE_ANIMALS,NON_CAVE_TILE_COORDINATES, CAVE_TILE_ANIMALS,CAVE_TILE_COORDINATES, CHIT_CARD_COORDINATES, CHIT_CARD_ANIMALS, CHIT_CARD_DRAGON_PIRATES, CHIT_CARD_BACK, ROOT_PATH
 from .tiles.non_cave_tile import NonCaveTile
 from .tiles.cave_tile import CaveTile
 from .chit_cards.animal_chit_card import AnimalChitCard
@@ -59,13 +59,13 @@ class GameBoard:
         for i in range(len(NON_CAVE_TILE_COORDINATES)): # Loop through the list of coordinates
             # Create a tile using the same index in the list of animals declared in settings.py
             tile = NonCaveTile(NON_CAVE_TILE_ANIMALS[i],None,NON_CAVE_TILE_COORDINATES[i][0],NON_CAVE_TILE_COORDINATES[i][1])  
-            animal = pygame.image.load("./board/assets/"+tile.animal.value).convert_alpha() # Load the animal image by getting the tiles animal attribute
+            animal = pygame.image.load(f"{ROOT_PATH}/assets/"+tile.animal.value).convert_alpha() # Load the animal image by getting the tiles animal attribute
             animal = pygame.transform.scale(animal,(SQUARE_SIZE,SQUARE_SIZE)) # Scale the image
             window.blit(animal,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE)) # render the image at the coordinates the tile has
 
         for i in range(len(CAVE_TILE_COORDINATES)): # do the same thing for the cave tiles
             tile = CaveTile(CAVE_TILE_ANIMALS[i],None,CAVE_TILE_COORDINATES[i][0],CAVE_TILE_COORDINATES[i][1])
-            animal = pygame.image.load("./board/assets/"+tile.animal.value).convert_alpha()
+            animal = pygame.image.load(f"{ROOT_PATH}/assets/"+tile.animal.value).convert_alpha()
             animal = pygame.transform.scale(animal,(SQUARE_SIZE,SQUARE_SIZE))
             window.blit(animal,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE))
 
@@ -108,7 +108,7 @@ class GameBoard:
     def draw_dragons(self,window):
         for i in range(len(self.players)):
             current_player = self.players[i]
-            dragon = pygame.image.load("./board/assets/" + str(current_player.player_number+1) + "_" + current_player.animal)
+            dragon = pygame.image.load(f"{ROOT_PATH}/assets/" + str(current_player.player_number+1) + "_" + current_player.animal)
             dragon = pygame.transform.scale(dragon,(SQUARE_SIZE - 30,SQUARE_SIZE - 30))
             window.blit(dragon,(SQUARE_SIZE * current_player.x + 15 , SQUARE_SIZE * current_player.y + 15))
         
@@ -129,7 +129,7 @@ class GameBoard:
                         window.blit(CHIT_CARD_BACK,(chit_card.x*SQUARE_SIZE,chit_card.y*SQUARE_SIZE))
                     else: # If it is flipped, render out the chit card based on the animal and the number of animals the chit card possesses. Using naming conventions
                         #for my assets I am able to retrieve the correct asset.
-                        animal = pygame.image.load("./board/assets/chit_card_" + str(chit_card.number_of_animal) + "_" + chit_card.animal.value)
+                        animal = pygame.image.load(f"{ROOT_PATH}/assets/chit_card_" + str(chit_card.number_of_animal) + "_" + chit_card.animal.value)
                         animal = pygame.transform.scale(animal,(SQUARE_SIZE,SQUARE_SIZE))
                         window.blit(animal,(chit_card.x*SQUARE_SIZE,chit_card.y*SQUARE_SIZE))
 

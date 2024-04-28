@@ -1,8 +1,17 @@
 from abc import ABC,abstractmethod
 
+"""
+This is the abstract class Tile. It represents the tiles that make up the game board
+"""
 class Tile(ABC):
     """
     This is the initialiser for the class Tile
+
+    self.animal : This is the animal that will be displayed on the tile
+
+    self.dragon: This is the dragon that occupies the tile
+
+    self.x & self.y : These are the coordinates of the tiles.
     """
     def __init__(self,animal,dragon,x,y) :
         self.animal = animal

@@ -1,9 +1,11 @@
 
 
 class Dragon:
-    def __init__(self,row,col,player_number,animal):
-        self.row = row
-        self.col = col
+    def __init__(self,player_number,animal,x,y):
+
         self.player_number = player_number
-        self.animal = None
+        self.animal = "dragon.png"
         self.turns_taken = 0
+        self.x = x
+        self.y = y
+

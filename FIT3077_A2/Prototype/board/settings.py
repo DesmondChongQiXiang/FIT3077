@@ -2,7 +2,10 @@ import pygame
 import os
 from .tiles.non_cave_tile import NonCaveTile
 from .animal import Animal
+"""
+This file contains all of the constants used in my assignment
 
+"""
 WIDTH,HEIGHT = 900,900
 ROWS,COLS = 9,9
 SQUARE_SIZE = WIDTH//COLS

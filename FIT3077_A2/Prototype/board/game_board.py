@@ -16,10 +16,13 @@ class GameBoard:
         self.active_player = None
         self.selected_chit_chard = None
 
+    def shuffle_chit_cards(self):
+        random.shuffle(CHIT_CARD_COORDINATES)
+        return CHIT_CARD_COORDINATES
+
     def draw_board(self, window):
         coordinate_pointer = 0
         window.fill(WHITE)
-        random.shuffle(CHIT_CARD_COORDINATES)
         for i in range(len(NON_CAVE_TILE_COORDINATES)):
             tile = NonCaveTile(NON_CAVE_TILE_ANIMALS[i],None,NON_CAVE_TILE_COORDINATES[i][0],NON_CAVE_TILE_COORDINATES[i][1])
             #pygame.draw.rect(window,tile.animal.value,(tile.x*SQUARE_SIZE,tile.y*SQUARE_SIZE,SQUARE_SIZE,SQUARE_SIZE))

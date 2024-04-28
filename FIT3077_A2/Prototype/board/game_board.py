@@ -96,10 +96,15 @@ class GameBoard:
             self.chit_cards[chit_card.x][chit_card.y] = chit_card
 
         for i in range(len(CAVE_TILE_COORDINATES)):
-            dragon = Dragon(i,None,CAVE_TILE_COORDINATES[i][0],CAVE_TILE_COORDINATES[i][1])
+            dragon = Dragon(i,None,CAVE_TILE_COORDINATES[i][0],CAVE_TILE_COORDINATES[i][1]) # creates dragons to start at each of the cave coordinates
             self.players.append(dragon)
 
-
+    """
+    This method draws the dragon tokens out in the center of the tiles they are on. It gets the tile coordinates, 
+    adjusts the players size and prints them in the center. The player numbers give which player token asset to render.
+    Some tests i did to find the center were to print the regular token at their regular coordinates. This made them sit in the top left. Then i added and subtracted
+    30. subtracting made them move in the wrong direction. Finally I just added 15 and they sit in the middle of the tile.
+    """
     def draw_dragons(self,window):
         for i in range(len(self.players)):
             current_player = self.players[i]

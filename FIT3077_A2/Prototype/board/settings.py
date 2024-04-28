@@ -50,3 +50,5 @@ NON_CAVE_TILE_ANIMALS = [Animal.BABY_DRAGON,Animal.BAT,Animal.SPIDER,
 
 CAVE_TILE_ANIMALS = [Animal.SALAMANDER,Animal.BAT,Animal.SPIDER,Animal.BABY_DRAGON]
 
+CHIT_CARD_BACK = pygame.image.load("./board/assets/chit_card_back.png")
+CHIT_CARD_BACK = pygame.transform.scale(CHIT_CARD_BACK,(SQUARE_SIZE,SQUARE_SIZE))

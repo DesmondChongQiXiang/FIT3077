@@ -20,7 +20,7 @@ def main():
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pass
-        board.draw_board(WINDOW)
+        board.draw_game(WINDOW)
         pygame.display.update()
 
     

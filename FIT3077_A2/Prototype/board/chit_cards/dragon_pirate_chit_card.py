@@ -1,10 +1,11 @@
 from .chit_card import ChitCard
+from ..animal import Animal
 
 class DragonPirateChitCard(ChitCard):
 
-    def __init__(self, number_of_animal,x,y):
+    def __init__(self,animal,number_of_animal,x,y):
         self.number_of_animal = number_of_animal
-        self.animal = "dragon_pirate.png"
+        self.animal = animal
         self.is_flipped = False
         self.tile_coefficient = -1
         self.flipped_this_turn = False

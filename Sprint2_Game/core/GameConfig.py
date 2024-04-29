@@ -1,7 +1,4 @@
-"""Module for configuring settings of the game.
-
-Author: Shen
-"""
+"""Game Settings"""
 
 SCREEN_WIDTH = 850  # Screen width in px
 SCREEN_HEIGHT = 850  # Screen height in px

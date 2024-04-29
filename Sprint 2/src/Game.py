@@ -1,6 +1,9 @@
 from board.Board import Board
 from board.BoardConfig import *
-from Dragon import Dragon
+from board.Dragon import Dragon
+from chit_cards.Animal import Animal
+from chit_cards.AnimalChitCard import AnimalChitCard
+from chit_cards.DragonPirateChitCard import DragonPirateChitCard
 import pygame
 
 
@@ -19,6 +22,9 @@ class Game:
         else:
             self.players = players
             self.board = board
+                #     (2, 2), (2, 3), (2, 4), (2, 5), (2, 6),
+    #     (3, 2), (3, 6), (4, 2), (4, 6), (5, 2), (5, 6),
+    #     (6, 2), (6, 3), (6, 4), (6, 5), (6, 6),
 
     def default_init(self):
         player_1 = Dragon("Rohan", 1)
@@ -27,6 +33,28 @@ class Game:
         player_4 = Dragon("Desmond", 4)
         self.players = [player_1, player_2, player_3, player_4]
         self.board = Board()
+        self.board.chit_cards = [AnimalChitCard(chit_steps=1, animal='bat', x=2, y=2),
+                                 AnimalChitCard(chit_steps=2, animal='bat_2', x=2, y=3),
+                                 AnimalChitCard(chit_steps=3, animal='bat_3', x=2, y=4),
+                                 AnimalChitCard(chit_steps=1, animal='salamander', x=2, y=5),
+                                 AnimalChitCard(chit_steps=2, animal='salamander_2', x=2, y=6),
+                                 AnimalChitCard(chit_steps=3, animal='salamander_3', x=3, y=2),
+                                 AnimalChitCard(chit_steps=1, animal='baby_dragon', x=3, y=6),
+                                 AnimalChitCard(chit_steps=2, animal='baby_dragon_2', x=4, y=2),
+                                 AnimalChitCard(chit_steps=3, animal='baby_dragon_3', x=4, y=6),
+                                 AnimalChitCard(chit_steps=1, animal='spider', x=5, y=2),
+                                 AnimalChitCard(chit_steps=2, animal='spider_2', x=5, y=6),
+                                 AnimalChitCard(chit_steps=3, animal='spider_3', x=6, y=2),
+                                 DragonPirateChitCard(chit_steps=-1, animal='pirate_dragon', x=6, y=3),
+                                 DragonPirateChitCard(chit_steps=-2, animal='pirate_dragon_2', x=6, y=4),
+                                 DragonPirateChitCard(chit_steps=-1, animal='pirate_dragon', x=6, y=5),
+                                 DragonPirateChitCard(chit_steps=-2, animal='pirate_dragon_2', x=6, y=6)]
+
+    def get_row_col_from_mouse(self, pos):
+        x, y = pos
+        row = x // IMAGE_TILE_SIZE
+        col = y // IMAGE_TILE_SIZE
+        return row, col
 
     def start_game(self):
         pygame.init()
@@ -38,9 +66,14 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.board.flip_chit_cards()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    position = pygame.mouse.get_pos() # gets the position of the mouse when the mouse is clicked
+                    row, col = self.get_row_col_from_mouse(position)
+                    # Check if a chit card was clicked
+                    for chit_card in self.board.chit_cards:
+                        if chit_card.col == row and chit_card.row == col:
+                            chit_card.flip()  # Flip the chit card
+
             
             self.board.draw_board(window)
             pygame.display.update()
@@ -49,7 +82,6 @@ class Game:
 
 if __name__ == "__main__":
     game = Game()
-
     game.start_game()
     
 

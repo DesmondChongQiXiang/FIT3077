@@ -1,4 +1,6 @@
 from .BoardConfig import *
+from chit_cards import AnimalChitCard, DragonPirateChitCard
+from chit_cards.Animal import Animal
 import pygame
 import os
 import random
@@ -15,7 +17,7 @@ class Board:
         # Retrieve animal images from the assets directory
         self.images = self.load_images()
         self.randomise_animal_tiles()
-        self.randomise_chit_cards()
+        self.randomise_chit_card_positions()
 
     def randomise_animal_tiles(self):
         # Create a list of animal tile types with each animal appearing exactly six times
@@ -24,47 +26,8 @@ class Board:
         self.animal_tiles = animal_types * tiles_per_animal
         random.shuffle(self.animal_tiles)
 
-    def randomise_chit_cards(self):
-        chit_card_distribution = [
-            'baby_dragon', 'baby_dragon_2', 'baby_dragon_3',
-            'bat', 'bat_2', 'bat_3',
-            'salamander', 'salamander_2', 'salamander_3',
-            'spider', 'spider_2', 'spider_3',
-            'pirate_dragon', 'pirate_dragon', 'pirate_dragon_2', 'pirate_dragon_2'
-        ]
-        random.shuffle(chit_card_distribution)
-        self.chit_cards = chit_card_distribution
-
-    def draw_chit_cards(self, win):
-        # Drawing chit card section
-        rect_size = 5
-        rect_width = rect_size * IMAGE_TILE_SIZE
-        pygame.draw.rect(win, YELLOW, ((CENTER_COL - 2) * IMAGE_TILE_SIZE + 1, (CENTER_ROW - 2) * IMAGE_TILE_SIZE + 1, rect_width - 2, rect_width - 2))
-
-        positions = [
-        (2, 2), (2, 3), (2, 4), (2, 5), (2, 6),
-        (3, 2), (3, 6), (4, 2), (4, 6), (5, 2), (5, 6),
-        (6, 2), (6, 3), (6, 4), (6, 5), (6, 6),
-        ]   
-        # Draw chit cards
-        for i in range(len(self.chit_cards)):
-            chit_card = self.chit_cards[i]
-            image = self.images[chit_card]
-            col, row = positions[i]
-            x = col * IMAGE_TILE_SIZE
-            y = row * IMAGE_TILE_SIZE
-            
-            # Create a circular mask
-            mask_radius = IMAGE_TILE_SIZE // 2 - 4
-            mask = pygame.Surface((IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), pygame.SRCALPHA)
-            pygame.draw.circle(mask, (255, 255, 255, 255), (IMAGE_TILE_SIZE // 2, IMAGE_TILE_SIZE // 2), mask_radius)
-            pygame.draw.circle(mask, (0, 0, 0, 255), (IMAGE_TILE_SIZE // 2, IMAGE_TILE_SIZE // 2), mask_radius, 2)  # Black border
-            win.blit(mask, (x, y), special_flags=pygame.BLEND_RGBA_SUB)
-
-            # Apply the mask to the chit card image
-            masked_image = image.copy()
-            masked_image.blit(mask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
-            win.blit(masked_image, (x, y))
+    def randomise_chit_card_positions(self):
+        random.shuffle(self.chit_cards)
 
     def draw_tiles(self, win):
         win.fill(BLACK)
@@ -81,12 +44,16 @@ class Board:
 
                 if row == 0 and col == CENTER_COL:
                     win.blit(self.images['cave_salamander'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
+                    win.blit(self.images['dragon_token_1'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
                 elif row == ROWS - 1 and col == CENTER_COL:
                     win.blit(self.images['cave_bat'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
+                    win.blit(self.images['dragon_token_2'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
                 elif row == CENTER_ROW and col == 0:
                     win.blit(self.images['cave_spider'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
+                    win.blit(self.images['dragon_token_3'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
                 elif row == CENTER_ROW and col == COLUMNS - 1:
                     win.blit(self.images['cave_baby_dragon'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
+                    win.blit(self.images['dragon_token_4'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
 
                 # Drawing normal tiles
                 elif 1 <= row <= ROWS - 2 and 1 <= col <= COLUMNS - 2:
@@ -101,6 +68,32 @@ class Board:
                         # Load and draw the image on the tile
                         image = self.images[animal_tile]
                         win.blit(image, (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
+
+    def draw_chit_cards(self, win):
+        # Drawing chit card section
+        rect_size = 5
+        rect_width = rect_size * IMAGE_TILE_SIZE
+        pygame.draw.rect(win, YELLOW, ((CENTER_COL - 2) * IMAGE_TILE_SIZE + 1, (CENTER_ROW - 2) * IMAGE_TILE_SIZE + 1, rect_width - 2, rect_width - 2))
+
+        for chit_card in self.chit_cards:
+            chit_card_image = self.images[chit_card.animal]
+
+            x = chit_card.col * IMAGE_TILE_SIZE + 1
+            y = chit_card.row * IMAGE_TILE_SIZE + 1
+
+            if chit_card.flipped:
+                # Create a circular mask
+                mask_radius = IMAGE_TILE_SIZE // 2
+                mask = pygame.Surface((IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), pygame.SRCALPHA)
+                pygame.draw.circle(mask, (255, 255, 255, 255), (IMAGE_TILE_SIZE // 2, IMAGE_TILE_SIZE // 2), mask_radius)
+                pygame.draw.circle(mask, (0, 0, 0, 255), (IMAGE_TILE_SIZE // 2, IMAGE_TILE_SIZE // 2), mask_radius, 2)  # Black border
+
+                # Apply the mask to the chit card image
+                masked_image = chit_card_image.copy()
+                masked_image.blit(mask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+                win.blit(masked_image, (x, y))
+            else:
+                pygame.draw.circle(win, BLACK, (x + IMAGE_TILE_SIZE // 2, y + IMAGE_TILE_SIZE // 2), IMAGE_TILE_SIZE // 2)
 
     def load_images(self):
         # Getting reference to the assets directory
@@ -127,7 +120,11 @@ class Board:
             'cave_spider': 'cave_spider.png',
             'cave_baby_dragon': 'cave_baby_dragon.png',
             'pirate_dragon': 'pirate_dragon.png',
-            'pirate_dragon_2': 'pirate_dragon_2.png'
+            'pirate_dragon_2': 'pirate_dragon_2.png',
+            'dragon_token_1': 'dragon_1.png',
+            'dragon_token_2': 'dragon_2.png',
+            'dragon_token_3': 'dragon_3.png',
+            'dragon_token_4': 'dragon_4.png',
         }
 
         for tile_type, image_path in tile_types.items():
@@ -140,7 +137,7 @@ class Board:
         self.draw_tiles(win)
         self.draw_chit_cards(win)
 
-    
+
         
 
 

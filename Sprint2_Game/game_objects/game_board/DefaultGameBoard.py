@@ -12,7 +12,8 @@ from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
     """Initialises and represents the default fiery dragons game board. Cells are drawn in a square, using the 
-    width of the screen as reference. Caves jut out from the main sequence of tiles.
+    width of the screen as reference. Caves jut out from the main sequence of tiles. Chit cards are randomly
+    placed within the inner ring.
 
     Author: Shen
     """

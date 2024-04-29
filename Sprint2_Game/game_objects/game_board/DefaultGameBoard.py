@@ -1,17 +1,20 @@
 from __future__ import annotations
-from .GameBoard import GameBoard
+from game_objects.game_board.GameBoard import GameBoard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.tiles.Tile import Tile
-from screen.DrawProperties import DrawProperties
 from game_objects.chit_cards.ChitCard import ChitCard
+from screen.DrawProperties import DrawProperties
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawAssetInstruction import DrawAssetInstruction
+from screen.ModularClickableSprite import ModularClickableSprite
 from core.singletons import PygameScreenController_instance
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
+import random
+
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
-    """Initialises and represents the default fiery dragons game board. Cells are drawn in a square, using the 
+    """Initialises and represents the default fiery dragons game board. Cells are drawn in a square, using the
     width of the screen as reference. Caves jut out from the main sequence of tiles. Chit cards are randomly
     placed within the inner ring.
 
@@ -20,17 +23,23 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
     ### CONFIG
     DIMENSION_CELL_COUNT: int = 7  # Cell count for each dimension
+    CHIT_CARD_RAND_FACTOR: int = 40  # random factor in pixels
+    CHIT_CARD_DIMENSIONS: tuple[int, int] = (75, 75)  # chit card dimensions (width, height) in px
 
-    def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]]):
+    def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard]):
         """
         Args:
             main_tile_sequence: The main tile sequence (excluding starting tiles) to use for the game board. Must have (DIMENSION_CELL_COUNT * 4) - 4 tiles.
             starting_tiles: The starting tiles. In form: (starting tile, next tile)
+            chit_cards: The chit cards to use for the game board.
         """
         self.__main_tile_sequence: list[Tile] = []
         self.__starting_tiles: list[Tile] = []
         self.__starting_tiles_set: set[Tile] = set()
-        self.__chit_cards: list[ChitCard] = []
+        self.__chit_cards: list[ChitCard] = chit_cards
+
+        # initialise chit card positions
+        self.__set_chit_card_positions()
 
         # Set the starting tiles
         dest_to_start_tile: dict[Tile, Tile] = dict()
@@ -60,6 +69,30 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             raise Exception(
                 f"There must be {DefaultGameBoard.get_tiles_required()} tiles in the main tile sequence (len={main_tiles_only_len}). DIMENSION_CELL_COUNT = {DefaultGameBoard.DIMENSION_CELL_COUNT}."
             )
+
+    def __set_chit_card_positions(self):
+        """Set the clickable chit card positions randomly for the default game board.
+
+        Warning: Will not set all chit card positions if random factor / chit card size is too large
+        """
+        safe_area = DefaultGameBoard.__get_chit_card_safe_area()
+        x0, y0, x1, y1 = safe_area[0][0], safe_area[0][1], safe_area[1][0], safe_area[1][1]
+        chit_card_w, chit_card_h = DefaultGameBoard.CHIT_CARD_DIMENSIONS
+        next_x, next_y = 0, 0  # default coords = (0, 0) to draw at if can't generate
+
+        # generate chit tiles randomly in manner that doesn't clip board tiles
+        chit_card_i = 0
+        x_random_range, y_random_range = chit_card_w + DefaultGameBoard.CHIT_CARD_RAND_FACTOR, chit_card_h + DefaultGameBoard.CHIT_CARD_RAND_FACTOR
+
+        for cur_y in range(y0, y1 - y_random_range, y_random_range):
+            for cur_x in range(x0, x1 - x_random_range, x_random_range):
+                if chit_card_i == len(self.__chit_cards):  # exit if no more chit cards to generate
+                    break
+                next_x, next_y = random.randint(cur_x, cur_x + DefaultGameBoard.CHIT_CARD_RAND_FACTOR), random.randint(
+                    cur_y, cur_y + DefaultGameBoard.CHIT_CARD_RAND_FACTOR
+                )
+                self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), DefaultGameBoard.CHIT_CARD_DIMENSIONS))
+                chit_card_i += 1
 
     # ------ GameBoard interface -----------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
@@ -135,9 +168,24 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         return draw_instructions
 
+    # TO REFACTOR
+    def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
+        """Draw the clickable chit cards for the default game board.
+
+        Returns:
+            The drawing instructions for the chit cards in form (instruction, chit card object)
+        """
+        ##### Getting instructions
+        instructions: list[tuple[DrawAssetInstruction, ModularClickableSprite]] = []
+        for chit_card in self.__chit_cards:
+            for click_inst in chit_card.get_draw_clickable_assets_instructions():
+                instructions.append(click_inst)
+
+        return instructions
+
     # ------- Static methods -----------------------------------------------------------------------------------------
     @staticmethod
-    def get_chit_card_safe_area() -> tuple[tuple[int, int], tuple[int, int]]:
+    def __get_chit_card_safe_area() -> tuple[tuple[int, int], tuple[int, int]]:
         """Get the square safe area for the chit cards.
 
         Returns:

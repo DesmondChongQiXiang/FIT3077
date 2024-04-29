@@ -3,6 +3,8 @@ from game_objects.tiles.Tile import Tile
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.DrawableByAsset import DrawableByAsset
+from screen.DrawAssetInstruction import DrawAssetInstruction
+from screen.ModularClickableSprite import ModularClickableSprite
 from game_events.MoveActionHandler import MoveActionHandler
 
 class GameBoard(ABC, DrawableByAsset, MoveActionHandler):
@@ -57,3 +59,12 @@ class GameBoard(ABC, DrawableByAsset, MoveActionHandler):
             steps: The steps the character should move
         """
         self.move_character_by_steps(character, steps)
+
+    @abstractmethod
+    def get_draw_clickable_assets_instructions(self)-> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
+        """Add a chit card to the game board.
+
+        Args:
+            chit_card: The chit card to add
+        """
+        ...

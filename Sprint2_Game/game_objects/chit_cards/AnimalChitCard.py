@@ -2,6 +2,8 @@ from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.animals.Animal import Animal
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
+from screen.DrawProperties import DrawProperties
+from typing import Optional
 
 
 class AnimalChitCard(ChitCard):
@@ -10,25 +12,27 @@ class AnimalChitCard(ChitCard):
     Author: Shen
     """
 
-    def __init__(self, animal: Animal, symbol_count: int, coordinates: tuple[int, int], size: tuple[int, int]) -> None:
+    def __init__(self, animal: Animal, symbol_count: int, draw_properties: Optional[DrawProperties] = None) -> None:
         """
         Args:
             animal: The animal associated with the chit card
             symbol_count: The symbol count for the chit card
-            coordinates: The coordinates to draw the chit cards at
-            size: (width, height) of the chit card in pixels
+            draw_properties (optional): Properties specifying how and where the chit card should be drawn
         """
         self.__animal = animal
-        super().__init__(symbol_count, coordinates, size)
+        super().__init__(symbol_count, draw_properties)
 
     def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
-        """Chit card displays back when it is not flipped. Otherwise display its front.
+        """Chit card displays its back when it is not flipped. Otherwise display its front. Don't draw if drawing properties have not been set.
 
         Returns:
             Array containing (instruction to represent flipped state, this object)
         """
+        draw_properties = self.get_draw_properties()
+        if draw_properties is None:
+            return []
         asset_path: str = "assets/chit_cards"
-        coord_x, coord_y = self.get_coordinates()
+        coord_x, coord_y = draw_properties.get_coordinates()
 
         if self.get_flipped():
             return [
@@ -37,14 +41,14 @@ class AnimalChitCard(ChitCard):
                         f"{asset_path}/chit_card_{self.__animal.value}_{self.get_symbol_count()}.png",
                         x=coord_x,
                         y=coord_y,
-                        size=self.get_size(),
+                        size=draw_properties.get_size(),
                     ),
                     self,
                 )
             ]
         return [
             (
-                DrawAssetInstruction(f"{asset_path}/chit_card_back.png", x=coord_x, y=coord_y, size=self.get_size()),
+                DrawAssetInstruction(f"{asset_path}/chit_card_back.png", x=coord_x, y=coord_y, size=draw_properties.get_size()),
                 self,
             )
         ]

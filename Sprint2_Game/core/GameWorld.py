@@ -40,7 +40,7 @@ class GameWorld:
             pygame.display.get_surface().fill(SCREEN_BACKGROUND_COLOUR)
 
             PygameScreenController_instance().draw_assets_from_instructions(self.__game_board.get_draw_assets_instructions())
-            hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__get_chit_card_drawing_instructions())
+            hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__game_board.get_draw_clickable_assets_instructions())
 
             # Handle Events
             for event in pygame.event.get():
@@ -66,15 +66,3 @@ class GameWorld:
             pos = pygame.mouse.get_pos()
             if rect.collidepoint(pos):
                 clickable.on_click()
-
-    def __get_chit_card_drawing_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
-        """Get the drawing instructions for the chit card clickables.
-
-        Returns:
-            The list representing the collated instructions in form (drawing instruction, associated chit card)
-        """
-        drawing_instructions: list[tuple[DrawAssetInstruction, ModularClickableSprite]] = []
-        for chit_card in self.__chit_cards:
-            for instruction in chit_card.get_draw_clickable_assets_instructions():
-                drawing_instructions.append(instruction)
-        return drawing_instructions

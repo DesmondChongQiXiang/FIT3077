@@ -24,6 +24,8 @@ class SingletonMeta(type):
                     cls._instances[cls] = super(SingletonMeta, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 class Game(metaclass=SingletonMeta):
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     """
     Game Class
 
@@ -55,8 +57,6 @@ class Game(metaclass=SingletonMeta):
         self.gameboard = gameboard
         self.menu = menu
         self.FPS = 150
-        pygame.init() # Initialize pygame
-        self.screen = pygame.display.set_mode((WIDTH, HEIGHT)) # Create game screen
         pygame.display.set_caption("Fiery Dragon") # Set window caption
 
     def __select_player_num(self):
@@ -96,16 +96,12 @@ class Game(metaclass=SingletonMeta):
         pygame.quit() # Quit pygame
 
     def run(self):
+        print("a")
         """
         Method to start and run the game.
         """
         self.__select_player_num()
         self.__initialise_game()
         self.__gameloop()
-
-
-
-
-
 
 

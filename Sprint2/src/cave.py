@@ -1,4 +1,5 @@
 import pygame
+import os
 from constants import CELL_WIDTH,CELL_HEIGHT  # Import constants for cell width and height
 from game import Game
 from drawableinterface import DrawableInterface # Import the DrawableInterface class for drawing objects
@@ -31,13 +32,13 @@ class Cave(DrawableInterface): # implement DrawableInterface
         self.x_pos = pos[0] # Set the x-coordinate position of the cave
         self.y_pos = pos[1] # Set the y-coordinate position of the cave
         # Load the image of the cave and scale it to the specified width and height
-        image = pygame.image.load("assets/cave{}.png".format(self.id)).convert_alpha() # load with the id
+        ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+        image = pygame.image.load(f"{ROOT_PATH}/assets/cave{self.id}.png").convert_alpha() # load with the id
         self.image = pygame.transform.scale(image, (CAVE_WIDTH, CAVE_HEIGHT))
 
     def draw(self):
         """
         Draws the cave on the game screen.
         """
-        game = Game() # Create a Game instance to get the screen
         # Blit the image of the cave onto the game screen at the specified position
-        game.screen.blit(self.image, (self.x_pos + 2, self.y_pos + 2))
+        Game.screen.blit(self.image, (self.x_pos + 2, self.y_pos + 2))

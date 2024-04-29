@@ -1,6 +1,7 @@
 import random
 from constants import CELL_WIDTH,CELL_HEIGHT, TILES_ANIMAL_ORDERING,TILES_POS,TILES_NUM,CAVES_ANIMAL,CAVES_DRAGON_POS,CHITCARD_COL_RANGE,CHITCARD_ROW_RANGE
-from chitcard import ForwardChitCard, BackwardChitCard
+from chitcard import ForwardChitCard
+from chitcard import BackwardChitCard
 from cave import Cave
 from tile import Tile
 from animal import Animal
@@ -90,10 +91,10 @@ class GameBoard:
             list: List of cave objects.
         """
         caves = [] # a list to store caves to return back to game class
-        for i in range(player_num): # create the number of caves based on the number of players
+        for i in range(4): # create the 4 caves
             caves.append(Cave(i+1,CAVES_ANIMAL[i],CAVES_DRAGON_POS[i])) # create cave with id, animal and position
         self.drawables.extend(caves) # also extend to drawable list to draw the gameboard later
-        return caves # return the obtained caves back to game class
+        return caves[:player_num] # return the obtained caves back to game class  based on the number of player
 
     def create_dragon_token(self,player_num):
         """
@@ -106,10 +107,10 @@ class GameBoard:
             list: List of dragon token objects.
         """
         dragon_tokens = [] # a list to store dragon token to return back to game class
-        for i in range(player_num): # create the number of dragon token based on the number of players
+        for i in range(4): # create 4 dragon token
             dragon_tokens.append(DragonToken(i + 1, CAVES_DRAGON_POS[i])) # create dragontoken with id and position
         self.drawables.extend(dragon_tokens) # also extend to drawable list to draw the gameboard later
-        return dragon_tokens # return the obtained dragon token back to game class
+        return dragon_tokens[:player_num] # return the obtained dragon token back to game class based on the number of player
 
 
 

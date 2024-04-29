@@ -1,5 +1,6 @@
 import pygame
 from game import Game
+import os
 class Menu:
     """
     Menu Class
@@ -51,7 +52,8 @@ class Menu:
         Displays the game title.
         """
         # Render the game title text
-        start_game =  pygame.font.Font("assets/font.ttf", 100).render("FIERY DRAGON", True, "#b68f40")
+        ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+        start_game =  pygame.font.Font(f"{ROOT_PATH}/assets/font.ttf", 100).render("FIERY DRAGON", True, "#b68f40")
         start_game_rect = start_game.get_rect(center=(640, 75)) # Get the rectangle for the title text
         game = Game() # Create a Game instance to use the screen
         game.screen.blit(start_game, start_game_rect) # Blit the title text onto the game screen
@@ -67,11 +69,13 @@ class Menu:
         Returns:
             pygame.Rect: Rect object representing the button.
         """
-        option_button = pygame.image.load("assets/Options Rect.png") # Load the button image
+        ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+        option_button = pygame.image.load(f"{ROOT_PATH}/assets/Options Rect.png").convert_alpha() # Load the button image
         option_button_rect = option_button.get_rect(center=(button_pos)) # Get the rectangle for the button
         game = Game() # Create a Game instance
         game.screen.blit(option_button,option_button_rect) # Blit the button image onto the game screen
-        text = pygame.font.Font("assets/font.ttf", 50).render(text, True, "#d7fcd4") # Render the button text
+
+        text = pygame.font.Font(f"{ROOT_PATH}/assets/font.ttf", 50).render(text, True, "#d7fcd4") # Render the button text
         text_rect = text.get_rect(center=(button_pos)) # Get the rectangle for the button text
         game.screen.blit(text,text_rect) # Blit the button text onto the game screen
         return option_button_rect # Return the rectangle representing the button
@@ -91,6 +95,3 @@ class Menu:
         if mouse_pos[0] in range(button_rect.left, button_rect.right) and mouse_pos[1] in range(button_rect.top,button_rect.bottom):
             return True # Return True if the button is clicked
         return False # Return False if the button is not clicked
-
-
-

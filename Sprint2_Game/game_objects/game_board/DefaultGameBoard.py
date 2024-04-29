@@ -109,7 +109,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     def add_chit_card(self, chit_card: ChitCard) -> None:
         pass
 
-    # ------ DrawableByAsset interface -----------------------------------------------------------------------------------
+    # ------ DrawableByAsset interface & Drawing --------------------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """
         Instructions to draw the game board as a square of square cells, with the number of cells on each dimension equal to
@@ -168,7 +168,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         return draw_instructions
 
-    # TO REFACTOR
     def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
         """Draw the clickable chit cards for the default game board.
 
@@ -185,6 +184,15 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
     # ------- Static methods -----------------------------------------------------------------------------------------
     @staticmethod
+    def get_tiles_required() -> int:
+        """Get the number of tiles required to construct the default game board.
+
+        Returns:
+            The number of tiles required
+        """
+        return DefaultGameBoard.DIMENSION_CELL_COUNT * 4 - 4
+
+    @staticmethod
     def __get_chit_card_safe_area() -> tuple[tuple[int, int], tuple[int, int]]:
         """Get the square safe area for the chit cards.
 
@@ -196,15 +204,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         main_x0, main_x1, main_y0, main_y1 = main_properties.main_x0, main_properties.main_x1, main_properties.main_y0, main_properties.main_y1
         square_size = main_properties.square_size
         return ((int(main_x0 + square_size), int(main_y0 + square_size)), (int(main_x1 - square_size), int(main_y1 - square_size)))
-
-    @staticmethod
-    def get_tiles_required() -> int:
-        """Get the number of tiles required to construct the default game board.
-
-        Returns:
-            The number of tiles required
-        """
-        return DefaultGameBoard.DIMENSION_CELL_COUNT * 4 - 4
 
     @staticmethod
     def __get_main_tile_sequence_properties() -> _MainTileSequenceProperties:

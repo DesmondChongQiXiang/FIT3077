@@ -1,10 +1,11 @@
 from __future__ import annotations
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from screen.DrawAssetInstruction import DrawAssetInstruction
+from typing import Protocol
 
 
-class ModularClickableSprite(ABC):
-    """Allows a class to be represented by assets (images) that can be clicked on.
+class ModularClickableSprite(Protocol):
+    """Allows objects to be represented by assets (images) that can be clicked on.
 
     Author: Shen
     """

@@ -22,16 +22,9 @@ class Game:
         else:
             self.players = players
             self.board = board
-                #     (2, 2), (2, 3), (2, 4), (2, 5), (2, 6),
-    #     (3, 2), (3, 6), (4, 2), (4, 6), (5, 2), (5, 6),
-    #     (6, 2), (6, 3), (6, 4), (6, 5), (6, 6),
 
     def default_init(self):
-        player_1 = Dragon("Rohan", 1)
-        player_2 = Dragon("Ian", 2)
-        player_3 = Dragon("Shen", 3)
-        player_4 = Dragon("Desmond", 4)
-        self.players = [player_1, player_2, player_3, player_4]
+        self.players = [Dragon("Rohan", 1), Dragon("Ian", 2), Dragon("Shen", 3), Dragon("Desmond", 4)]
         self.board = Board()
         self.board.chit_cards = [AnimalChitCard(chit_steps=1, animal='bat', x=2, y=2),
                                  AnimalChitCard(chit_steps=2, animal='bat_2', x=2, y=3),

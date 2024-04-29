@@ -7,8 +7,14 @@ import random
 
 
 class Board:
+    """
+    Class representing the game board.
+    """
 
     def __init__(self):
+        """
+        Initialize the Board object.
+        """
         self.tiles = []
         self.chit_cards = []
         self.dragons = []
@@ -16,10 +22,15 @@ class Board:
 
         # Retrieve animal images from the assets directory
         self.images = self.load_images()
+
+        # Randomising animal tiles and chit cards' position
         self.randomise_animal_tiles()
         self.randomise_chit_card_positions()
 
     def randomise_animal_tiles(self):
+        """
+        Randomise the positions of animal tiles on the board.
+        """
         # Create a list of animal tile types with each animal appearing exactly six times
         animal_types = ['salamander', 'bat', 'spider', 'baby_dragon']
         tiles_per_animal = 6
@@ -27,9 +38,15 @@ class Board:
         random.shuffle(self.animal_tiles)
 
     def randomise_chit_card_positions(self):
+        """
+        Randomise the positions of chit cards on the board.
+        """
         random.shuffle(self.chit_cards)
 
     def draw_tiles(self, win):
+        """
+        Draw the tiles on the board.
+        """
         win.fill(BLACK)
 
         tile_index = 0
@@ -42,15 +59,19 @@ class Board:
                     pygame.draw.rect(win, YELLOW, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE))
                     pygame.draw.rect(win, BLACK, (col * IMAGE_TILE_SIZE, row * IMAGE_TILE_SIZE, IMAGE_TILE_SIZE, IMAGE_TILE_SIZE), 1)
 
+                # 1st cave
                 if row == 0 and col == CENTER_COL:
                     win.blit(self.images['cave_salamander'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
                     win.blit(self.images['dragon_token_1'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
+                # 2nd cave
                 elif row == ROWS - 1 and col == CENTER_COL:
                     win.blit(self.images['cave_bat'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
                     win.blit(self.images['dragon_token_2'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
+                # 3rd cave
                 elif row == CENTER_ROW and col == 0:
                     win.blit(self.images['cave_spider'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
                     win.blit(self.images['dragon_token_3'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
+                # 4th cave
                 elif row == CENTER_ROW and col == COLUMNS - 1:
                     win.blit(self.images['cave_baby_dragon'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
                     win.blit(self.images['dragon_token_4'], (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
@@ -70,7 +91,10 @@ class Board:
                         win.blit(image, (col * IMAGE_TILE_SIZE + 1, row * IMAGE_TILE_SIZE + 1))
 
     def draw_chit_cards(self, win):
-        # Drawing chit card section
+        """
+        Draw the chit cards on the board.
+        """
+        # Drawing the section where the chit cards will be placed
         rect_size = 5
         rect_width = rect_size * IMAGE_TILE_SIZE
         pygame.draw.rect(win, YELLOW, ((CENTER_COL - 2) * IMAGE_TILE_SIZE + 1, (CENTER_ROW - 2) * IMAGE_TILE_SIZE + 1, rect_width - 2, rect_width - 2))
@@ -81,6 +105,7 @@ class Board:
             x = chit_card.col * IMAGE_TILE_SIZE + 1
             y = chit_card.row * IMAGE_TILE_SIZE + 1
 
+            # If the chit card has not been flipped, it will blit the image of the chit card
             if chit_card.flipped:
                 # Create a circular mask
                 mask_radius = IMAGE_TILE_SIZE // 2
@@ -93,9 +118,13 @@ class Board:
                 masked_image.blit(mask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
                 win.blit(masked_image, (x, y))
             else:
+            # Else, the chit card will remain covered (black)
                 pygame.draw.circle(win, BLACK, (x + IMAGE_TILE_SIZE // 2, y + IMAGE_TILE_SIZE // 2), IMAGE_TILE_SIZE // 2)
 
     def load_images(self):
+        """
+        Load images for the game.
+        """
         # Getting reference to the assets directory
         current_dir = os.path.dirname(__file__)
         images_dir = os.path.join(current_dir, '..', 'assets')
@@ -127,6 +156,7 @@ class Board:
             'dragon_token_4': 'dragon_4.png',
         }
 
+        # Retrieving all the images within the assets directory and scaling them according to IMAGE_SIZE
         for tile_type, image_path in tile_types.items():
             image = pygame.image.load(os.path.join(images_dir, image_path))
             images[tile_type] = pygame.transform.scale(image, IMAGE_SIZE)
@@ -134,6 +164,9 @@ class Board:
         return images
     
     def draw_board(self, win):
+        """
+        Draw the entire board.
+        """
         self.draw_tiles(win)
         self.draw_chit_cards(win)
 

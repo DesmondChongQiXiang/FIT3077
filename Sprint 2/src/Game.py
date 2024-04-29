@@ -62,6 +62,7 @@ class Game:
                                  DragonPirateChitCard(chit_steps=-2, animal='pirate_dragon_2', x=6, y=4),
                                  DragonPirateChitCard(chit_steps=-1, animal='pirate_dragon', x=6, y=5),
                                  DragonPirateChitCard(chit_steps=-2, animal='pirate_dragon_2', x=6, y=6)]
+        self.board.randomise_chit_card_positions()
 
     def get_row_col_from_mouse(self, pos):
         """

@@ -1,6 +1,6 @@
 from .BoardConfig import *
-from chit_cards import AnimalChitCard, DragonPirateChitCard
-from chit_cards.Animal import Animal
+from chit_cards.AnimalChitCard import AnimalChitCard
+from chit_cards.DragonPirateChitCard import DragonPirateChitCard
 import pygame
 import os
 import random
@@ -16,7 +16,22 @@ class Board:
         Initialize the Board object.
         """
         self.tiles = []
-        self.chit_cards = []
+        self.chit_cards = [AnimalChitCard(chit_steps=1, animal='bat', x=2, y=2),
+                                 AnimalChitCard(chit_steps=2, animal='bat_2', x=2, y=3),
+                                 AnimalChitCard(chit_steps=3, animal='bat_3', x=2, y=4),
+                                 AnimalChitCard(chit_steps=1, animal='salamander', x=2, y=5),
+                                 AnimalChitCard(chit_steps=2, animal='salamander_2', x=2, y=6),
+                                 AnimalChitCard(chit_steps=3, animal='salamander_3', x=3, y=2),
+                                 AnimalChitCard(chit_steps=1, animal='baby_dragon', x=3, y=6),
+                                 AnimalChitCard(chit_steps=2, animal='baby_dragon_2', x=4, y=2),
+                                 AnimalChitCard(chit_steps=3, animal='baby_dragon_3', x=4, y=6),
+                                 AnimalChitCard(chit_steps=1, animal='spider', x=5, y=2),
+                                 AnimalChitCard(chit_steps=2, animal='spider_2', x=5, y=6),
+                                 AnimalChitCard(chit_steps=3, animal='spider_3', x=6, y=2),
+                                 DragonPirateChitCard(chit_steps=-1, animal='pirate_dragon', x=6, y=3),
+                                 DragonPirateChitCard(chit_steps=-2, animal='pirate_dragon_2', x=6, y=4),
+                                 DragonPirateChitCard(chit_steps=-1, animal='pirate_dragon', x=6, y=5),
+                                 DragonPirateChitCard(chit_steps=-2, animal='pirate_dragon_2', x=6, y=6)]
         self.dragons = []
         self.animal_tiles = []
 
@@ -25,7 +40,7 @@ class Board:
 
         # Randomising animal tiles and chit cards' position
         self.randomise_animal_tiles()
-        self.randomise_chit_card_positions()
+        #self.randomise_chit_card_positions()
 
     def randomise_animal_tiles(self):
         """
@@ -41,7 +56,15 @@ class Board:
         """
         Randomise the positions of chit cards on the board.
         """
+        # random.shuffle(self.chit_cards)
+            # Shuffle the chit cards to ensure randomness
         random.shuffle(self.chit_cards)
+
+        # Iterate over pairs of chit cards (starting from the first one)
+        for i in range(0, len(self.chit_cards), 2):
+            # Swap the x and y coordinates of the chit cards
+            self.chit_cards[i].col, self.chit_cards[i + 1].col = self.chit_cards[i + 1].col, self.chit_cards[i].col
+            self.chit_cards[i].row, self.chit_cards[i + 1].row = self.chit_cards[i + 1].row, self.chit_cards[i].row
 
     def draw_tiles(self, win):
         """

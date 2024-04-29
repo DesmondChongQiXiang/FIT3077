@@ -5,7 +5,6 @@ from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.game_board.GameBoard import GameBoard
 from screen.ModularClickableSprite import ModularClickableSprite
-from screen.DrawAssetInstruction import DrawAssetInstruction
 
 
 class GameWorld:

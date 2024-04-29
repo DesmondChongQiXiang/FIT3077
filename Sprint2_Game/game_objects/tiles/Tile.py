@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Optional
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawProperties import DrawProperties

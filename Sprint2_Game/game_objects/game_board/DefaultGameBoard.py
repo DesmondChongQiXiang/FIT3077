@@ -38,8 +38,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         self.__starting_tiles_set: set[Tile] = set()
         self.__chit_cards: list[ChitCard] = chit_cards
 
-        # initialise chit card positions
-        self.__set_chit_card_positions()
+        # initialise chit card position & size
+        self.__initialise_chit_card_draw_properties()
 
         # Set the starting tiles
         dest_to_start_tile: dict[Tile, Tile] = dict()
@@ -70,10 +70,14 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 f"There must be {DefaultGameBoard.get_tiles_required()} tiles in the main tile sequence (len={main_tiles_only_len}). DIMENSION_CELL_COUNT = {DefaultGameBoard.DIMENSION_CELL_COUNT}."
             )
 
-    def __set_chit_card_positions(self):
-        """Set the clickable chit card positions randomly for the default game board.
+    def __initialise_chit_card_draw_properties(self) -> None:
+        """Initialise the clickable chit cards to draw randomly within the inner zone (square) of the game board. 
+        
+        DefaultGameBoard.CHIT_CARD_RAND_FACTOR and DefaultGameBoard.CHIT_CARD_DIMENSIONS determine the randomness 
+        and size of the chit cards.
 
-        Warning: Will not set all chit card positions if random factor / chit card size is too large
+        Warning: 
+            Will not set all chit card positions if random factor / chit card size is too large
         """
         safe_area = DefaultGameBoard.__get_chit_card_safe_area()
         x0, y0, x1, y1 = safe_area[0][0], safe_area[0][1], safe_area[1][0], safe_area[1][1]

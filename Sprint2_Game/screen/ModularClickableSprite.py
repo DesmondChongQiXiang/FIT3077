@@ -5,7 +5,7 @@ from typing import Protocol
 
 
 class ModularClickableSprite(Protocol):
-    """Allows objects to be represented by assets (images) that can be clicked on.
+    """Allows an object to be represented by assets (images) that can be clicked on.
 
     Author: Shen
     """

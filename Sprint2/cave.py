@@ -31,7 +31,7 @@ class Cave(DrawableInterface): # implement DrawableInterface
         self.x_pos = pos[0] # Set the x-coordinate position of the cave
         self.y_pos = pos[1] # Set the y-coordinate position of the cave
         # Load the image of the cave and scale it to the specified width and height
-        image = pygame.image.load("../assets/cave{}.png".format(self.id)).convert_alpha() # load with the id
+        image = pygame.image.load("assets/cave{}.png".format(self.id)).convert_alpha() # load with the id
         self.image = pygame.transform.scale(image, (CAVE_WIDTH, CAVE_HEIGHT))
 
     def draw(self):

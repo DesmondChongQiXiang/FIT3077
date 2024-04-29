@@ -8,15 +8,32 @@ import pygame
 
 
 class Game:
+    """
+    The main game class that controls the flow of the Fiery Dragons game.
+
+    Attributes:
+    - players (list): A list of Dragon objects representing the players in the game.
+    - board (Board): An instance of the Board class representing the game board.
+    """
 
     _instance = None
     
     def __new__(cls, *args, **kwargs):
+        """
+        Ensure only one instance of the Game class is created. (Singleton)
+        """
         if not cls._instance:
             cls._instance = super(Game, cls).__new__(cls, *args, **kwargs)
         return cls._instance
 
     def __init__(self, players=None, board=None):
+        """
+        Initialize the Game object.
+
+        Args:
+        - players (list): A list of Dragon objects representing the players in the game.
+        - board (Board): An instance of the Board class representing the game board.
+        """
         if players is None and board is None:
             self.default_init()
         else:
@@ -24,6 +41,9 @@ class Game:
             self.board = board
 
     def default_init(self):
+        """
+        Initialize the game with default players and board setup.
+        """
         self.players = [Dragon("Rohan", 1), Dragon("Ian", 2), Dragon("Shen", 3), Dragon("Desmond", 4)]
         self.board = Board()
         self.board.chit_cards = [AnimalChitCard(chit_steps=1, animal='bat', x=2, y=2),
@@ -44,12 +64,24 @@ class Game:
                                  DragonPirateChitCard(chit_steps=-2, animal='pirate_dragon_2', x=6, y=6)]
 
     def get_row_col_from_mouse(self, pos):
+        """
+        Get the row and column from the mouse click position.
+
+        Args:
+        - pos (tuple): The mouse click position (x, y).
+
+        Returns:
+        - tuple: The row and column corresponding to the mouse click position.
+        """
         x, y = pos
         row = x // IMAGE_TILE_SIZE
         col = y // IMAGE_TILE_SIZE
         return row, col
 
     def start_game(self):
+        """
+        Start the game loop and handle game events.
+        """
         pygame.init()
         window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Fiery Dragons")
@@ -60,7 +92,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    position = pygame.mouse.get_pos() # gets the position of the mouse when the mouse is clicked
+                    position = pygame.mouse.get_pos()
                     row, col = self.get_row_col_from_mouse(position)
                     # Check if a chit card was clicked
                     for chit_card in self.board.chit_cards:

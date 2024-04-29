@@ -12,7 +12,7 @@ class ModularClickableSprite(Protocol):
 
     @abstractmethod
     def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
-        """Get the instructions to draw the clickable asset.
+        """Get the instructions to draw the clickable assets.
 
         Returns:
             A list containing tuples in the form of (drawing instructions, object to return on click)

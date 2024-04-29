@@ -7,9 +7,10 @@ from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from game_events.MoveActionHandler import MoveActionHandler
 
+
 class GameBoard(ABC, DrawableByAsset, MoveActionHandler):
     """Represents a game board that can be played on
-    
+
     Author: Shen
     """
 
@@ -50,10 +51,10 @@ class GameBoard(ABC, DrawableByAsset, MoveActionHandler):
             chit_card: The chit card to add
         """
         ...
-        
+
     def on_move_action_fired(self, character: PlayableCharacter, steps: int) -> None:
         """Move the character by a number of steps.
-        
+
         Args:
             character: The character which fired the move action
             steps: The steps the character should move
@@ -61,10 +62,10 @@ class GameBoard(ABC, DrawableByAsset, MoveActionHandler):
         self.move_character_by_steps(character, steps)
 
     @abstractmethod
-    def get_draw_clickable_assets_instructions(self)-> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
-        """Add a chit card to the game board.
+    def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
+        """Get the instructions to draw the clickable assets of the game board.
 
-        Args:
-            chit_card: The chit card to add
+        Returns:
+            A list containing tuples in the form of (drawing instructions, object to return on click)
         """
         ...

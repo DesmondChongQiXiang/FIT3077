@@ -1,7 +1,7 @@
 # Fiery Dragon Board Game
 
 Author: Zhan Hung Fu 
-  
+
 Student ID: 33049394
 
 ## Overview
@@ -25,7 +25,7 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
 - **Language:** Python
 - **Libraries:** PyGame
 
-## Building the Executable
+## Building the Executable (runs on MacOS)
 
 1. Navigate into the **'src'** folder.
 

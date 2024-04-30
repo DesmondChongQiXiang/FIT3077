@@ -31,11 +31,11 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
 2. Activate the virtual environment by running the following command in the terminal:
 
 
-` source .venv/bin/activate `
+- ` source .venv/bin/activate `
 
 3. Turn the program into an executable by running this command in the terminal:
 
-` pyinstaller Game.py `
+- ` pyinstaller Game.py `
 
 4. This creates a folder called 'dist' which is a bundled executable that includes its scripts, dependencies and etc.
 

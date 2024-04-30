@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class PlayableCharacterVariant(Enum):
-    """Identifies different variants for the playable characters.
+    """Represents different variants for the playable characters.
 
     Author: Shen
     """

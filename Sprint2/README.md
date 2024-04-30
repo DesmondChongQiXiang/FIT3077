@@ -30,15 +30,17 @@ This repository includes the Sprint 2 file, which contains the UML class diagram
 2. Activate the virtual environment by executing the following command in your terminal:
 
     - ` source .venv/bin/activate `
+3. Please install pyinstaller if it is not installed yet, please type it in command:
+    - `pip install pyinstaller `
 
-3. Convert the program into an executable by running this command in the terminal:
+4. Convert the program into an executable by running this command in the terminal:
 
     - ` pyinstaller main.py `
 
-4. This action generates a folder named **'dist'**, containing a bundled executable along with its necessary scripts and dependencies.
+5. This action generates a folder named **'dist'**, containing a bundled executable along with its necessary scripts and dependencies.
 
-5. Within the **'dist'** directory, establish a new folder named **'game'** within the **'_internal'** directory.
+6. Within the **'dist'** directory, establish a new folder named **'game'** within the **'_internal'** directory.
 
-6. Copy the **'assets'** folder into the newly created **'game'** folder.
+7. Copy the **'assets'** folder into the newly created **'game'** folder.
 
-7. The process of creating the executable is now complete, allowing it to be executed independently from the source code.
+8. The process of creating the executable is now complete, allowing it to be executed independently from the source code.

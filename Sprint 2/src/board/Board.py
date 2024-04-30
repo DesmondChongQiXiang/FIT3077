@@ -40,7 +40,6 @@ class Board:
 
         # Randomising animal tiles and chit cards' position
         self.randomise_animal_tiles()
-        #self.randomise_chit_card_positions()
 
     def randomise_animal_tiles(self):
         """
@@ -56,8 +55,7 @@ class Board:
         """
         Randomise the positions of chit cards on the board.
         """
-        # random.shuffle(self.chit_cards)
-            # Shuffle the chit cards to ensure randomness
+        # Shuffle the chit cards to ensure randomness
         random.shuffle(self.chit_cards)
 
         # Iterate over pairs of chit cards (starting from the first one)

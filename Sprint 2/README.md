@@ -1,10 +1,13 @@
 # Fiery Dragon Board Game
 
-## Overview
+Author: Zhan Hung Fu 
+Student ID: 33049394
+
+## OVERVIEW
 
 Welcome to the Fiery Dragon Board Game repository! This project houses the codebase for the Fiery Dragon Board Game, along the UML class diagrams, sequence diagrams, and design rationale. 
 
-## Navigation
+## NAVIGATION
 
 - **Deliverables**: This folder contains all project deliverables.
     - [**UML Class Diagram**](./deliverables/FIT3077%20Sprint%202%20UML%20Class%20Diagram.pdf)
@@ -14,9 +17,11 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
     - [**REQ 3 & 4 Sequence Diagram**](./deliverables/FIT3077%20Sprint%202%20REQ%203%20&%204%20Sequence%20Diagram.pdf)
     - [**REQ 5 Sequence Diagram**](./deliverables/FIT3077%20Sprint%202%20Design%20Rationale.pdf)
 
-- **Src**: This folder contains all the game's code and assets.
+- [**Src**](./src/): This folder contains all the game's code and assets.
 
-## Tech Stack
+## TECH STACK
 
 - **Language:** Python
 - **Libraries:** PyGame
+
+## HOW TO RUN THE EXE.

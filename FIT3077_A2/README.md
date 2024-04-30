@@ -14,6 +14,9 @@ This repository contains the UML class diagrams, Sequence Diagram, Design Ration
 [**Prototype**](./Prototype/)/dist/main/_internal.
 7. Create a new folder inside this _internal folder called board.
 8. Copy the [**assets**](./Prototype/board/assets/) folder from inside [**board**](./Prototype/board/) originally in prototype to this new board folder. The file path for the copy of assets should be : Prototype/dist/main/_internal/board/assets. The original assets folder can be gotten from : [**Prototype/board/assets**](./Prototype/board/assets/)
+9. Now the executable is ready to run. Go to the main folder inside dist in your main laptop file directory. On mac this is finder. Inside this folder should be an executable called main. Click on it to run the executable.
+
+Notes: The Creation and Running of the Executable has been tested on 3 different laptops. One is a windows OS device and two are MAC OS devices. This means that there should be no problem creating and running the executable.
 
 ## Navigation
 

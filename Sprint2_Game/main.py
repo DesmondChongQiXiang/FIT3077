@@ -41,4 +41,4 @@ if __name__ == "__main__":
     )
 
     # ============ GAME INSTANCE =============
-    world = GameWorld(playable_characters, chit_cards, game_board)
+    world = GameWorld(playable_characters, game_board)

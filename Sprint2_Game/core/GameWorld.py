@@ -13,15 +13,13 @@ class GameWorld:
     Author: Shen
     """
 
-    def __init__(self, playable_characters: list[PlayableCharacter], chit_cards: list[ChitCard], game_board: GameBoard):
+    def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard):
         """
         Args:
             playable_charcters: The list of playable characters to initialise the world (game) with
-            chit_cards: The chit cards the game should start off with
             game_board: The game board
         """
         self.__playable_characters: list[PlayableCharacter] = playable_characters
-        self.__chit_cards: list[ChitCard] = chit_cards
         self.__game_board: GameBoard = game_board
 
         self.__run()

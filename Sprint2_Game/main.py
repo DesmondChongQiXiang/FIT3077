@@ -22,9 +22,14 @@ if __name__ == "__main__":
     pygame.display.set_caption("Fiery Dragons: Shen Jiang")
 
     # ============= GAME CONFIG ==============
-    playable_characters: list[PlayableCharacter] = [Dragon(PlayableCharacterVariant.BLUE), Dragon(PlayableCharacterVariant.GREEN), Dragon(PlayableCharacterVariant.ORANGE), Dragon(PlayableCharacterVariant.PURPLE)]
     tiles: list[Tile] = normal_tiles_in_animal_sequence(24)
     chit_cards: list[ChitCard] = animal_chit_cards_in_animal_sequence(16)
+    playable_characters: list[PlayableCharacter] = [
+        Dragon(PlayableCharacterVariant.BLUE),
+        Dragon(PlayableCharacterVariant.GREEN),
+        Dragon(PlayableCharacterVariant.ORANGE),
+        Dragon(PlayableCharacterVariant.PURPLE),
+    ]
     starting_tiles: list[Tile] = [
         CaveTile(Animal.BABY_DRAGON, character=playable_characters[0]),
         CaveTile(Animal.SALAMANDER, character=playable_characters[1]),

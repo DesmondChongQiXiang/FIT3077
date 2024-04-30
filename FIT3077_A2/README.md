@@ -11,9 +11,9 @@ This repository contains the UML class diagrams, Sequence Diagram, Design Ration
 4. Type the following command in the terminal : pyinstaller main.py
 5. After this has run, there should be 2 new folders : build and dist in the prototype directory
 6. Inside the dist folder, there should be a folder called main. Inside the main folder there should be a folder called internal. The relative file path should be:
-Prototype/dist/main/_internal.
+[**Prototype**](./Prototype/)/dist/main/_internal.
 7. Create a new folder inside this _internal folder called board.
-8. Copy the assets folder from inside board to this new board folder. The file path for the copy of assets should be : Prototype/dist/main/_internal/board/assets. The original assets folder can be gotten from : Prototype/board/assets
+8. Copy the [**assets**](./Prototype/board/assets/) folder from inside [**board**](./Prototype/board/) originally in prototype to this new board folder. The file path for the copy of assets should be : Prototype/dist/main/_internal/board/assets. The original assets folder can be gotten from : [**Prototype/board/assets**](./Prototype/board/assets/)
 
 ## Navigation
 

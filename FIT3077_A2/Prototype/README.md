@@ -10,4 +10,4 @@ This repository is the Tech-Based work in progress(Software prototype). For this
 
 - **Deliverables**: This folder contains all the files used for my tech based work in progress
     - [**board**](./board/) : This folder contains all the classes that I have used to create my board and set up the board
-    - main.py : This is the file where my main game loop has been implemented
+    - [**main.py**](main.py) : This is the file where my main game loop has been implemented

@@ -4,7 +4,16 @@ Student ID: 32880316
 Date: 29-04-2024
 
 ## Overview
-This repository contains the UML class diagrams, Sequence Diagram, Design Rational and working prototype
+This repository contains the UML class diagrams, Sequence Diagram, Design Rational and working prototype. To set up the executable for this project, follow the following steps.
+1. Navigate to the active directory Prototype
+2. Activate the virtual environment. On Mac , this is : source .venv/bin/activate
+3. Make sure that pyinstaller is installed, if not install by typing the command on mac : pip install pyinstaller 
+4. Type the following command in the terminal : pyinstaller main.py
+5. After this has run, there should be 2 new folders : build and dist in the prototype directory
+6. Inside the dist folder, there should be a folder called main. Inside the main folder there should be a folder called internal. The relative file path should be:
+Prototype/dist/main/_internal.
+7. Create a new folder inside this _internal folder called board.
+8. Copy the assets folder from inside board to this new board folder. The file path for the copy of assets should be : Prototype/dist/main/_internal/board/assets. The original assets folder can be gotten from : Prototype/board/assets
 
 ## Navigation
 

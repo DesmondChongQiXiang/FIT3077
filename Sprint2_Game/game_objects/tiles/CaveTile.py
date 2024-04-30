@@ -13,6 +13,8 @@ class CaveTile(Tile):
     Author: Shen
     """
 
+    __ANIMAL_DRAW_SIZE_FACTOR: float = 1.7  # higher means smaller animal
+
     def __init__(self, animal: Animal, draw_data: Optional[DrawProperties] = None, character: Optional[PlayableCharacter] = None):
         """
         Args:
@@ -35,7 +37,7 @@ class CaveTile(Tile):
 
         instructions: list[DrawAssetInstruction] = []
         tile_x, tile_y = tile_draw_data.get_coordinates()
-        animal_size = int(tile_draw_data.get_size()[0] // 1.45)
+        animal_size = int(tile_draw_data.get_size()[0] // CaveTile.__ANIMAL_DRAW_SIZE_FACTOR)
         animal_x, animal_y = get_coords_for_center_drawing_in_rect(tile_draw_data.get_coordinates(), tile_draw_data.get_size(), (animal_size, animal_size))
 
         instructions.append(DrawAssetInstruction("assets/tiles/cave_tile.png", tile_x, tile_y, tile_draw_data.get_size(), tile_draw_data.get_rotation()))

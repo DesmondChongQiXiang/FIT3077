@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawProperties import DrawProperties
+from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVariant
 from typing import Optional
 
 
@@ -10,11 +11,13 @@ class PlayableCharacter(ABC, DrawableByAsset):
     Author: Shen
     """
 
-    def __init__(self, draw_properties: Optional[DrawProperties] = None):
+    def __init__(self, variant: PlayableCharacterVariant, draw_properties: Optional[DrawProperties] = None):
         """
         Args:
+            variant: The variant of the character
             draw_properties (optional): The drawing properties specifying how to draw the character
         """
+        self._variant = variant
         self.__draw_properties = draw_properties
 
     def get_draw_properties(self) -> Optional[DrawProperties]:

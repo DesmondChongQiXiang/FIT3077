@@ -1,4 +1,5 @@
 from game_objects.characters.PlayableCharacter import PlayableCharacter
+from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVariant
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.DrawProperties import DrawProperties
 from typing import Optional
@@ -10,12 +11,13 @@ class Dragon(PlayableCharacter):
     Author: Shen
     """
 
-    def __init__(self, draw_properties: Optional[DrawProperties] = None):
+    def __init__(self, variant: PlayableCharacterVariant, draw_properties: Optional[DrawProperties] = None):
         """
         Args:
-            draw_properties (optional): The drawing properties specifying how to draw the character
+            variant: The variant of the dragon
+            draw_properties (optional): The drawing properties specifying how to draw the dragon
         """
-        super().__init__(draw_properties)
+        super().__init__(variant, draw_properties)
 
     # TODO: Implement turn taking functionality
     def take_turn(self) -> None:
@@ -23,7 +25,7 @@ class Dragon(PlayableCharacter):
 
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """Draw the dragon if the drawing properties have been specified. Otherwise draws nothing.
-        
+
         Returns:
             The drawing instructions
         """
@@ -32,4 +34,4 @@ class Dragon(PlayableCharacter):
             return []
         x, y = draw_properties.get_coordinates()
 
-        return [DrawAssetInstruction("assets/characters/dragon.png", x, y, draw_properties.get_size())]
+        return [DrawAssetInstruction(f"assets/characters/dragon/dragon_{self._variant.value}.png", x, y, draw_properties.get_size())]

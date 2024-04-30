@@ -6,10 +6,10 @@ from game_objects.characters.Dragon import Dragon
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.tiles.Tile import Tile
 from game_objects.tiles.CaveTile import CaveTile
-from game_objects.tiles.NormalTile import NormalTile
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.game_board.DefaultGameBoard import DefaultGameBoard
 from game_objects.animals.Animal import Animal
+from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVariant
 
 import pygame
 import random
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     pygame.display.set_caption("Fiery Dragons: Shen Jiang")
 
     # ============= GAME CONFIG ==============
-    playable_characters: list[PlayableCharacter] = [Dragon(), Dragon(), Dragon(), Dragon()]
+    playable_characters: list[PlayableCharacter] = [Dragon(PlayableCharacterVariant.BLUE), Dragon(PlayableCharacterVariant.GREEN), Dragon(PlayableCharacterVariant.ORANGE), Dragon(PlayableCharacterVariant.PURPLE)]
     tiles: list[Tile] = normal_tiles_in_animal_sequence(24)
     chit_cards: list[ChitCard] = animal_chit_cards_in_animal_sequence(16)
     starting_tiles: list[Tile] = [

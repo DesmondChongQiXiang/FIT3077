@@ -37,7 +37,7 @@ class GameWorld:
             pygame.display.get_surface().fill(SCREEN_BACKGROUND_COLOUR)
 
             PygameScreenController_instance().draw_assets_from_instructions(self.__game_board.get_draw_assets_instructions())
-            hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__game_board.get_draw_clickable_assets_instructions())
+            chit_card_hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__game_board.get_draw_clickable_assets_instructions())
 
             # Handle Events
             for event in pygame.event.get():
@@ -47,7 +47,7 @@ class GameWorld:
                         return
 
                     case pygame.MOUSEBUTTONDOWN:  # handle mouse click
-                        self.__handle_clickables_on_mouse_click(hitboxes)
+                        self.__handle_clickables_on_mouse_click(chit_card_hitboxes)
 
             # Update screen & Set FPS
             pygame.display.flip()  # update screen

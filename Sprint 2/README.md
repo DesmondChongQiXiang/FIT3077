@@ -26,7 +26,7 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
 
 ## Building the Executable
 
-1. Navigate into the 'src' folder.
+1. Navigate into the **'src'** folder.
 
 2. Activate the virtual environment by running the following command in the terminal:
 
@@ -37,10 +37,10 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
 
 - ` pyinstaller Game.py `
 
-4. This creates a folder called 'dist' which is a bundled executable that includes its scripts, dependencies and etc.
+4. This creates a folder called **'dist'** which is a bundled executable that includes its scripts, dependencies and etc.
 
-5. Inside the 'dist' folder, create a new folder called 'board' under the '_internal' folder.
+5. Inside the **'dist'** folder, create a new folder called **'board'** under the **'_internal'** folder.
 
-6. Copy the 'assets' folder into the newly created 'board' folder.
+6. Copy the **'assets'** folder into the newly created **'board'** folder.
 
 7. The creation of the executable is complete, and it can be run independently of the source code.

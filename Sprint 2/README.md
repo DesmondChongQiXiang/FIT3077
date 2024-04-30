@@ -17,7 +17,7 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
     - [**REQ 3 & 4 Sequence Diagram**](./deliverables/FIT3077%20Sprint%202%20REQ%203%20&%204%20Sequence%20Diagram.pdf)
     - [**REQ 5 Sequence Diagram**](./deliverables/FIT3077%20Sprint%202%20Design%20Rationale.pdf)
 
-- [**Src**](./src/): This folder contains all the game's code and assets.
+- [**src**](./src/): This folder contains all the game's code and assets.
 
 ## Tech Stack
 
@@ -29,7 +29,6 @@ Welcome to the Fiery Dragon Board Game repository! This project houses the codeb
 1. Navigate into the **'src'** folder.
 
 2. Activate the virtual environment by running the following command in the terminal:
-
 
     - ` source .venv/bin/activate `
 

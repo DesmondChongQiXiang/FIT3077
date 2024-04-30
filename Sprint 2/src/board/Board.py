@@ -150,7 +150,7 @@ class Board:
         """
         # Getting reference to the assets directory
         current_dir = os.path.dirname(__file__)
-        images_dir = os.path.join(current_dir, '..', 'assets')
+        images_dir = os.path.join(current_dir, 'assets')
 
         images = {}
 

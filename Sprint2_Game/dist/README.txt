@@ -2,6 +2,7 @@ Intended platform: Windows
 
 
 How to build the executable from the source code
+Please see demonstration video for guided building
 
 1. Ensure you are on a Windows computer. 
 

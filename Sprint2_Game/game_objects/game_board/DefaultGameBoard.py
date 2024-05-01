@@ -31,7 +31,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Args:
             main_tile_sequence: The main tile sequence (excluding starting tiles) to use for the game board. Must have (DIMENSION_CELL_COUNT * 4) - 4 tiles.
             starting_tiles: The starting tiles. In form: (starting tile, next tile)
-            chit_cards: The chit cards to use for the game board. Will be placed in order from top to bottom, left to right.
+            chit_cards: The chit cards to use for the game board. Will be placed in order from left to right, top to bottom.
         """
         self.__main_tile_sequence: list[Tile] = []
         self.__starting_tiles: list[Tile] = []

@@ -2,6 +2,7 @@
 
 **Deliverables**:
 - Video Demonstration
+- Design Rationale
 - UML Class Diagram
 - UML Sequence Diagrams for requirements 1-5
 

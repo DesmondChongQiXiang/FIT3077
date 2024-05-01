@@ -14,3 +14,9 @@
 
 
 [**Press Here To Navigate**](./Sprint2_Game/)
+
+## Executable related things
+**Build & Run**: See submitted executable zip README.txt
+
+
+**Run**: Extract submitted executable zip and run main.exe

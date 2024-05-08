@@ -24,7 +24,7 @@ class PygameScreenController:
             Exception if the pygame screen does not yet exist
         """
         self.__screen = pygame.display.get_surface()
-        self.__image_cache: dict[str, pygame.Surface] = dict()      # K = Absolute Image Path, V = Loaded Image
+        self.__image_cache: dict[str, pygame.Surface] = dict()  # K = Absolute Image Path, V = Loaded Image
 
         if self.__screen is None:
             raise Exception("The pygame screen does not yet exist.")

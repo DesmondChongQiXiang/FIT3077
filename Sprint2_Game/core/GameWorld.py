@@ -41,7 +41,7 @@ class GameWorld:
             chit_card_hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__game_board.get_draw_clickable_assets_instructions())
 
             # Handle Turns
-            current_player: PlayableCharacter = self.__playable_characters[0]   # TEMP CODE
+            current_player: PlayableCharacter = self.__playable_characters[0]  # TEMP CODE
 
             # Handle Events
             for event in pygame.event.get():

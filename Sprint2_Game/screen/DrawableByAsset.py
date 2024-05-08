@@ -11,7 +11,11 @@ class DrawableByAsset(Protocol):
 
     @abstractmethod
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
-        """Get the drawing instructions that draw the assets for the object."""
+        """Get the drawing instructions that draw the assets for the object.
+
+        Returns:
+            The list of drawing instructions to draw the object
+        """
         ...
 
 

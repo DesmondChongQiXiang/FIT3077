@@ -57,7 +57,7 @@ class AnimalChitCard(ChitCard):
 
     def on_click(self, character: PlayableCharacter, characters_tile: Tile) -> None:
         """On click toggle its flipped state.
-        
+
         Args:
             character: The character who clicked the sprite
             characters_tile: The tile the character was on

@@ -46,7 +46,7 @@ class Tile(ABC, DrawableByAsset):
 
     def get_animal(self) -> Optional[Animal]:
         """Get the animal on the tile if it has one.
-        
+
         Returns:
             The animal on the tile
         """

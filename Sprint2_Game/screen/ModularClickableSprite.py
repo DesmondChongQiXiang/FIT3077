@@ -24,7 +24,7 @@ class ModularClickableSprite(Protocol):
     @abstractmethod
     def on_click(self, character: PlayableCharacter, characters_tile: Tile) -> None:
         """When the sprite is clicked on, do something.
-        
+
         Args:
             character: The character who clicked the sprite
             characters_tile: The tile the character was on

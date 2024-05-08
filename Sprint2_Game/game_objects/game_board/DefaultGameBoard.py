@@ -71,12 +71,12 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             )
 
     def __initialise_chit_card_draw_properties(self) -> None:
-        """Initialise the clickable chit cards to draw randomly within the inner zone (square) of the game board. 
-        
-        DefaultGameBoard.CHIT_CARD_RAND_FACTOR and DefaultGameBoard.CHIT_CARD_DIMENSIONS determine the randomness 
+        """Initialise the clickable chit cards to draw randomly within the inner zone (square) of the game board.
+
+        DefaultGameBoard.CHIT_CARD_RAND_FACTOR and DefaultGameBoard.CHIT_CARD_DIMENSIONS determine the randomness
         and size of the chit cards.
 
-        Warning: 
+        Warning:
             Will not set all chit card positions if random factor / chit card size is too large
         """
         safe_area = DefaultGameBoard.__get_chit_card_safe_area()

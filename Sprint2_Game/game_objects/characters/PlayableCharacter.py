@@ -6,7 +6,8 @@ from typing import Optional
 
 
 class PlayableCharacter(ABC, DrawableByAsset):
-    """Represents a playable character in the game.
+    """Represents a playable character in the game. Actions in the game interact with this class to determine their
+    behaviour.
 
     Author: Shen
     """

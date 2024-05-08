@@ -19,10 +19,6 @@ class Dragon(PlayableCharacter):
         """
         super().__init__(variant, draw_properties)
 
-    # TODO: Implement turn taking functionality
-    def take_turn(self) -> None:
-        pass
-
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """Draw the dragon if the drawing properties have been specified. Otherwise draws nothing.
 

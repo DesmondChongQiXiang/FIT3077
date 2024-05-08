@@ -35,7 +35,3 @@ class PlayableCharacter(ABC, DrawableByAsset):
             draw_data: The draw data
         """
         self.__draw_properties = draw_properties
-
-    @abstractmethod
-    def take_turn(self) -> None:
-        """Perform turn functionalities for the character."""

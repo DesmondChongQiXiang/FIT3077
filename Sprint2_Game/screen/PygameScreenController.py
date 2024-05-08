@@ -47,7 +47,7 @@ class PygameScreenController:
         """
         abs_image_path: str = f"{ROOT_PATH}/{image_path}"
 
-        # Use image cache if possible. HIT: Load image. MISS: Load and cache image
+        # Use image cache if possible. HIT: Load cached image. MISS: Load then cache image
         if abs_image_path not in self.__image_cache:
             self.__image_cache[abs_image_path] = pygame.image.load(abs_image_path)
 
@@ -113,7 +113,3 @@ class PygameScreenController:
         Author: Shen
         """
         return self.__screen.get_size()
-
-
-# References
-# https://stackoverflow.com/questions/33533148/how-do-i-type-hint-a-method-with-the-type-of-the-enclosing-class

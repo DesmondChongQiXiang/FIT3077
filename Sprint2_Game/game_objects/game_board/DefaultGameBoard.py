@@ -103,7 +103,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         pass
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
-        # TODO: Do not call. Will crash if no starting tiles
+        # TODO: Placeholder code. Will crash if no starting tiles
         return self.__starting_tiles[0]
 
     def flip_chit_card(self, character: PlayableCharacter, chit_card: ChitCard) -> None:

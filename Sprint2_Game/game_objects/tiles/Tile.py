@@ -4,6 +4,7 @@ from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from game_objects.characters.PlayableCharacter import PlayableCharacter
+from game_objects.animals.Animal import Animal
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 
@@ -16,14 +17,16 @@ class Tile(ABC, DrawableByAsset):
     Author: Shen
     """
 
-    def __init__(self, draw_data: Optional[DrawProperties], character: Optional[PlayableCharacter] = None):
+    def __init__(self, draw_data: Optional[DrawProperties], character: Optional[PlayableCharacter] = None, animal: Optional[Animal] = None):
         """
         Args:
             draw_data (Optional): The data specifying how to draw the tile
             character (Optional): The character on the tile
+            animal (Optional): The animal on the tile
         """
         self.__draw_data = draw_data
         self.__character = character
+        self.__animal = animal
 
     def get_draw_data(self) -> Optional[DrawProperties]:
         """Returns the data required to draw the tile if it exists.
@@ -40,6 +43,14 @@ class Tile(ABC, DrawableByAsset):
             draw_data: The draw data
         """
         self.__draw_data = draw_data
+
+    def get_animal(self) -> Optional[Animal]:
+        """Get the animal on the tile if it has one.
+        
+        Returns:
+            The animal on the tile
+        """
+        return self.__animal
 
     def get_character_on_tile(self) -> Optional[PlayableCharacter]:
         """Returns the character currently on the tile if there is one.

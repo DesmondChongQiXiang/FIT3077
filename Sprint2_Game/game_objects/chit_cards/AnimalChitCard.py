@@ -1,5 +1,7 @@
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.animals.Animal import Animal
+from game_objects.tiles.Tile import Tile
+from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.DrawProperties import DrawProperties
@@ -53,6 +55,11 @@ class AnimalChitCard(ChitCard):
             )
         ]
 
-    def on_click(self) -> None:
-        """On click toggle its flipped state."""
+    def on_click(self, character: PlayableCharacter, characters_tile: Tile) -> None:
+        """On click toggle its flipped state.
+        
+        Args:
+            character: The character who clicked the sprite
+            characters_tile: The tile the character was on
+        """
         self.set_flipped(not self.get_flipped())

@@ -22,16 +22,7 @@ class NormalTile(Tile):
             draw_data (Optional): The data specifying how to draw the tile
             character (Optional): The character on the tile
         """
-        self.__animal = animal
-        super().__init__(draw_data, character)
-
-    def get_animal(self) -> Animal:
-        """Gets the animal the tile represents.
-
-        Returns:
-            The animal
-        """
-        return self.__animal
+        super().__init__(draw_data, character, animal)
 
     # ------- DrawableByAsset interface --------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
@@ -47,11 +38,13 @@ class NormalTile(Tile):
 
         instructions: list[DrawAssetInstruction] = []
         tile_x, tile_y = tile_draw_data.get_coordinates()
+        animal = self.get_animal()
         animal_size = int(tile_draw_data.get_size()[0] / NormalTile.__ANIMAL_DRAW_SIZE_FACTOR)
         animal_x, animal_y = get_coords_for_center_drawing_in_rect(tile_draw_data.get_coordinates(), tile_draw_data.get_size(), (animal_size, animal_size))
 
         instructions.append(DrawAssetInstruction("assets/tiles/normal_tile.png", tile_x, tile_y, tile_draw_data.get_size()))
-        instructions.append(DrawAssetInstruction(f"assets/animals/{self.__animal.value}.png", animal_x, animal_y, (animal_size, animal_size)))
+        if animal is not None:
+            instructions.append(DrawAssetInstruction(f"assets/animals/{animal.value}.png", animal_x, animal_y, (animal_size, animal_size)))
         for instruction in self._get_character_draw_instructions():
             instructions.append(instruction)
 

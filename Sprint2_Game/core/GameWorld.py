@@ -4,6 +4,7 @@ from core.singletons import PygameScreenController_instance
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.game_board.GameBoard import GameBoard
+from game_objects.tiles.Tile import Tile
 from screen.ModularClickableSprite import ModularClickableSprite
 
 
@@ -39,6 +40,9 @@ class GameWorld:
             PygameScreenController_instance().draw_assets_from_instructions(self.__game_board.get_draw_assets_instructions())
             chit_card_hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__game_board.get_draw_clickable_assets_instructions())
 
+            # Handle Turns
+            current_player: PlayableCharacter = self.__playable_characters[0]   # TEMP CODE
+
             # Handle Events
             for event in pygame.event.get():
                 match event.type:
@@ -47,19 +51,22 @@ class GameWorld:
                         return
 
                     case pygame.MOUSEBUTTONDOWN:  # handle mouse click
-                        self.__handle_clickables_on_mouse_click(chit_card_hitboxes)
+                        self.__fire_onclick_for_clicked_hitboxes(chit_card_hitboxes, current_player)
 
             # Update screen & Set FPS
             pygame.display.flip()  # update screen
             clock.tick(FRAMES_PER_SECOND)
 
-    def __handle_clickables_on_mouse_click(self, hitboxes: list[tuple[pygame.Rect, ModularClickableSprite]]) -> None:
-        """Fires on_click() for any clickable that was clicked.
+    def __fire_onclick_for_clicked_hitboxes(self, hitboxes: list[tuple[pygame.Rect, ModularClickableSprite]], player: PlayableCharacter) -> None:
+        """Fires on_click() for any objects containing hitboxes under the user's current cursor position.
 
         Args:
             hitboxes: A list of tuples of form (rectangular hitbox, object associated with hitbox)
+            player: The playable character of the current player
         """
+        players_tile: Tile = self.__game_board.get_character_floor_tile(player)
+
         for rect, clickable in hitboxes:
             pos = pygame.mouse.get_pos()
             if rect.collidepoint(pos):
-                clickable.on_click()
+                clickable.on_click(player, players_tile)

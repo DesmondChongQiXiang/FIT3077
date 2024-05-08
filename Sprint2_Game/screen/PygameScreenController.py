@@ -24,6 +24,7 @@ class PygameScreenController:
             Exception if the pygame screen does not yet exist
         """
         self.__screen = pygame.display.get_surface()
+        self.__image_cache: dict[str, pygame.Surface] = dict()      # K = Absolute Image Path, V = Loaded Image
 
         if self.__screen is None:
             raise Exception("The pygame screen does not yet exist.")
@@ -44,7 +45,13 @@ class PygameScreenController:
 
         Author: Shen
         """
-        image = pygame.image.load(f"{ROOT_PATH}/{image_path}")
+        abs_image_path: str = f"{ROOT_PATH}/{image_path}"
+
+        # Use image cache if possible. HIT: Load image. MISS: Load and cache image
+        if abs_image_path not in self.__image_cache:
+            self.__image_cache[abs_image_path] = pygame.image.load(abs_image_path)
+
+        image: pygame.Surface = self.__image_cache[abs_image_path]
         image = pygame.transform.rotozoom(image, rotate, 1.0)
         if width is not None and height is not None:
             image = pygame.transform.smoothscale(image.convert_alpha(), (width, height))  # convert to 24/32 bit surface as required by pygame, and smoothly scale

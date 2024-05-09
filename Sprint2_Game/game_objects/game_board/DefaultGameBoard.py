@@ -27,7 +27,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     DIMENSION_CELL_COUNT: int = 7  # Cell count for each dimension
     CHIT_CARD_RAND_FACTOR: int = 40  # random factor in pixels
     CHIT_CARD_DIMENSIONS: tuple[int, int] = (75, 75)  # chit card dimensions (width, height) in px
-    TURN_END_RESET_DELAY: float = 1.3  # Seconds to delay resetting game board on player turn end
+    TURN_END_RESET_DELAY: float = 2.0  # Seconds to delay resetting game board on player turn end
 
     def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard]):
         """

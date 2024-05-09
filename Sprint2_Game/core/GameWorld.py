@@ -2,19 +2,19 @@ import pygame
 from core.GameConfig import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
 from core.singletons import PygameScreenController_instance
 from game_objects.characters.PlayableCharacter import PlayableCharacter
-from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.tiles.Tile import Tile
 from screen.ModularClickableSprite import ModularClickableSprite
+from metaclasses.SingletonMeta import SingletonMeta
 
 
-class GameWorld:
-    """Initialises and manages a game instance. Provides the interface between it and the players.
+class GameWorld(metaclass=SingletonMeta):
+    """A singleton. This class creates and manages a game instance. It provides the interface between it and the players.
 
     Author: Shen
     """
 
-    __USER_CLICK_ENABLED: bool = True   # whether the user can click to interact with the game instance
+    __USER_CLICK_ENABLED: bool = True  # whether the user can click to interact with the game instance
 
     def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard):
         """Constructs the game world with the first character in the list of playable characters being the starting player.
@@ -109,7 +109,7 @@ class GameWorld:
             return True
 
         return False
-    
+
     @staticmethod
     def disable_mouse_clicks() -> None:
         """Disable user interaction with the game by mouse clicks."""

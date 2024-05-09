@@ -103,8 +103,21 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         pass
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
-        # TODO: Placeholder code. Will crash if no starting tiles
-        return self.__starting_tiles[0]
+        """Get the tile a character is on.
+
+        Args:
+            character: The character
+
+        Returns:
+            The tile the character is on
+
+        Raises:
+            Exception if the character could not be found on any tile
+        """
+        for tile in self.__main_tile_sequence:
+            if tile.get_character_on_tile() == character:
+                return tile
+        raise Exception("Character could not be found on any tile.")
 
     def flip_chit_card(self, character: PlayableCharacter, chit_card: ChitCard) -> None:
         pass

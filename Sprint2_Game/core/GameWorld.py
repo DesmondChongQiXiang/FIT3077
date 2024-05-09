@@ -86,6 +86,7 @@ class GameWorld:
         nothing."""
         if not self.__current_player.should_continue_turn():
             self.__current_player.set_is_currently_playing(False)
+            self.__current_player.set_should_continue_turn(True)
 
             if self.__current_player_i + 1 > len(self.__playable_characters) - 1:
                 # if the current player was the last player, loop around to the starting player

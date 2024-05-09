@@ -56,11 +56,17 @@ class AnimalChitCard(ChitCard):
         ]
 
     def on_click(self, character: PlayableCharacter, characters_tile: Tile) -> None:
-        """On click toggle its flipped state.
+        """On click, reveal the chit card if its not flipped. Once revealed, the chit card cannot be flipped back by
+        clicking. Ends the player's turn if the animal on the chit card flipped does not match with the animal on its
+        current tile it's standing on.
 
         Args:
             character: The character who clicked the sprite
             characters_tile: The tile the character was on
         """
-        character.notify_action_taken()
-        self.set_flipped(not self.get_flipped())
+        tile_animal = characters_tile.get_animal()
+        if tile_animal is not None and tile_animal != self.__animal:
+            character.set_should_continue_turn(False)
+
+        if not self.get_flipped():
+            self.set_flipped(not self.get_flipped())

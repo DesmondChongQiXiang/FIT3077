@@ -38,4 +38,3 @@ class SingletonMeta(type):
 
 
 # ADAPTED FROM: https://refactoring.guru/design-patterns/singleton/python/example
-# Note: cls is Class of calling class

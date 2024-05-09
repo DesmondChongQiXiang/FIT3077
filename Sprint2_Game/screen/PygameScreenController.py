@@ -1,12 +1,14 @@
+from __future__ import annotations
 from definitions import ROOT_PATH
 from typing import Optional
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
+from metaclasses.SingletonMeta import SingletonMeta
 
 import pygame
 
 
-class PygameScreenController:
+class PygameScreenController(metaclass=SingletonMeta):
     """Contains useful methods for interacting with pygame's screen.
 
     Warning: Should be used as a singleton
@@ -113,3 +115,12 @@ class PygameScreenController:
         Author: Shen
         """
         return self.__screen.get_size()
+    
+    @staticmethod
+    def instance() -> PygameScreenController:
+        """Get the shared instance of this controller.
+        
+        Returns:
+            The singleton instance
+        """
+        return PygameScreenController()

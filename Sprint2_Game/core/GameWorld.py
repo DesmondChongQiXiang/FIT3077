@@ -1,4 +1,4 @@
-import pygame
+from __future__ import annotations
 from core.GameConfig import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
 from core.singletons import PygameScreenController_instance
 from game_objects.characters.PlayableCharacter import PlayableCharacter
@@ -6,6 +6,9 @@ from game_objects.game_board.GameBoard import GameBoard
 from game_objects.tiles.Tile import Tile
 from screen.ModularClickableSprite import ModularClickableSprite
 from metaclasses.SingletonMeta import SingletonMeta
+
+import pygame
+from typing import cast
 
 
 class GameWorld(metaclass=SingletonMeta):
@@ -119,3 +122,18 @@ class GameWorld(metaclass=SingletonMeta):
     def enable_mouse_clicks() -> None:
         """Enable user interaction with the game by mouse clicks."""
         GameWorld.__USER_CLICK_ENABLED = True
+
+    @staticmethod
+    def instance() -> GameWorld:
+        """Get the shared instance of this controller.
+
+        Returns:
+            The singleton instance
+
+        Raises:
+            Exception if the instance did not exist before access
+        """
+        existing_instance = cast(GameWorld, GameWorld._get_existing_instance(GameWorld))  # type guranteed to be GameWorld
+        if existing_instance is not None:
+            return existing_instance
+        raise Exception("GameWorld instance accessed before instantiation.")

@@ -129,7 +129,7 @@ class GameWorld(metaclass=SingletonMeta):
         Raises:
             Exception if the instance did not exist before access
         """
-        existing_instance = cast(GameWorld, GameWorld._get_existing_instance(GameWorld))  # type guranteed to be GameWorld
+        existing_instance = cast(GameWorld, SingletonMeta._get_existing_instance(GameWorld))  # type guranteed to be GameWorld
         if existing_instance is not None:
             return existing_instance
         raise Exception("GameWorld instance accessed before instantiation.")

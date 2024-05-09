@@ -22,18 +22,20 @@ class SingletonMeta(type):
             cls._singletons[cls] = super().__call__(*args, **kwargs)  # create the class object
         return cls._singletons[cls]
 
-    def _get_existing_instance(self, cls: SingletonMeta) -> Optional[SingletonMeta]:
-        """Gets the existing singleton instance if it exists. Otherwise returns None.
+    @classmethod
+    def _get_existing_instance(cls, class_: SingletonMeta) -> Optional[SingletonMeta]:
+        """Gets the existing singleton instance of the inputted class if it exists. Otherwise returns None.
 
         Args:
-            cls: The class of the singleton
-
+            class_: The class
+            
         Returns:
             The singleton for the class if it exists.
         """
-        if cls in self._singletons:
-            return self._singletons[cls]
+        if class_ in cls._singletons:
+            return cls._singletons[class_]
         return None
 
 
 # ADAPTED FROM: https://refactoring.guru/design-patterns/singleton/python/example
+# Note: cls is Class of calling class

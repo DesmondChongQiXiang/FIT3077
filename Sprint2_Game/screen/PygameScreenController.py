@@ -123,7 +123,7 @@ class PygameScreenController(metaclass=SingletonMeta):
         Returns:
             The singleton instance
         """
-        instance = cast(Optional[PygameScreenController], PygameScreenController._get_existing_instance(PygameScreenController))
+        instance = cast(Optional[PygameScreenController], SingletonMeta._get_existing_instance(PygameScreenController))
         if instance is not None:
             return instance
         return PygameScreenController()

@@ -17,6 +17,8 @@ class Dragon(PlayableCharacter):
             variant: The variant of the dragon
             draw_properties (optional): The drawing properties specifying how to draw the dragon
         """
+        self.__draw_rotation: float = 0
+
         super().__init__(variant, draw_properties)
 
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
@@ -30,4 +32,10 @@ class Dragon(PlayableCharacter):
             return []
         x, y = draw_properties.get_coordinates()
 
-        return [DrawAssetInstruction(f"assets/characters/dragon/dragon_{self._variant.value}.png", x, y, draw_properties.get_size())]
+        # Turn sprite anticlockwise whilst playing. Otherwise draw at normal rotation (none).
+        if self._is_currently_playing:
+            self.__draw_rotation += 3
+        else:
+            self.__draw_rotation = 0
+
+        return [DrawAssetInstruction(f"assets/characters/dragon/dragon_{self._variant.value}.png", x, y, draw_properties.get_size(), self.__draw_rotation)]

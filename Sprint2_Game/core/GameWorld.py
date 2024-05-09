@@ -32,6 +32,7 @@ class GameWorld:
         self.__current_player = playable_characters[0]
         self.__current_player_i = 0  # for turn purposes only
 
+        self.__current_player.set_is_currently_playing(True)
         self.__run()
 
     def __run(self) -> None:
@@ -84,6 +85,8 @@ class GameWorld:
         """Ends the current player's turn and transitions turn to the next player if their turn should end. Otherwise does
         nothing."""
         if not self.__current_player.should_continue_turn():
+            self.__current_player.set_is_currently_playing(False)
+
             if self.__current_player_i + 1 > len(self.__playable_characters) - 1:
                 # if the current player was the last player, loop around to the starting player
                 self.__current_player = self.__playable_characters[0]
@@ -92,3 +95,5 @@ class GameWorld:
                 # otherwise turn should go to next player
                 self.__current_player = self.__playable_characters[self.__current_player_i + 1]
                 self.__current_player_i += 1
+
+            self.__current_player.set_is_currently_playing(True)

@@ -23,6 +23,7 @@ class PlayableCharacter(ABC, DrawableByAsset):
         self.__draw_properties = draw_properties
         self.__max_action_count = max_action_count
         self.__action_count: int = 0
+        self._is_currently_playing: bool = False
 
     def notify_action_taken(self) -> None:
         """Notifies the character that an action has been taken. Default implementation increments the character's internal
@@ -64,3 +65,11 @@ class PlayableCharacter(ABC, DrawableByAsset):
             draw_data: The draw data
         """
         self.__draw_properties = draw_properties
+
+    def set_is_currently_playing(self, playing: bool) -> None:
+        """Set whether the character is currently playing. Affects how a character is drawn.
+
+        Args:
+            playing: Whether the character is currently playing
+        """
+        self._is_currently_playing = playing

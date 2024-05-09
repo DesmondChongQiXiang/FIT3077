@@ -14,6 +14,8 @@ class GameWorld:
     Author: Shen
     """
 
+    __USER_CLICK_ENABLED: bool = True   # whether the user can click to interact with the game instance
+
     def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard):
         """Constructs the game world with the first character in the list of playable characters being the starting player.
 
@@ -58,7 +60,8 @@ class GameWorld:
                         return
 
                     case pygame.MOUSEBUTTONDOWN:  # handle mouse click
-                        self.__fire_onclick_for_clicked_hitboxes(chit_card_hitboxes, self.__current_player)
+                        if GameWorld.__USER_CLICK_ENABLED:
+                            self.__fire_onclick_for_clicked_hitboxes(chit_card_hitboxes, self.__current_player)
 
             # Handle Player Turns
             if self.__process_current_player_turn():
@@ -106,3 +109,13 @@ class GameWorld:
             return True
 
         return False
+    
+    @staticmethod
+    def disable_mouse_clicks() -> None:
+        """Disable user interaction with the game by mouse clicks."""
+        GameWorld.__USER_CLICK_ENABLED = False
+
+    @staticmethod
+    def enable_mouse_clicks() -> None:
+        """Enable user interaction with the game by mouse clicks."""
+        GameWorld.__USER_CLICK_ENABLED = True

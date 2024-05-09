@@ -8,6 +8,7 @@ from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from core.singletons import PygameScreenController_instance
+from core.GameWorld import GameWorld
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 import random
@@ -122,14 +123,18 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         raise Exception("Character could not be found on any tile.")
 
     def on_player_turn_end(self) -> None:
-        """When a player's turn ends, unflip all chit cards."""
+        """When a player's turn ends, unflip all chit cards after a delay defined by DefaultGameBoard.TURN_END_RESET_DELAY.
+        User interaction is disabled during the delay.
+        """
 
         def unflip_chit_cards():
             for chit_card in self.__chit_cards:
                 chit_card.set_flipped(False)
+            GameWorld.enable_mouse_clicks()
 
         unflip_timer = Timer(DefaultGameBoard.TURN_END_RESET_DELAY, unflip_chit_cards)
         unflip_timer.start()
+        GameWorld.disable_mouse_clicks()
 
     # ------ DrawableByAsset interface & Drawing --------------------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:

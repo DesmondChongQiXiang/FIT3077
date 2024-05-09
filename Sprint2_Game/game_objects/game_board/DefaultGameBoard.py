@@ -98,7 +98,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), DefaultGameBoard.CHIT_CARD_DIMENSIONS))
                 chit_card_i += 1
 
-    # ------ GameBoard interface -----------------------------------------------------------------------------------------
+    # ------ GameBoard abstract class -----------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
         pass
 
@@ -119,12 +119,10 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 return tile
         raise Exception("Character could not be found on any tile.")
 
-    def flip_chit_card(self, character: PlayableCharacter, chit_card: ChitCard) -> None:
-        pass
-
-    # TODO: should turn this to work on iterables
-    def add_chit_card(self, chit_card: ChitCard) -> None:
-        pass
+    def on_player_turn_end(self) -> None:
+        """When a player's turn ends, unflip all chit cards."""
+        for chit_card in self.__chit_cards:
+            chit_card.set_flipped(False)
 
     # ------ DrawableByAsset interface & Drawing --------------------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:

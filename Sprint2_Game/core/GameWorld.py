@@ -61,7 +61,8 @@ class GameWorld:
                         self.__fire_onclick_for_clicked_hitboxes(chit_card_hitboxes, self.__current_player)
 
             # Handle Player Turns
-            self.__process_current_player_turn()
+            if self.__process_current_player_turn():
+                self.__game_board.on_player_turn_end()
 
             # Update screen & Set FPS
             pygame.display.flip()  # update screen
@@ -81,12 +82,16 @@ class GameWorld:
             if rect.collidepoint(pos):
                 clickable.on_click(player, players_tile)
 
-    def __process_current_player_turn(self) -> None:
+    def __process_current_player_turn(self) -> bool:
         """Ends the current player's turn and transitions turn to the next player if their turn should end. Otherwise does
-        nothing."""
+        nothing.
+
+        Returns:
+            Whether the current player's turn ended.
+        """
         if not self.__current_player.should_continue_turn():
             self.__current_player.set_is_currently_playing(False)
-            self.__current_player.set_should_continue_turn(True)
+            self.__current_player.set_should_continue_turn(True)  # reset for the playable character's next turn
 
             if self.__current_player_i + 1 > len(self.__playable_characters) - 1:
                 # if the current player was the last player, loop around to the starting player
@@ -98,3 +103,6 @@ class GameWorld:
                 self.__current_player_i += 1
 
             self.__current_player.set_is_currently_playing(True)
+            return True
+
+        return False

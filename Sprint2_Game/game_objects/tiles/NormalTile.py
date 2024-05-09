@@ -43,7 +43,7 @@ class NormalTile(Tile):
         animal_x, animal_y = get_coords_for_center_drawing_in_rect(tile_draw_data.get_coordinates(), tile_draw_data.get_size(), (animal_size, animal_size))
 
         instructions.append(DrawAssetInstruction("assets/tiles/normal_tile.png", tile_x, tile_y, tile_draw_data.get_size()))
-        if animal is not None:
+        if animal is not None:  # animal is never none
             instructions.append(DrawAssetInstruction(f"assets/animals/{animal.value}.png", animal_x, animal_y, (animal_size, animal_size)))
         for instruction in self._get_character_draw_instructions():
             instructions.append(instruction)

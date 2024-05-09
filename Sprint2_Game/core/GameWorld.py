@@ -17,10 +17,8 @@ class GameWorld(metaclass=SingletonMeta):
     Author: Shen
     """
 
-    __USER_CLICK_ENABLED: bool = True  # whether the user can click to interact with the game instance
-
     def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard):
-        """Constructs the game world with the first character in the list of playable characters being the starting player.
+        """Configures the game world, with the first character in the list of playable characters being the starting player.
 
         Args:
             playable_charcters: The list of playable characters to initialise the world (game) with
@@ -35,12 +33,12 @@ class GameWorld(metaclass=SingletonMeta):
         self.__playable_characters: list[PlayableCharacter] = playable_characters
         self.__game_board: GameBoard = game_board
         self.__current_player = playable_characters[0]
-        self.__current_player_i = 0  # for turn purposes only
+        self.__current_player_i = 0  # for turn processing purposes only
+        self.__mouse_click_enabled = True
 
         self.__current_player.set_is_currently_playing(True)
-        self.__run()
 
-    def __run(self) -> None:
+    def run(self) -> None:
         """Initialises the game on the active pygame screen and runs the main game loop.
 
         Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
@@ -63,7 +61,7 @@ class GameWorld(metaclass=SingletonMeta):
                         return
 
                     case pygame.MOUSEBUTTONDOWN:  # handle mouse click
-                        if GameWorld.__USER_CLICK_ENABLED:
+                        if self.__mouse_click_enabled:
                             self.__fire_onclick_for_clicked_hitboxes(chit_card_hitboxes, self.__current_player)
 
             # Handle Player Turns
@@ -113,15 +111,13 @@ class GameWorld(metaclass=SingletonMeta):
 
         return False
 
-    @staticmethod
-    def disable_mouse_clicks() -> None:
+    def disable_mouse_clicks(self) -> None:
         """Disable user interaction with the game by mouse clicks."""
-        GameWorld.__USER_CLICK_ENABLED = False
+        self.__mouse_click_enabled = False
 
-    @staticmethod
-    def enable_mouse_clicks() -> None:
+    def enable_mouse_clicks(self) -> None:
         """Enable user interaction with the game by mouse clicks."""
-        GameWorld.__USER_CLICK_ENABLED = True
+        self.__mouse_click_enabled = True
 
     @staticmethod
     def instance() -> GameWorld:

@@ -130,11 +130,11 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         def unflip_chit_cards():
             for chit_card in self.__chit_cards:
                 chit_card.set_flipped(False)
-            GameWorld.enable_mouse_clicks()
+            GameWorld.instance().enable_mouse_clicks()
 
         unflip_timer = Timer(DefaultGameBoard.TURN_END_RESET_DELAY, unflip_chit_cards)
         unflip_timer.start()
-        GameWorld.disable_mouse_clicks()
+        GameWorld.instance().disable_mouse_clicks()
 
     # ------ DrawableByAsset interface & Drawing --------------------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:

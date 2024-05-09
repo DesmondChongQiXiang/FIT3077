@@ -8,9 +8,6 @@ from game_objects.animals.Animal import Animal
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 
-# TODO: Implement abstract methods later (see class diagram)
-
-
 class Tile(ABC, DrawableByAsset):
     """Represents a tile that a character can stand on.
 

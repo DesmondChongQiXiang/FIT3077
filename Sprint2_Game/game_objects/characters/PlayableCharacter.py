@@ -37,7 +37,7 @@ class PlayableCharacter(ABC, DrawableByAsset):
     def should_continue_turn(self) -> bool:
         """Return whether the playable character should continue its turn for the next tick (i.e game loop). Default
         implementation returns false and resets the character's internal counter for the number of actions taken
-        when the number of actions taken by the character exceeds the maximum number of actions it can take for its turn.
+        when the number of actions taken by the character reaches the maximum number of actions it can take for its turn.
 
         Note:
             Override to change default behaviour
@@ -45,7 +45,7 @@ class PlayableCharacter(ABC, DrawableByAsset):
         Returns:
             Whether the character should continue its turn
         """
-        should_continue = self.__action_count <= self.__max_action_count
+        should_continue = self.__action_count < self.__max_action_count
         if not should_continue:
             self.__action_count = 0
         return should_continue

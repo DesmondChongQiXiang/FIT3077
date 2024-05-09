@@ -62,4 +62,5 @@ class AnimalChitCard(ChitCard):
             character: The character who clicked the sprite
             characters_tile: The tile the character was on
         """
+        character.notify_action_taken()
         self.set_flipped(not self.get_flipped())

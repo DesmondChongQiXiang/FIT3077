@@ -11,6 +11,7 @@ from core.singletons import PygameScreenController_instance
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 import random
+from threading import Timer
 
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
@@ -25,6 +26,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     DIMENSION_CELL_COUNT: int = 7  # Cell count for each dimension
     CHIT_CARD_RAND_FACTOR: int = 40  # random factor in pixels
     CHIT_CARD_DIMENSIONS: tuple[int, int] = (75, 75)  # chit card dimensions (width, height) in px
+    TURN_END_RESET_DELAY: float = 1.3  # Seconds to delay resetting game board on player turn end
 
     def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard]):
         """
@@ -121,8 +123,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
     def on_player_turn_end(self) -> None:
         """When a player's turn ends, unflip all chit cards."""
-        for chit_card in self.__chit_cards:
-            chit_card.set_flipped(False)
+
+        def unflip_chit_cards():
+            for chit_card in self.__chit_cards:
+                chit_card.set_flipped(False)
+
+        unflip_timer = Timer(DefaultGameBoard.TURN_END_RESET_DELAY, unflip_chit_cards)
+        unflip_timer.start()
 
     # ------ DrawableByAsset interface & Drawing --------------------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:

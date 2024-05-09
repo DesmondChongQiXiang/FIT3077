@@ -22,7 +22,8 @@ class Dragon(PlayableCharacter):
         super().__init__(variant, draw_properties)
 
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
-        """Draw the dragon if the drawing properties have been specified. Otherwise draws nothing.
+        """Draw the dragon if the drawing properties have been specified. Otherwise draws nothing. A dragon who is currently 
+        taking its turn will rotate slowly anticlockwise, otherwise, it will use it standard appearance (not rotated).
 
         Returns:
             The drawing instructions

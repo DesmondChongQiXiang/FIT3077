@@ -1,6 +1,6 @@
 from __future__ import annotations
+from typing import Optional, cast
 from definitions import ROOT_PATH
-from typing import Optional
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from metaclasses.SingletonMeta import SingletonMeta
@@ -115,12 +115,15 @@ class PygameScreenController(metaclass=SingletonMeta):
         Author: Shen
         """
         return self.__screen.get_size()
-    
+
     @staticmethod
     def instance() -> PygameScreenController:
         """Get the shared instance of this controller.
-        
+
         Returns:
             The singleton instance
         """
+        instance = cast(Optional[PygameScreenController], PygameScreenController._get_existing_instance(PygameScreenController))
+        if instance is not None:
+            return instance
         return PygameScreenController()

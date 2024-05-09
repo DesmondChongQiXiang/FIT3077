@@ -1,14 +1,14 @@
 from __future__ import annotations
+from typing import cast
 from core.GameConfig import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
-from core.singletons import PygameScreenController_instance
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.tiles.Tile import Tile
 from screen.ModularClickableSprite import ModularClickableSprite
+from screen.PygameScreenController import PygameScreenController
 from metaclasses.SingletonMeta import SingletonMeta
 
 import pygame
-from typing import cast
 
 
 class GameWorld(metaclass=SingletonMeta):
@@ -50,8 +50,8 @@ class GameWorld(metaclass=SingletonMeta):
             # Handle Drawing
             pygame.display.get_surface().fill(SCREEN_BACKGROUND_COLOUR)
 
-            PygameScreenController_instance().draw_assets_from_instructions(self.__game_board.get_draw_assets_instructions())
-            chit_card_hitboxes = PygameScreenController_instance().draw_clickable_assets_from_instructions(self.__game_board.get_draw_clickable_assets_instructions())
+            PygameScreenController.instance().draw_assets_from_instructions(self.__game_board.get_draw_assets_instructions())
+            chit_card_hitboxes = PygameScreenController.instance().draw_clickable_assets_from_instructions(self.__game_board.get_draw_clickable_assets_instructions())
 
             # Handle Events
             for event in pygame.event.get():

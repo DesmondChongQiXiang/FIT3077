@@ -1,4 +1,5 @@
 from __future__ import annotations
+from threading import Timer
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.tiles.Tile import Tile
@@ -7,12 +8,11 @@ from screen.DrawProperties import DrawProperties
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
-from core.singletons import PygameScreenController_instance
+from screen.PygameScreenController import PygameScreenController
 from core.GameWorld import GameWorld
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 import random
-from threading import Timer
 
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
@@ -239,7 +239,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Returns:
             The properties of the main tile sequence
         """
-        width, height = PygameScreenController_instance().get_screen_size()
+        width, height = PygameScreenController.instance().get_screen_size()
         main_width, main_height = width - 2 * (width // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2)), height - 2 * (height // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2))
         square_size: float = main_width / DefaultGameBoard.DIMENSION_CELL_COUNT
         main_x, main_y = get_coords_for_center_drawing_in_rect((0, 0), (width, height), (main_width, main_height))

@@ -1,6 +1,5 @@
 from abc import abstractmethod, ABC
 from game_objects.tiles.Tile import Tile
-from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawAssetInstruction import DrawAssetInstruction

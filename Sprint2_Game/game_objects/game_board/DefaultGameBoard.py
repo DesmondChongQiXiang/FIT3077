@@ -1,5 +1,6 @@
 from __future__ import annotations
 from threading import Timer
+from typing import Optional
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.tiles.Tile import Tile
@@ -29,20 +30,24 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     CHIT_CARD_DIMENSIONS: tuple[int, int] = (75, 75)  # chit card dimensions (width, height) in px
     TURN_END_RESET_DELAY: float = 2.0  # Seconds to delay resetting game board on player turn end
 
-    def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard]):
+    def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]):
         """
         Args:
             main_tile_sequence: The main tile sequence (excluding starting tiles) to use for the game board. Must have (DIMENSION_CELL_COUNT * 4) - 4 tiles.
             starting_tiles: The starting tiles. In form: (starting tile, next tile)
             chit_cards: The chit cards to use for the game board. Will be placed in order from left to right, top to bottom.
+            playable_characters: The playable characters to play on the game board
         """
         self.__main_tile_sequence: list[Tile] = []
         self.__starting_tiles: list[Tile] = []
         self.__starting_tiles_set: set[Tile] = set()
         self.__chit_cards: list[ChitCard] = chit_cards
+        self.__character_tiles_visited: dict[PlayableCharacter, set[Tile]] = dict()  # K = character, V = set of tiles visited
+        self.__character_location: dict[PlayableCharacter, int] = dict()  # K = character, V = index along main tile sequence
 
+        # ------ INITIALISATION ------------------------------------------------------------------------------------------------------------------------------------------------
         # initialise chit card position & size
-        self.__initialise_chit_card_draw_properties()
+        self.__set_chit_card_draw_properties()
 
         # Set the starting tiles
         dest_to_start_tile: dict[Tile, Tile] = dict()
@@ -61,6 +66,15 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # Check enough tiles
         self.__check_enough_main_tiles()
 
+        # Set up character tiles visited & character location dictionaries
+        for character in playable_characters:
+            self.__character_tiles_visited[character] = set()
+
+        for i, tile in enumerate(self.__main_tile_sequence):
+            potential_char: Optional[PlayableCharacter] = tile.get_character_on_tile()
+            if potential_char is not None:
+                self.__character_location[potential_char] = i
+
     def __check_enough_main_tiles(self) -> None:
         """Checks that there is the correct number of main tiles. If incorrect, throws an exception
 
@@ -73,7 +87,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 f"There must be {DefaultGameBoard.get_tiles_required()} tiles in the main tile sequence (len={main_tiles_only_len}). DIMENSION_CELL_COUNT = {DefaultGameBoard.DIMENSION_CELL_COUNT}."
             )
 
-    def __initialise_chit_card_draw_properties(self) -> None:
+    def __set_chit_card_draw_properties(self) -> None:
         """Initialise the clickable chit cards to draw randomly within the inner zone (square) of the game board.
 
         DefaultGameBoard.CHIT_CARD_RAND_FACTOR and DefaultGameBoard.CHIT_CARD_DIMENSIONS determine the randomness

@@ -41,7 +41,10 @@ if __name__ == "__main__":
     random.shuffle(tiles)
 
     game_board: GameBoard = DefaultGameBoard(
-        tiles, [(starting_tiles[0], tiles[3]), (starting_tiles[1], tiles[9]), (starting_tiles[2], tiles[15]), (starting_tiles[3], tiles[21])], chit_cards
+        tiles,
+        [(starting_tiles[0], tiles[3]), (starting_tiles[1], tiles[9]), (starting_tiles[2], tiles[15]), (starting_tiles[3], tiles[21])],
+        chit_cards,
+        playable_characters,
     )
 
     # ============ GAME INSTANCE =============

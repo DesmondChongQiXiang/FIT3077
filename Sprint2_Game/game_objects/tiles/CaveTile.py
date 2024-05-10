@@ -24,6 +24,15 @@ class CaveTile(Tile):
         """
         super().__init__(draw_data, character, animal)
 
+    # TODO: Incomplete implementation
+    def place_character_on_tile(self, character: PlayableCharacter) -> None:
+        """Places the character on the tile and triggers a win for the character.
+        
+        Args:
+            character: The character to place on the tile
+        """
+        self.set_character_on_tile(character)
+
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """Draw the tile based on the tile's draw data, and its animal. If there is no data, the tile is not drawn.
 

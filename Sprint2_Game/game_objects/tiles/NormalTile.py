@@ -24,6 +24,15 @@ class NormalTile(Tile):
         """
         super().__init__(draw_data, character, animal)
 
+    # ------- Tile abstract class --------------------------------------------------------------------------
+    def place_character_on_tile(self, character: PlayableCharacter) -> None:
+        """Place a character on the tile.
+        
+        Args:
+            character: The character to place on the tile
+        """
+        self.set_character_on_tile(character)
+
     # ------- DrawableByAsset interface --------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """Draw the tile based on the tile's draw data, its animal, and any characters on it. If there is no data,

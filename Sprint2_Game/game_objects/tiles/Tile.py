@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Optional
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawProperties import DrawProperties
@@ -56,6 +56,23 @@ class Tile(ABC, DrawableByAsset):
             The character currently on the tile
         """
         return self.__character
+
+    def set_character_on_tile(self, character: PlayableCharacter) -> None:
+        """Set the character on the tile.
+
+        Args:
+            character: The character
+        """
+        self.__character = character
+
+    @abstractmethod
+    def place_character_on_tile(self, character: PlayableCharacter) -> None:
+        """Place the character on the tile and perform any functionalities.
+
+        Args:
+            character: The character to be placed on the tile.
+        """
+        ...
 
     def _get_character_draw_instructions(self) -> list[DrawAssetInstruction]:
         """Get the drawing instructions for showing the character currently on the tile.

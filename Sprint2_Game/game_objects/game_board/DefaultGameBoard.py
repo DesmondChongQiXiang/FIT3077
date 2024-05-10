@@ -44,6 +44,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         self.__chit_cards: list[ChitCard] = chit_cards
         self.__character_tiles_visited: dict[PlayableCharacter, set[Tile]] = dict()  # K = character, V = set of tiles visited
         self.__character_location: dict[PlayableCharacter, int] = dict()  # K = character, V = index along main tile sequence
+        self.__character_starting_tiles: dict[PlayableCharacter, Tile] = dict()  # K = character, V = their starting tile
 
         # ------ INITIALISATION ------------------------------------------------------------------------------------------------------------------------------------------------
         # initialise chit card position & size
@@ -66,9 +67,14 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # Check enough tiles
         self.__check_enough_main_tiles()
 
-        # Set up character tiles visited & character location dictionaries
+        # Set up live character tiles visited, character starting location, live character location, dictionaries
         for character in playable_characters:
             self.__character_tiles_visited[character] = set()
+
+        for tile in self.__starting_tiles:
+            char_on_tile = tile.get_character_on_tile()
+            if char_on_tile is not None:
+                self.__character_starting_tiles[char_on_tile] = tile
 
         for i, tile in enumerate(self.__main_tile_sequence):
             potential_char: Optional[PlayableCharacter] = tile.get_character_on_tile()
@@ -115,9 +121,44 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), DefaultGameBoard.CHIT_CARD_DIMENSIONS))
                 chit_card_i += 1
 
-    # ------ GameBoard abstract class -----------------------------------------------------------------------------------------
+    # ------ GameBoard abstract class --------------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
-        pass
+        """Move a character by a number of steps along the game board. Characters can only re-enter their starting tiles
+        once they have visited all main tiles. Characters are prevented from moving once they re-enter their starting
+        tiles. If the character will overshoot their starting tile after visiting all tiles, then the character will not
+        move.
+
+        Args:
+            character: The character to move
+            steps: The number of steps to move (negative = anti-clockwise, positive = clockwise)
+        """
+        tile_intermediate_i: int = self.__character_location[character]
+        steps_taken: int = 0
+
+        while steps_taken < steps:
+            tile_intermediate_i += 1  # check next tile
+
+            current_tile_i = tile_intermediate_i % len(self.__main_tile_sequence)
+            current_tile = self.__main_tile_sequence[current_tile_i]
+
+            if current_tile in self.__starting_tiles_set:
+                # Allow character to re-enter its starting tile only when they've visited all main sequence tiles
+                if self.__character_starting_tiles[character] is current_tile and (
+                    len(self.__character_tiles_visited[character]) == len(self.__main_tile_sequence) - len(self.__starting_tiles)
+                ):
+                    if steps_taken < steps:
+                        # don't move character if starting tile will be overshot
+                        return
+
+                    break
+            else:
+                self.__character_tiles_visited[character].add(current_tile)
+                steps_taken += 1
+
+        # place character on the calculated destination tile and update character location
+        final_tile_i: int = tile_intermediate_i % len(self.__main_tile_sequence)
+        self.__main_tile_sequence[final_tile_i].place_character_on_tile(character)
+        self.__character_location[character] = final_tile_i
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
         """Get the tile a character is on.

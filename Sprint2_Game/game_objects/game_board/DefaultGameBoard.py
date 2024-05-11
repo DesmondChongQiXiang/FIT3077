@@ -167,8 +167,15 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             # add the currently considered tile to visited tiles for character accounting for any skipping of tiles
             self.__character_tiles_visited[character].add(self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)])
 
-        # place character on the calculated destination tile and update character location
+        # place character on the calculated destination tile if not occupied and update character location. Otherwise end player's turn
         final_tile_i: int = tile_intermediate_i % len(self.__main_tile_sequence)
+        final_tile: Tile = self.__main_tile_sequence[final_tile_i]
+
+        if final_tile.get_character_on_tile() is not None:
+            # if there is a character on the destination tile, end player's turn and do not move
+            character.set_should_continue_turn(False)
+            return
+
         self.__main_tile_sequence[final_tile_i].place_character_on_tile(character)
         self.__main_tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
         self.__character_location[character] = final_tile_i
@@ -264,7 +271,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 tile.set_draw_data(DrawProperties((int(main_x0), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
 
         # getting draw instructions for the entire board after setting draw data
-        starting_tile_destinations_drawn = set()
+        starting_tile_destinations_drawn: set[Tile] = set()
 
         for tile in self.__main_tile_sequence:
             tile_draw_instructions: Optional[list[DrawAssetInstruction]] = None

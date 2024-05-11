@@ -126,42 +126,45 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     # ------ GameBoard abstract class --------------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
         """Move a character by a number of steps along the game board. Characters can only re-enter their starting tiles
-        once they have visited all main tiles. Characters are prevented from moving once they re-enter their starting
-        tiles. If the character will overshoot their starting tile after visiting all tiles, then the character will not
-        move.
+        once they have visited all main tiles. If the character will overshoot their starting tile after visiting all tiles,
+        then the character will not move and their turn will end.
 
         Args:
             character: The character to move
             steps: The number of steps to move (negative = anti-clockwise, positive = clockwise)
         """
-        self.__main_tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
-
         tile_intermediate_i: int = self.__character_location[character]
         steps_taken: int = 0
 
         while steps_taken < steps:
             tile_intermediate_i += 1  # check next tile
+            steps_taken += 1
 
             current_tile_i = tile_intermediate_i % len(self.__main_tile_sequence)
             current_tile = self.__main_tile_sequence[current_tile_i]
 
             if current_tile in self.__starting_tiles_set:
-                # Allow character to re-enter its starting tile only when they've visited all main sequence tiles
+                # Allow character to only re-enter its own starting tile and only when they've visited all main sequence tiles
                 if self.__character_starting_tiles[character] is current_tile and (
                     len(self.__character_tiles_visited[character]) == len(self.__main_tile_sequence) - len(self.__starting_tiles)
                 ):
                     if steps_taken < steps:
-                        # don't move character if starting tile will be overshot
+                        # don't move character if starting tile will be overshot & end character's turn
+                        character.set_should_continue_turn(False)
                         return
 
+                    # go into its own starting tile
                     break
-            else:
-                self.__character_tiles_visited[character].add(current_tile)
-                steps_taken += 1
+
+                tile_intermediate_i += 1  # otherwise skip the starting tile (don't enter)
+
+            # add the currently considered tile to visited tiles for character accounting for any skipping of tiles
+            self.__character_tiles_visited[character].add(self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)])
 
         # place character on the calculated destination tile and update character location
         final_tile_i: int = tile_intermediate_i % len(self.__main_tile_sequence)
         self.__main_tile_sequence[final_tile_i].place_character_on_tile(character)
+        self.__main_tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
         self.__character_location[character] = final_tile_i
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:

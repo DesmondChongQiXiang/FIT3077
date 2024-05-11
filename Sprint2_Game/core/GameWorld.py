@@ -79,12 +79,10 @@ class GameWorld(metaclass=SingletonMeta):
             hitboxes: A list of tuples of form (rectangular hitbox, object associated with hitbox)
             player: The playable character of the current player
         """
-        players_tile: Tile = self.__game_board.get_character_floor_tile(player)
-
         for rect, clickable in hitboxes:
             pos = pygame.mouse.get_pos()
             if rect.collidepoint(pos):
-                clickable.on_click(player, players_tile)
+                clickable.on_click(player)
 
     def __process_current_player_turn(self) -> bool:
         """Ends the current player's turn and transitions turn to the next player if their turn should end. Otherwise does

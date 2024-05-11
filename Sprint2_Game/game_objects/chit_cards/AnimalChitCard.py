@@ -55,18 +55,25 @@ class AnimalChitCard(ChitCard):
             )
         ]
 
-    def on_click(self, character: PlayableCharacter, characters_tile: Tile) -> None:
+    def on_click(self, character: PlayableCharacter) -> None:
         """On click, reveal the chit card if its not flipped. Once revealed, the chit card cannot be flipped back by
         clicking. Ends the player's turn if the animal on the chit card flipped does not match with the animal on its
         current tile it's standing on.
 
         Args:
             character: The character who clicked the sprite
-            characters_tile: The tile the character was on
-        """
-        tile_animal = characters_tile.get_animal()
-        if tile_animal is not None and tile_animal != self.__animal:
-            character.set_should_continue_turn(False)
 
-        if not self.get_flipped():
-            self.set_flipped(not self.get_flipped())
+        Raises:
+            Exception if the game board delegate was not set before calling
+        """
+        if self._board_delegate is not None:
+            tile_animal: Optional[Animal] = self._board_delegate.get_character_floor_tile(character).get_animal()
+            if tile_animal is not None and tile_animal != self.__animal:
+                character.set_should_continue_turn(False)
+            else:
+                self._board_delegate.move_character_by_steps(character, self.get_symbol_count())
+                
+            if not self.get_flipped():
+                self.set_flipped(not self.get_flipped())
+        else:
+            raise Exception("Board delegate was not set when on_click() called.")

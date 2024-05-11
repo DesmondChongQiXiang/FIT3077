@@ -1,5 +1,6 @@
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.DrawProperties import DrawProperties
+from game_objects.game_board.GameBoard import GameBoard
 from typing import Optional
 
 
@@ -18,6 +19,7 @@ class ChitCard(ModularClickableSprite):
         self.__symbol_count = symbol_count
         self.__flipped: bool = False
         self.__draw_properties = draw_properties
+        self._board_delegate: Optional[GameBoard] = None
 
     def set_flipped(self, state: bool) -> None:
         """Set the flipped state of the chit card.
@@ -26,6 +28,14 @@ class ChitCard(ModularClickableSprite):
             state: Whether the chit card is flipped
         """
         self.__flipped = state
+
+    def set_game_board_delegate(self, game_board: GameBoard) -> None:
+        """Set the game board delegate to inform about events occuring for the chit cards.
+
+        Args:
+            game_board: The game board
+        """
+        self._board_delegate = game_board
 
     def get_flipped(self) -> bool:
         """Gets whether the chit card is flipped."""

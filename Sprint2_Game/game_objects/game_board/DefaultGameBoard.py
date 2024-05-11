@@ -47,10 +47,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         self.__character_starting_tiles: dict[PlayableCharacter, Tile] = dict()  # K = character, V = their starting tile
 
         # ------ INITIALISATION ------------------------------------------------------------------------------------------------------------------------------------------------
-        # initialise chit card position & size
+        # initialise chit card position & size. Also set delegate
         self.__set_chit_card_draw_properties()
 
-        # Set the starting tiles
+        for chit_card in self.__chit_cards:
+            chit_card.set_game_board_delegate(self)
+
+        # Populate starting tile stores, and create main tile sequence, taking in account starting tiles.
         dest_to_start_tile: dict[Tile, Tile] = dict()
         for tile_pair in starting_tiles:
             starting_tile, dest = tile_pair[0], tile_pair[1]
@@ -58,7 +61,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             self.__starting_tiles.append(starting_tile)
             dest_to_start_tile[dest] = starting_tile
 
-        # Create main tile sequence, taking in account starting tiles
         for tile in main_tile_sequence:
             if tile in dest_to_start_tile:
                 self.__main_tile_sequence.append(dest_to_start_tile[tile])
@@ -132,6 +134,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             character: The character to move
             steps: The number of steps to move (negative = anti-clockwise, positive = clockwise)
         """
+        self.__main_tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
+
         tile_intermediate_i: int = self.__character_location[character]
         steps_taken: int = 0
 

@@ -57,11 +57,11 @@ class Tile(ABC, DrawableByAsset):
         """
         return self.__character
 
-    def set_character_on_tile(self, character: PlayableCharacter) -> None:
-        """Set the character on the tile.
+    def set_character_on_tile(self, character: Optional[PlayableCharacter]) -> None:
+        """Set the character that is on the tile.
 
         Args:
-            character: The character
+            character (optional): The character
         """
         self.__character = character
 

@@ -41,6 +41,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         self.__main_tile_sequence: list[Tile] = []
         self.__starting_tiles: list[Tile] = []
         self.__starting_tiles_set: set[Tile] = set()
+        self.__starting_tiles_destinations_set: set[Tile] = set()  # stores the tiles that are the destinations for starting tiles
         self.__chit_cards: list[ChitCard] = chit_cards
         self.__character_tiles_visited: dict[PlayableCharacter, set[Tile]] = dict()  # K = character, V = set of tiles visited
         self.__character_location: dict[PlayableCharacter, int] = dict()  # K = character, V = index along main tile sequence
@@ -57,12 +58,15 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         dest_to_start_tile: dict[Tile, Tile] = dict()
         for tile_pair in starting_tiles:
             starting_tile, dest = tile_pair[0], tile_pair[1]
+            self.__starting_tiles_destinations_set.add(dest)
             self.__starting_tiles_set.add(starting_tile)
             self.__starting_tiles.append(starting_tile)
             dest_to_start_tile[dest] = starting_tile
 
         for tile in main_tile_sequence:
             if tile in dest_to_start_tile:
+                # starting tiles should be connected like so: tile -> starting tile -> tile
+                self.__main_tile_sequence.append(tile)
                 self.__main_tile_sequence.append(dest_to_start_tile[tile])
             self.__main_tile_sequence.append(tile)
 
@@ -89,7 +93,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Throws:
             Exception if the number of main sequence tiles is incorect (DIMENSION_CELL_COUNT * 4) - 4
         """
-        main_tiles_only_len = len(self.__main_tile_sequence) - len(self.__starting_tiles)
+        main_tiles_only_len = (
+            len(self.__main_tile_sequence) - len(self.__starting_tiles) * 2
+        )  # *2 to account for starting tiles + duplicate tiles used in starting tile path
         if main_tiles_only_len != DefaultGameBoard.get_tiles_required():
             raise Exception(
                 f"There must be {DefaultGameBoard.get_tiles_required()} tiles in the main tile sequence (len={main_tiles_only_len}). DIMENSION_CELL_COUNT = {DefaultGameBoard.DIMENSION_CELL_COUNT}."
@@ -146,7 +152,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             if current_tile in self.__starting_tiles_set:
                 # Allow character to only re-enter its own starting tile and only when they've visited all main sequence tiles
                 if self.__character_starting_tiles[character] is current_tile and (
-                    len(self.__character_tiles_visited[character]) == len(self.__main_tile_sequence) - len(self.__starting_tiles)
+                    len(self.__character_tiles_visited[character]) == len(self.__main_tile_sequence) - len(self.__starting_tiles) * 2
                 ):
                     if steps_taken < steps:
                         # don't move character if starting tile will be overshot & end character's turn
@@ -156,7 +162,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                     # go into its own starting tile
                     break
 
-                tile_intermediate_i += 1  # otherwise skip the starting tile (don't enter)
+                tile_intermediate_i += 2  # otherwise skip the starting tile. +2 to account for its duplicate destination tile
 
             # add the currently considered tile to visited tiles for character accounting for any skipping of tiles
             self.__character_tiles_visited[character].add(self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)])
@@ -214,6 +220,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         square_size = main_properties.square_size
 
         draw_instructions: list[DrawAssetInstruction] = []
+        starting_tile_destinations_drawn: set[Tile] = set()
 
         # setting draw data in clockwise pattern (including starting tiles), starting at top left
         i_top, i_right, i_bottom = DefaultGameBoard.DIMENSION_CELL_COUNT, DefaultGameBoard.DIMENSION_CELL_COUNT * 2 - 1, DefaultGameBoard.DIMENSION_CELL_COUNT * 3 - 2
@@ -221,9 +228,15 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         for i, tile in enumerate(self.__main_tile_sequence):
             i = i - i_offset
 
+            # setting draw data for destinations of starting tiles whilst offsetting for duplicate
+            if tile in self.__starting_tiles_destinations_set:
+                i_offset += 1  # starting tile should be drawn on top of the destination tile
+                if tile in starting_tile_destinations_drawn:
+                    continue
+                starting_tile_destinations_drawn.add(tile)
+
             # setting draw data for starting tiles
             if tile in self.__starting_tiles_set:
-                i_offset += 1
                 if i < i_top:  # draw for top row
                     tile.set_draw_data(DrawProperties((int(main_x0 + square_size * i), int(main_y0 - square_size)), (int(square_size), int(square_size))))
                 elif i < i_right:  # draw for right column
@@ -251,8 +264,19 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 tile.set_draw_data(DrawProperties((int(main_x0), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
 
         # getting draw instructions after setting draw data
+        starting_tile_destinations_drawn = set()
+
         for tile in self.__main_tile_sequence:
-            for instruction in tile.get_draw_assets_instructions():
+            tile_draw_instructions: list[DrawAssetInstruction] = tile.get_draw_assets_instructions()
+
+            # only get drawing instructions for one of the duplicate starting tile destination tiles [increase FPS]
+            if tile in self.__starting_tiles_destinations_set:
+                if tile not in starting_tile_destinations_drawn:
+                    starting_tile_destinations_drawn.add(tile)
+                else:
+                    tile_draw_instructions = []
+
+            for instruction in tile_draw_instructions:
                 draw_instructions.append(instruction)
 
         return draw_instructions

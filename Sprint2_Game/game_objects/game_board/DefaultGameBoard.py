@@ -267,14 +267,17 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         starting_tile_destinations_drawn = set()
 
         for tile in self.__main_tile_sequence:
-            tile_draw_instructions: list[DrawAssetInstruction] = tile.get_draw_assets_instructions()
+            tile_draw_instructions: Optional[list[DrawAssetInstruction]] = None
 
-            # only get drawing instructions for one of the duplicate starting tile destination tiles [increase game performance]
             if tile in self.__starting_tiles_destinations_set:
+                # only get drawing instructions for one of the duplicate starting tile destination tiles [increase game performance]
                 if tile not in starting_tile_destinations_drawn:
                     starting_tile_destinations_drawn.add(tile)
+                    tile_draw_instructions = tile.get_draw_assets_instructions()
                 else:
-                    tile_draw_instructions = []
+                    continue
+            else:
+                tile_draw_instructions = tile.get_draw_assets_instructions()
 
             for instruction in tile_draw_instructions:
                 draw_instructions.append(instruction)

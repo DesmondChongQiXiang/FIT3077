@@ -263,13 +263,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 factor: int = i - i_bottom + 1
                 tile.set_draw_data(DrawProperties((int(main_x0), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
 
-        # getting draw instructions after setting draw data
+        # getting draw instructions for the entire board after setting draw data
         starting_tile_destinations_drawn = set()
 
         for tile in self.__main_tile_sequence:
             tile_draw_instructions: list[DrawAssetInstruction] = tile.get_draw_assets_instructions()
 
-            # only get drawing instructions for one of the duplicate starting tile destination tiles [increase FPS]
+            # only get drawing instructions for one of the duplicate starting tile destination tiles [increase game performance]
             if tile in self.__starting_tiles_destinations_set:
                 if tile not in starting_tile_destinations_drawn:
                     starting_tile_destinations_drawn.add(tile)

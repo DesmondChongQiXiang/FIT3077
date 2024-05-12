@@ -4,10 +4,9 @@ from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
-from game_events.MoveActionHandler import MoveActionHandler
 
 
-class GameBoard(ABC, DrawableByAsset, MoveActionHandler):
+class GameBoard(ABC, DrawableByAsset):
     """Represents a game board that can be played on. Players can be placed on the board, and chit cards are used to
     interact with the game board.
 

@@ -11,7 +11,6 @@ from metaclasses.SingletonMeta import SingletonMeta
 from threading import Timer
 
 import pygame
-import sys
 
 
 class GameWorld(WinEventListener, metaclass=SingletonMeta):
@@ -134,15 +133,20 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
 
     # --------- WinEventListener interface -------------------------------------------------------------------------------------------------
     def on_player_win(self, character: PlayableCharacter) -> None:
-        """On a player win, print to the console the character who won the game and quit the game.
+        """On a player win, print to the console the character who won the game, prevent further interaction and quit the game after a
+        delay specified by GameWorld.__GAME_END_CLOSE_DELAY.
 
         Args:
             character: The character
         """
+        # print who won the game
         for i, player_char in enumerate(self.__playable_characters):
             if player_char == character:
                 print(f"Player {i+1} has won the game!")
 
+        self.disable_mouse_clicks()
+
+        # stop game after delay
         end_game_timer: Timer = Timer(GameWorld.__GAME_END_CLOSE_DELAY, self.stop_game)
         end_game_timer.start()
 

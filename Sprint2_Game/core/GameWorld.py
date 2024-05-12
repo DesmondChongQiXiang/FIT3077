@@ -55,7 +55,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         #### GAME LOOP
         while self.__should_game_run:
             # Handle Drawing
-            pygame.display.get_surface().fill(SCREEN_BACKGROUND_COLOUR)
+            PygameScreenController.instance().fill_screen_with_colour(SCREEN_BACKGROUND_COLOUR)
 
             PygameScreenController.instance().draw_assets_from_instructions(self.__game_board.get_draw_assets_instructions())
             clickable_hitboxes = PygameScreenController.instance().draw_clickable_assets_from_instructions(self.__game_board.get_draw_clickable_assets_instructions())

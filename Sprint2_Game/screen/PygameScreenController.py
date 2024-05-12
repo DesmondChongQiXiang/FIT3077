@@ -31,6 +31,14 @@ class PygameScreenController(metaclass=SingletonMeta):
         if self.__screen is None:
             raise Exception("The pygame screen does not yet exist.")
 
+    def fill_screen_with_colour(self, rgb: tuple[int, int, int]) -> None:
+        """Fill the screen with a solid colour.
+
+        Args:
+            rgb: The colour in form (R, G, B)
+        """
+        self.__screen.fill(rgb)
+
     def draw_asset(self, image_path: str, x: int, y: int, width: Optional[int] = None, height: Optional[int] = None, rotate: float = 0) -> pygame.Surface:
         """Draw an asset on coordinates (x,y) on the screen.
 

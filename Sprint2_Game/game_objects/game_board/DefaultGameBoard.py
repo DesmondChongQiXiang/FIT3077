@@ -91,7 +91,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """Checks that there is the correct number of main tiles. If incorrect, throws an exception
 
         Throws:
-            Exception if the number of main sequence tiles is incorect (DIMENSION_CELL_COUNT * 4) - 4
+            Exception if the number of main sequence tiles is incorrect (DIMENSION_CELL_COUNT * 4) - 4
         """
         main_tiles_only_len = (
             len(self.__main_tile_sequence) - len(self.__starting_tiles) * 2
@@ -158,7 +158,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                         # don't move character if starting tile will be overshot & end character's turn
                         character.set_should_continue_turn(False)
                         return
-
+                    
                     # go into its own starting tile
                     break
 

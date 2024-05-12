@@ -30,7 +30,7 @@ class ChitCard(ModularClickableSprite):
         self.__flipped = state
 
     def set_game_board_delegate(self, game_board: GameBoard) -> None:
-        """Set the game board delegate to inform about events occuring for the chit cards.
+        """Set the game board delegate to inform about events occurring for the chit cards.
 
         Args:
             game_board: The game board

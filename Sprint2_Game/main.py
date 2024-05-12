@@ -19,7 +19,7 @@ if __name__ == "__main__":
     # Initialise pygame, and pygame screen
     pygame.init()
     pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Fiery Dragons: Shen Jiang")
+    pygame.display.set_caption("Fiery Dragons")
 
     # ============= GAME CONFIG ==============
     tiles: list[Tile] = normal_tiles_in_animal_sequence(24)

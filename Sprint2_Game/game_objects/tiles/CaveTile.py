@@ -5,6 +5,8 @@ from game_objects.animals.Animal import Animal
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 from typing import Optional
+from game_events.WinEventPublisher import WinEventPublisher
+
 
 
 class CaveTile(Tile):
@@ -32,6 +34,10 @@ class CaveTile(Tile):
             character: The character to place on the tile
         """
         self.set_character_on_tile(character)
+        WinEventPublisher.instance().notify_subscribers(character)
+        
+
+
 
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """Draw the tile based on the tile's draw data, and its animal. If there is no data, the tile is not drawn.

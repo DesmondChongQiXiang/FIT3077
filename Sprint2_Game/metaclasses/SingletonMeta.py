@@ -1,8 +1,9 @@
 from __future__ import annotations
 from typing import Any, Optional
+from game_events.WinEventListener import WinEventListener
 
 
-class SingletonMeta(type):
+class SingletonMeta(type(WinEventListener)):
     """Metaclass that allows for only one instance of each class user. Instantiating another instance of the same class,
     even with different parameters will always return the original singleton.
 

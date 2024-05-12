@@ -6,22 +6,27 @@ from game_objects.game_board.GameBoard import GameBoard
 from game_objects.tiles.Tile import Tile
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
+from game_events.WinEventListener import WinEventListener
+from game_events.WinEventPublisher import WinEventPublisher
 from metaclasses.SingletonMeta import SingletonMeta
+from threading import Timer
 
 import pygame
 
 
-class GameWorld(metaclass=SingletonMeta):
+class GameWorld(WinEventListener,metaclass=SingletonMeta):
     """A singleton. This class creates and manages a game instance. It provides the interface between it and the players.
 
     Author: Shen
     """
+    GAME_END_DELAY : float = 5.0
+    RUNNING: bool = True
 
     def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard):
         """Configures the game world, with the first character in the list of playable characters being the starting player.
 
         Args:
-            playable_charcters: The list of playable characters to initialise the world (game) with
+            playable_characters: The list of playable characters to initialise the world (game) with
             game_board: The game board
 
         Throws:
@@ -38,15 +43,21 @@ class GameWorld(metaclass=SingletonMeta):
 
         self.__current_player.set_is_currently_playing(True)
 
+
+        WinEventPublisher.instance().subscribe(self)
+
+        
+
     def run(self) -> None:
         """Initialises the game on the active pygame screen and runs the main game loop.
 
         Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
         """
         clock = pygame.time.Clock()
+        
 
         # GAME LOOP
-        while True:
+        while GameWorld.RUNNING:
             # Handle Drawing
             pygame.display.get_surface().fill(SCREEN_BACKGROUND_COLOUR)
 
@@ -117,6 +128,18 @@ class GameWorld(metaclass=SingletonMeta):
         """Enable user interaction with the game by mouse clicks."""
         self.__mouse_click_enabled = True
 
+    def on_player_win(self,character):
+        for i in range(len(self.__playable_characters)):
+            if self.__playable_characters[i] == character:
+                print(f"Player {i+1} has won the game!")
+        
+        #end_game_timer = Timer(GameWorld.GAME_END_DELAY,pygame.quit)
+        GameWorld.RUNNING = False
+        
+        #end_game_timer.start()
+        
+        
+
     @staticmethod
     def instance() -> GameWorld:
         """Get the shared instance of this controller.
@@ -127,7 +150,7 @@ class GameWorld(metaclass=SingletonMeta):
         Raises:
             Exception if the instance did not exist before access
         """
-        existing_instance = cast(GameWorld, SingletonMeta._get_existing_instance(GameWorld))  # type guranteed to be GameWorld
+        existing_instance = cast(GameWorld, SingletonMeta._get_existing_instance(GameWorld))  # type guaranteed to be GameWorld
         if existing_instance is not None:
             return existing_instance
         raise Exception("GameWorld instance accessed before instantiation.")

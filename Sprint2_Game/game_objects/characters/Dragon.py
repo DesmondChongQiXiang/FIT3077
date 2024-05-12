@@ -13,15 +13,16 @@ class Dragon(PlayableCharacter):
 
     __TURN_ROTATE_SPEED: float = 3.5  # speed at which the sprite should rotate anti-clockwise during the dragon's turn
 
-    def __init__(self, variant: PlayableCharacterVariant, draw_properties: Optional[DrawProperties] = None):
+    def __init__(self, variant: PlayableCharacterVariant, name: str, draw_properties: Optional[DrawProperties] = None):
         """
         Args:
             variant: The variant of the dragon
+            name: The name of the character
             draw_properties (optional): The drawing properties specifying how to draw the dragon
         """
         self.__draw_rotation: float = 0
 
-        super().__init__(variant, draw_properties)
+        super().__init__(variant, name, draw_properties)
 
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """Draw the dragon if the drawing properties have been specified. Otherwise draws nothing. A dragon who is currently

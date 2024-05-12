@@ -12,15 +12,17 @@ class PlayableCharacter(ABC, DrawableByAsset):
     Author: Shen
     """
 
-    def __init__(self, variant: PlayableCharacterVariant, draw_properties: Optional[DrawProperties] = None):
+    def __init__(self, variant: PlayableCharacterVariant, name: str, draw_properties: Optional[DrawProperties] = None):
         """
         Args:
             variant: The variant of the character
+            name: The name for the character
             draw_properties (optional): The drawing properties specifying how to draw the character
         """
         self._variant = variant
         self.__draw_properties = draw_properties
         self.__should_continue_turn: bool = True
+        self.__name = name
         self._is_currently_playing: bool = False
 
     def should_continue_turn(self) -> bool:
@@ -62,3 +64,11 @@ class PlayableCharacter(ABC, DrawableByAsset):
             playing: Whether the character is currently playing
         """
         self._is_currently_playing = playing
+
+    def name(self) -> str:
+        """Gets the name of the playable character.
+
+        Returns:
+            The character's name
+        """
+        return self.__name

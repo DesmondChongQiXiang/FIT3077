@@ -133,16 +133,16 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
 
     # --------- WinEventListener interface -------------------------------------------------------------------------------------------------
     def on_player_win(self, character: PlayableCharacter) -> None:
-        """On a player win, print to the console the character who won the game, prevent further interaction and quit the game after a
-        delay specified by GameWorld.__GAME_END_CLOSE_DELAY.
+        """On a player win, print to the console the name of the character who won the game, prevent further interaction and quit the
+        game after a delay specified by GameWorld.__GAME_END_CLOSE_DELAY.
 
         Args:
             character: The character
         """
         # print who won the game
-        for i, player_char in enumerate(self.__playable_characters):
+        for player_char in self.__playable_characters:
             if player_char == character:
-                print(f"Player {i+1} has won the game!")
+                print(f"Player {player_char.name()} has won the game!")
 
         self.disable_mouse_clicks()
 

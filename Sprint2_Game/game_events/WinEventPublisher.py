@@ -4,23 +4,42 @@ from game_events.WinEventListener import WinEventListener
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from typing import Optional, cast
 
-class WinEventPublisher(metaclass = SingletonMeta):
+
+class WinEventPublisher(metaclass=SingletonMeta):
+    """A publisher that allows subscribers to be notified of a character who has won the game.
+
+    Author: Rohan
+    """
+
     def __init__(self) -> None:
-        self.subscribers = []
+        """Constructor."""
+        self.__subscribers: list[WinEventListener] = []
 
-    def subscribe(self,subscriber: WinEventListener):
-        self.subscribers.append(subscriber)
+    def subscribe(self, listener: WinEventListener) -> None:
+        """Subscribe to listen to win events.
 
-    def unsubscribe(self,subscriber: WinEventListener):
-        if WinEventListener in self.subscribers:
-            self.subscribers.remove(subscriber)
+        Args:
+            listener: The listener
+        """
+        self.__subscribers.append(listener)
 
-    def notify_subscribers(self,character: PlayableCharacter) -> PlayableCharacter:
-        for subscriber in self.subscribers:
+    def unsubscribe(self, subscriber: WinEventListener) -> None:
+        """Subscribe an object to listen to win events.
+
+        Args:
+            listener: The listener
+        """
+        if WinEventListener in self.__subscribers:
+            self.__subscribers.remove(subscriber)
+
+    def notify_subscribers(self, character: PlayableCharacter) -> None:
+        """Notify all subscribed objects about a character who won.
+
+        Args:
+            character: The character who won
+        """
+        for subscriber in self.__subscribers:
             subscriber.on_player_win(character)
-        return character
-            
-
 
     @staticmethod
     def instance() -> WinEventPublisher:
@@ -33,4 +52,3 @@ class WinEventPublisher(metaclass = SingletonMeta):
         if instance is not None:
             return instance
         return WinEventPublisher()
-

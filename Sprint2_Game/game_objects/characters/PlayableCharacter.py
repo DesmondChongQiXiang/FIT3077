@@ -20,7 +20,7 @@ class PlayableCharacter(ABC, DrawableByAsset):
         """
         self._variant = variant
         self.__draw_properties = draw_properties
-        self.__should_continue_turn = True
+        self.__should_continue_turn: bool = True
         self._is_currently_playing: bool = False
 
     def should_continue_turn(self) -> bool:

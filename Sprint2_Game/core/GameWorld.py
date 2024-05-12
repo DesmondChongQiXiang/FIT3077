@@ -3,7 +3,6 @@ from typing import cast
 from core.GameConfig import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.game_board.GameBoard import GameBoard
-from game_objects.tiles.Tile import Tile
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
 from game_events.WinEventListener import WinEventListener
@@ -12,15 +11,16 @@ from metaclasses.SingletonMeta import SingletonMeta
 from threading import Timer
 
 import pygame
+import sys
 
 
-class GameWorld(WinEventListener,metaclass=SingletonMeta):
+class GameWorld(WinEventListener, metaclass=SingletonMeta):
     """A singleton. This class creates and manages a game instance. It provides the interface between it and the players.
 
-    Author: Shen
+    Author: Shen, Rohan
     """
-    GAME_END_DELAY : float = 5.0
-    RUNNING: bool = True
+
+    __GAME_END_CLOSE_DELAY: float = 2.0  # seconds after which to close the game after the game ends (i.e when a player wins)
 
     def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard):
         """Configures the game world, with the first character in the list of playable characters being the starting player.
@@ -39,25 +39,22 @@ class GameWorld(WinEventListener,metaclass=SingletonMeta):
         self.__game_board: GameBoard = game_board
         self.__current_player = playable_characters[0]
         self.__current_player_i = 0  # for turn processing purposes only
+        self.__should_game_run: bool = True
         self.__mouse_click_enabled = True
 
         self.__current_player.set_is_currently_playing(True)
-
-
         WinEventPublisher.instance().subscribe(self)
 
-        
-
+    # ----------- Class methods ----------------------------------------------------------------------------------------------------------------
     def run(self) -> None:
         """Initialises the game on the active pygame screen and runs the main game loop.
 
         Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
         """
         clock = pygame.time.Clock()
-        
 
-        # GAME LOOP
-        while GameWorld.RUNNING:
+        #### GAME LOOP
+        while self.__should_game_run:
             # Handle Drawing
             pygame.display.get_surface().fill(SCREEN_BACKGROUND_COLOUR)
 
@@ -68,8 +65,8 @@ class GameWorld(WinEventListener,metaclass=SingletonMeta):
             for event in pygame.event.get():
                 match event.type:
                     case pygame.QUIT:  # Handle closing of game
-                        pygame.quit()
-                        return
+                        self.__should_game_run = False
+                        break
 
                     case pygame.MOUSEBUTTONDOWN:  # handle mouse click
                         if self.__mouse_click_enabled:
@@ -82,6 +79,9 @@ class GameWorld(WinEventListener,metaclass=SingletonMeta):
             # Update screen & Set FPS
             pygame.display.flip()  # update screen
             clock.tick(FRAMES_PER_SECOND)
+
+        # Quit game once game loop broken
+        pygame.quit()
 
     def __fire_onclick_for_clicked_hitboxes(self, hitboxes: list[tuple[pygame.Rect, ModularClickableSprite]], player: PlayableCharacter) -> None:
         """Fires on_click() for any objects containing hitboxes under the user's current cursor position.
@@ -128,18 +128,25 @@ class GameWorld(WinEventListener,metaclass=SingletonMeta):
         """Enable user interaction with the game by mouse clicks."""
         self.__mouse_click_enabled = True
 
-    def on_player_win(self,character):
-        for i in range(len(self.__playable_characters)):
-            if self.__playable_characters[i] == character:
-                print(f"Player {i+1} has won the game!")
-        
-        #end_game_timer = Timer(GameWorld.GAME_END_DELAY,pygame.quit)
-        GameWorld.RUNNING = False
-        
-        #end_game_timer.start()
-        
-        
+    def stop_game(self) -> None:
+        """Stops the game and causes game to exit."""
+        self.__should_game_run = False
 
+    # --------- WinEventListener interface -------------------------------------------------------------------------------------------------
+    def on_player_win(self, character: PlayableCharacter) -> None:
+        """On a player win, print to the console the character who won the game and quit the game.
+
+        Args:
+            character: The character
+        """
+        for i, player_char in enumerate(self.__playable_characters):
+            if player_char == character:
+                print(f"Player {i+1} has won the game!")
+
+        end_game_timer: Timer = Timer(GameWorld.__GAME_END_CLOSE_DELAY, self.stop_game)
+        end_game_timer.start()
+
+    # -------- Static methods ---------------------------------------------------------------------------------------------------------------
     @staticmethod
     def instance() -> GameWorld:
         """Get the shared instance of this controller.

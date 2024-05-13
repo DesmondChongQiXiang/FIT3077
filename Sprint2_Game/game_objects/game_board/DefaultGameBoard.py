@@ -73,7 +73,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # Check enough tiles
         self.__check_enough_main_tiles()
 
-        # Set up live character tiles visited, character starting location, live character location, dictionaries
+        # Initialise character tiles visited, character starting location, character location dictionaries to initial game board state
         for character in playable_characters:
             self.__character_tiles_visited[character] = set()
 
@@ -158,7 +158,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                         # don't move character if starting tile will be overshot & end character's turn
                         character.set_should_continue_turn(False)
                         return
-                    
+
                     # go into its own starting tile
                     break
 

@@ -63,7 +63,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
             # Handle Events
             for event in pygame.event.get():
                 match event.type:
-                    case pygame.QUIT:  # Handle closing of game
+                    case pygame.QUIT:  # handle when X pressed on window
                         self.__should_game_run = False
                         break
 

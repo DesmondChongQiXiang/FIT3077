@@ -128,7 +128,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         self.__mouse_click_enabled = True
 
     def stop_game(self) -> None:
-        """Stops the game and causes game to exit."""
+        """Stops the game and causes the game to exit."""
         self.__should_game_run = False
 
     # --------- WinEventListener interface -------------------------------------------------------------------------------------------------

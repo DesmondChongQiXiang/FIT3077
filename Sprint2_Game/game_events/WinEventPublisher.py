@@ -29,7 +29,7 @@ class WinEventPublisher(metaclass=SingletonMeta):
         Args:
             listener: The listener
         """
-        if WinEventListener in self.__subscribers:
+        if subscriber in self.__subscribers:
             self.__subscribers.remove(subscriber)
 
     def notify_subscribers(self, character: PlayableCharacter) -> None:

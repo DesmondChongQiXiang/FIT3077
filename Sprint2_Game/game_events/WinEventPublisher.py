@@ -23,14 +23,14 @@ class WinEventPublisher(metaclass=SingletonMeta):
         """
         self.__subscribers.append(listener)
 
-    def unsubscribe(self, subscriber: WinEventListener) -> None:
+    def unsubscribe(self, listener: WinEventListener) -> None:
         """Subscribe an object to listen to win events.
 
         Args:
             listener: The listener
         """
-        if subscriber in self.__subscribers:
-            self.__subscribers.remove(subscriber)
+        if listener in self.__subscribers:
+            self.__subscribers.remove(listener)
 
     def notify_subscribers(self, character: PlayableCharacter) -> None:
         """Notify all subscribed objects about a character who won.

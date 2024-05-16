@@ -23,8 +23,10 @@ if __name__ == "__main__":
 
     # ============= GAME CONFIG ==============
     tiles: list[Tile] = normal_tiles_in_animal_sequence(24)
+    
     chit_cards: list[ChitCard] = animal_chit_cards_in_animal_sequence(12)
-    chit_cards: list[ChitCard] = dragon_pirate_chit_cards_in_dragon_pirate_sequence(4,chit_cards)
+    chit_cards = dragon_pirate_chit_cards_in_dragon_pirate_sequence(4,chit_cards)
+
     playable_characters: list[PlayableCharacter] = [
         Dragon(PlayableCharacterVariant.BLUE, "Ian"),
         Dragon(PlayableCharacterVariant.GREEN, "Rohan"),

@@ -145,11 +145,10 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         while steps_taken < abs(steps):
             if steps < 0: # If a dragon pirate chit card has been flipped
                 tile_intermediate_i -= 1
-                steps_taken += 1
 
             else:
                 tile_intermediate_i += 1  # check next tile
-                steps_taken += 1
+            steps_taken += 1
 
             current_tile_i = tile_intermediate_i % len(self.__main_tile_sequence)
             current_tile = self.__main_tile_sequence[current_tile_i]
@@ -159,15 +158,18 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 if self.__character_starting_tiles[character] is current_tile and (
                     len(self.__character_tiles_visited[character]) == len(self.__main_tile_sequence) - len(self.__starting_tiles) * 2
                 ):
-                    if steps_taken < steps:
+                    if steps_taken < abs(steps):
                         # don't move character if starting tile will be overshot & end character's turn
                         character.set_should_continue_turn(False)
                         return
 
                     # go into its own starting tile
                     break
-
-                tile_intermediate_i += 2  # otherwise skip the starting tile. +2 to account for its duplicate destination tile
+                
+                if steps < 0:
+                    tile_intermediate_i -= 2  # otherwise skip the starting tile. -2 to account for its duplicate destination tile when moving back
+                else:
+                    tile_intermediate_i += 2 # otherwise skip the starting tile. +2 to account for its duplicate destination tile
 
             if steps > 0: # Only add the tile to the list of visited tiles if we're moving forward
                 # add the currently considered tile to visited tiles for character accounting for any skipping of tiles

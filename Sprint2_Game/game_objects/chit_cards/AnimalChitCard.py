@@ -68,14 +68,16 @@ class AnimalChitCard(ChitCard):
         """
         if self._board_delegate is not None:
             tile_animal: Optional[Animal] = self._board_delegate.get_character_floor_tile(character).get_animal()
-            if tile_animal is not None and tile_animal != self.__animal:
-                character.set_should_continue_turn(False)
+            if not self.get_flipped():# Makes it so the players only move if the chit card has not been flipped before
+
+                if tile_animal is not None and tile_animal != self.__animal:
+                    character.set_should_continue_turn(False)
             
-            #else:
-               # self._board_delegate.move_character_by_steps(character, self.get_symbol_count())
+                else:
+                    #self.set_flipped(not self.get_flipped())
+                    self._board_delegate.move_character_by_steps(character, self.get_symbol_count())
                 
             if not self.get_flipped():
-                self._board_delegate.move_character_by_steps(character, self.get_symbol_count())
                 self.set_flipped(not self.get_flipped())
         else:
             raise Exception("Board delegate was not set when on_click() called.")

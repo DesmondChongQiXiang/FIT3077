@@ -185,9 +185,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 else:
                     tile_intermediate_i += 2 # otherwise skip the starting tile. +2 to account for its duplicate destination tile
 
-            if steps > 0: # Only add the tile to the list of visited tiles if we're moving forward
-                # add the currently considered tile to visited tiles for character accounting for any skipping of tiles
-                self.__character_tiles_visited[character].add(self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)])
+            
+            # add the currently considered tile to visited tiles for character accounting for any skipping of tiles
+            self.__character_tiles_visited[character].add(self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)])
 
         # place character on the calculated destination tile if not occupied and update character location. Otherwise end player's turn
         final_tile_i: int = tile_intermediate_i % len(self.__main_tile_sequence)

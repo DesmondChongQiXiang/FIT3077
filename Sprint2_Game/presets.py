@@ -16,6 +16,7 @@ def animal_chit_cards_in_animal_sequence(number: int, chit_cards : list[ChitCard
 
     Args:
         number: number of chit card to generate
+        chit_cards: list of chit cards to append to. Defaults to an empty list if no list of chit cards is passed as an argument
 
     Returns:
         The list of generated chit cards
@@ -38,6 +39,7 @@ def dragon_pirate_chit_cards_in_dragon_pirate_sequence(number: int, chit_cards :
     
     Args:
         number: number of chit cards to generate
+        chit_cards: list of chit cards to append to. Defaults to an empty list if no list of chit cards is passed as an argument
 
     Returns:
         The list of generated chit cards

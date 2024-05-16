@@ -141,10 +141,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """
         tile_intermediate_i: int = self.__character_location[character]
         steps_taken: int = 0
+        current_tile_i = tile_intermediate_i % len(self.__main_tile_sequence)
+        current_tile = self.__main_tile_sequence[current_tile_i]
+
 
         while steps_taken < abs(steps):
-            # If the character is going to move back into their cave, end the players turn
-            if self.__character_starting_tiles[character] is self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)] and steps < 0:
+            # If the character is already in a cave and going to move further back, end their turn
+            if self.__character_starting_tiles[character] is current_tile and steps < 0:
                     character.set_should_continue_turn(False)
                     return
             
@@ -159,7 +162,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             current_tile = self.__main_tile_sequence[current_tile_i]
 
             if current_tile in self.__starting_tiles_set:
-
+                # If the player is going to re-enter their own cave by moving back, end their turn. 
                 if self.__character_starting_tiles[character] is current_tile and steps < 0:
                     character.set_should_continue_turn(False)
                     return
@@ -176,8 +179,11 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                     # go into its own starting tile
                     break
                 
+                if steps < 0:
+                    tile_intermediate_i -= 2
                 
-                tile_intermediate_i += 2 # otherwise skip the starting tile. +2 to account for its duplicate destination tile
+                else:
+                    tile_intermediate_i += 2 # otherwise skip the starting tile. +2 to account for its duplicate destination tile
 
             if steps > 0: # Only add the tile to the list of visited tiles if we're moving forward
                 # add the currently considered tile to visited tiles for character accounting for any skipping of tiles

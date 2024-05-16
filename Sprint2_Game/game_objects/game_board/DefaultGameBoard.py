@@ -143,6 +143,11 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         steps_taken: int = 0
 
         while steps_taken < abs(steps):
+            # If the character is going to move back into their cave, end the players turn
+            if self.__character_starting_tiles[character] is self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)] and steps < 0:
+                    character.set_should_continue_turn(False)
+                    return
+            
             if steps < 0: # If a dragon pirate chit card has been flipped
                 tile_intermediate_i -= 1
 
@@ -154,6 +159,11 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             current_tile = self.__main_tile_sequence[current_tile_i]
 
             if current_tile in self.__starting_tiles_set:
+                
+                if self.__character_starting_tiles[character] is self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)] and steps < 0:
+                    character.set_should_continue_turn(False)
+                    return
+
                 # Allow character to only re-enter its own starting tile and only when they've visited all main sequence tiles
                 if self.__character_starting_tiles[character] is current_tile and (
                     len(self.__character_tiles_visited[character]) == len(self.__main_tile_sequence) - len(self.__starting_tiles) * 2
@@ -166,10 +176,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                     # go into its own starting tile
                     break
                 
-                if steps < 0:
-                    tile_intermediate_i -= 2  # otherwise skip the starting tile. -2 to account for its duplicate destination tile when moving back
-                else:
-                    tile_intermediate_i += 2 # otherwise skip the starting tile. +2 to account for its duplicate destination tile
+                
+                tile_intermediate_i += 2 # otherwise skip the starting tile. +2 to account for its duplicate destination tile
 
             if steps > 0: # Only add the tile to the list of visited tiles if we're moving forward
                 # add the currently considered tile to visited tiles for character accounting for any skipping of tiles

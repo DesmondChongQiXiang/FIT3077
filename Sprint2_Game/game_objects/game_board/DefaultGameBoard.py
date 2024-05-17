@@ -162,7 +162,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             current_tile = self.__main_tile_sequence[current_tile_i]
 
             if current_tile in self.__starting_tiles_set:
-                # If the player is going to pass their own starting tile by moving backwards, end their turn.
+                # If the player is going to re-enter/pass their own starting tile by moving backwards, end their turn.
                 if self.__character_starting_tiles[character] is current_tile and steps < 0:
                     character.set_should_continue_turn(False)
                     return

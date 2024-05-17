@@ -11,18 +11,15 @@ from game_objects.tiles.Tile import Tile
 from game_objects.tiles.NormalTile import NormalTile
 
 
-def animal_chit_cards_in_animal_sequence(number: int, chit_cards : list[ChitCard] = []) -> list[ChitCard]:
-    """Generate animal chit cards in sequence of animals in Animal enum and symbol count (i.e 1,2,3).
+def add_animal_chit_cards_in_animal_sequence(number: int, chit_cards: list[ChitCard]) -> None:
+    """Generate animal chit cards in sequence of animals in Animal enum and symbol count (i.e 1,2,3) and appends
+    them to the end of the list.
 
     Args:
         number: number of chit card to generate
-        chit_cards: list of chit cards to append to. Defaults to an empty list if no list of chit cards is passed as an argument
-
-    Returns:
-        The list of generated chit cards
+        chit_cards: the list of chit cards to append to
     """
-    #chit_cards: list[ChitCard] = []
-    generated = 0
+    generated: int = 0
 
     while generated < number:  # for case where all 1-3 and animal combinations < number
         for i in range(1, 4):
@@ -31,21 +28,18 @@ def animal_chit_cards_in_animal_sequence(number: int, chit_cards : list[ChitCard
                 generated += 1
 
                 if generated >= number:
-                    return chit_cards
-    return chit_cards
+                    return
 
-def dragon_pirate_chit_cards_in_dragon_pirate_sequence(number: int, chit_cards : list[ChitCard] = []) -> list[ChitCard]:
-    """Generate dragon pirate chit cards with symbol count 1 and 2
-    
+
+def add_dragon_pirate_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> None:
+    """Generate dragon pirate chit cards with symbol count 1 and 2 in sequence and appends them to the end of
+    the list.
+
     Args:
         number: number of chit cards to generate
-        chit_cards: list of chit cards to append to. Defaults to an empty list if no list of chit cards is passed as an argument
-
-    Returns:
-        The list of generated chit cards
-    
+        chit_cards: the list of chit cards to append to
     """
-    generated = 0
+    generated: int = 0
 
     while generated < number:
         for i in range(1, 3):
@@ -53,8 +47,7 @@ def dragon_pirate_chit_cards_in_dragon_pirate_sequence(number: int, chit_cards :
             generated += 1
 
             if generated >= number:
-                return chit_cards
-    return chit_cards  
+                return
 
 
 def normal_tiles_in_animal_sequence(number: int) -> list[Tile]:

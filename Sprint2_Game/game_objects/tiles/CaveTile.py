@@ -1,11 +1,13 @@
 from game_objects.tiles.Tile import Tile
+from game_objects.tiles.CaveTileVariant import CaveTileVariant
 from game_objects.characters.PlayableCharacter import PlayableCharacter
-from screen.DrawProperties import DrawProperties
 from game_objects.animals.Animal import Animal
+from game_events.WinEventPublisher import WinEventPublisher
+from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
+
 from typing import Optional
-from game_events.WinEventPublisher import WinEventPublisher
 
 
 class CaveTile(Tile):
@@ -16,14 +18,16 @@ class CaveTile(Tile):
 
     __ANIMAL_DRAW_SIZE_FACTOR: float = 1.7  # higher means smaller animal
 
-    def __init__(self, animal: Animal, draw_data: Optional[DrawProperties] = None, character: Optional[PlayableCharacter] = None):
+    def __init__(self, animal: Animal, variant: CaveTileVariant, draw_data: Optional[DrawProperties] = None, character: Optional[PlayableCharacter] = None):
         """
         Args:
             animal: The animal to be represented by the tile
+            variant: The cave tile variant to use
             draw_data (Optional): The data specifying how to draw the tile
             character (Optional): The character on the tile
         """
         super().__init__(draw_data, character, animal)
+        self.__variant = variant
 
     def place_character_on_tile(self, character: PlayableCharacter) -> None:
         """Places the character on the tile and triggers a win for the character.
@@ -50,7 +54,11 @@ class CaveTile(Tile):
         animal_size = int(tile_draw_data.get_size()[0] // CaveTile.__ANIMAL_DRAW_SIZE_FACTOR)
         animal_x, animal_y = get_coords_for_center_drawing_in_rect(tile_draw_data.get_coordinates(), tile_draw_data.get_size(), (animal_size, animal_size))
 
-        instructions.append(DrawAssetInstruction("assets/tiles/cave_tile.png", tile_x, tile_y, tile_draw_data.get_size(), tile_draw_data.get_rotation()))
+        instructions.append(
+            DrawAssetInstruction(
+                f"assets/tiles/cave_tiles/cave_tile_{self.__variant.value}.png", tile_x, tile_y, tile_draw_data.get_size(), tile_draw_data.get_rotation()
+            )
+        )
         if animal is not None:
             instructions.append(DrawAssetInstruction(f"assets/animals/{animal.value}.png", animal_x, animal_y, (animal_size, animal_size)))
         for instruction in self._get_character_draw_instructions():

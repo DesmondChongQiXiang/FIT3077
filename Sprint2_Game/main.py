@@ -6,6 +6,7 @@ from game_objects.characters.Dragon import Dragon
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.tiles.Tile import Tile
 from game_objects.tiles.CaveTile import CaveTile
+from game_objects.tiles.CaveTileVariant import CaveTileVariant
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.game_board.DefaultGameBoard import DefaultGameBoard
 from game_objects.animals.Animal import Animal
@@ -48,10 +49,10 @@ if __name__ == "__main__":
         Dragon(PlayableCharacterVariant.PURPLE, "Desmond"),
     ]
     starting_tiles: list[Tile] = [
-        CaveTile(Animal.BABY_DRAGON, character=playable_characters[0]),
-        CaveTile(Animal.SALAMANDER, character=playable_characters[1]),
-        CaveTile(Animal.SPIDER, character=playable_characters[2]),
-        CaveTile(Animal.BAT, character=playable_characters[3]),
+        CaveTile(Animal.BABY_DRAGON, CaveTileVariant.BLUE, character=playable_characters[0]),
+        CaveTile(Animal.SALAMANDER, CaveTileVariant.GREEN, character=playable_characters[1]),
+        CaveTile(Animal.SPIDER, CaveTileVariant.ORANGE, character=playable_characters[2]),
+        CaveTile(Animal.BAT, CaveTileVariant.PURPLE, character=playable_characters[3]),
     ]
 
     random.shuffle(chit_cards)

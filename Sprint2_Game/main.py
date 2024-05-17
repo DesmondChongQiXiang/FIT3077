@@ -43,10 +43,10 @@ if __name__ == "__main__":
     add_dragon_pirate_chit_cards_in_sequence(4, chit_cards)
 
     playable_characters: list[PlayableCharacter] = [
-        Dragon(PlayableCharacterVariant.BLUE, "Ian"),
-        Dragon(PlayableCharacterVariant.GREEN, "Rohan"),
-        Dragon(PlayableCharacterVariant.ORANGE, "Shen"),
-        Dragon(PlayableCharacterVariant.PURPLE, "Desmond"),
+        Dragon(PlayableCharacterVariant.BLUE, "Blue"),
+        Dragon(PlayableCharacterVariant.GREEN, "Green"),
+        Dragon(PlayableCharacterVariant.ORANGE, "Orange"),
+        Dragon(PlayableCharacterVariant.PURPLE, "Purple"),
     ]
     starting_tiles: list[Tile] = [
         CaveTile(Animal.BABY_DRAGON, CaveTileVariant.BLUE, character=playable_characters[0]),

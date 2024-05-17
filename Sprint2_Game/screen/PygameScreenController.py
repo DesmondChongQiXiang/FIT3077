@@ -65,7 +65,7 @@ class PygameScreenController(metaclass=SingletonMeta):
         if abs_image_path not in self.__image_cache:
             self.__image_cache[abs_image_path] = pygame.image.load(abs_image_path).convert_alpha()
 
-        ### DRAWING
+        ### TRANSFORMING & DRAWING
         image: pygame.Surface = self.__image_cache[abs_image_path]
 
         # Resize image to requested width and height

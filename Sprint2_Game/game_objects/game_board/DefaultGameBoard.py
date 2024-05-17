@@ -15,6 +15,8 @@ from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 import random
 
+# TODO: Change chit card dimensions and random factor to use math for varying number of chit cards. Currently hard coded
+
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
     """Initialises and represents the default fiery dragons game board. Cells are drawn in a square, using the
@@ -26,8 +28,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
     ### CONFIG
     DIMENSION_CELL_COUNT: int = 7  # Cell count for each dimension
-    CHIT_CARD_RAND_FACTOR: int = 40  # random factor in pixels
-    CHIT_CARD_DIMENSIONS: tuple[int, int] = (75, 75)  # chit card dimensions (width, height) in px
     TURN_END_RESET_DELAY: float = 2.0  # Seconds to delay resetting game board on player turn end
 
     def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]):
@@ -110,23 +110,27 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Warning:
             Will not set all chit card positions if random factor / chit card size is too large
         """
+        # chit card generation factors
+        screen_width: int = PygameScreenController.instance().get_screen_size()[0]
+        chit_card_rand_factor: int = int(screen_width * (70 / 1500))  # random factor for chit card generation in pixels.
+        chit_card_size: tuple[int, int] = (int(0.09 * screen_width), int(0.09 * screen_width))  # chit card dimensions (width, height) in px
+
+        #### Generating chit cards
         safe_area = DefaultGameBoard.__get_chit_card_safe_area()
         x0, y0, x1, y1 = safe_area[0][0], safe_area[0][1], safe_area[1][0], safe_area[1][1]
-        chit_card_w, chit_card_h = DefaultGameBoard.CHIT_CARD_DIMENSIONS
+        chit_card_w, chit_card_h = chit_card_size
         next_x, next_y = 0, 0  # default coords = (0, 0) to draw at if can't generate
 
         # generate chit tiles randomly in manner that doesn't clip board tiles
         chit_card_i = 0
-        x_random_range, y_random_range = chit_card_w + DefaultGameBoard.CHIT_CARD_RAND_FACTOR, chit_card_h + DefaultGameBoard.CHIT_CARD_RAND_FACTOR
+        x_random_range, y_random_range = chit_card_w + chit_card_rand_factor, chit_card_h + chit_card_rand_factor
 
         for cur_y in range(y0, y1 - y_random_range, y_random_range):
             for cur_x in range(x0, x1 - x_random_range, x_random_range):
                 if chit_card_i == len(self.__chit_cards):  # exit if no more chit cards to generate
                     break
-                next_x, next_y = random.randint(cur_x, cur_x + DefaultGameBoard.CHIT_CARD_RAND_FACTOR), random.randint(
-                    cur_y, cur_y + DefaultGameBoard.CHIT_CARD_RAND_FACTOR
-                )
-                self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), DefaultGameBoard.CHIT_CARD_DIMENSIONS))
+                next_x, next_y = random.randint(cur_x, cur_x + chit_card_rand_factor), random.randint(cur_y, cur_y + chit_card_rand_factor)
+                self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), chit_card_size))
                 chit_card_i += 1
 
     # ------ GameBoard abstract class --------------------------------------------------------------------------------------------

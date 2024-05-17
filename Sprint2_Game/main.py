@@ -10,18 +10,31 @@ from game_objects.game_board.GameBoard import GameBoard
 from game_objects.game_board.DefaultGameBoard import DefaultGameBoard
 from game_objects.animals.Animal import Animal
 from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVariant
+from utils.os_utils import *
 
 import pygame
 import random
+import os
 
 if __name__ == "__main__":
-    # ============= PYGAME INIT ==============
-    # Initialise pygame, and pygame screen
+    # ----- PYGAME INIT -------------------------------------------------------------------------------------------------
+    # initialise pygame
     pygame.init()
-    pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Fiery Dragons")
 
-    # ============= GAME CONFIG ==============
+    # Initialise pygame screen
+    if os.name == "nt":
+        # For Windows: Automatically ensure screen size is within safe area for monitor
+        user_screen_w, user_screen_h = nt_safe_value_for_screen_dimension(ScreenDimension.WIDTH), nt_safe_value_for_screen_dimension(ScreenDimension.HEIGHT)
+        min_safe_value: int = min(user_screen_h, user_screen_w)
+        game_screen_size: int = min_safe_value if REQUESTED_SCREEN_SIZE > min_safe_value else REQUESTED_SCREEN_SIZE
+        pygame.display.set_mode((game_screen_size, game_screen_size))
+
+    else:
+        # For all other OS: Use requested screen size
+        pygame.display.set_mode((REQUESTED_SCREEN_SIZE, REQUESTED_SCREEN_SIZE))
+
+    # ----- GAME CONFIG --------------------------------------------------------------------------------------------------
     tiles: list[Tile] = normal_tiles_in_animal_sequence(24)
 
     chit_cards: list[ChitCard] = []
@@ -51,6 +64,6 @@ if __name__ == "__main__":
         playable_characters,
     )
 
-    # ============ GAME INSTANCE =============
+    # ----- GAME INSTANCE --------------------------------------------------------------------------------------------------
     world = GameWorld(playable_characters, game_board)
     world.run()

@@ -30,7 +30,7 @@ class PygameScreenController(metaclass=SingletonMeta):
         self.__image_cache: dict[str, pygame.Surface] = dict()  # K = Absolute image path, V = Loaded image in alpha form
         self.__image_cache_resized: dict[str, dict[tuple[int, int], pygame.Surface]] = defaultdict(
             dict
-        )  # K = Absolute image path, V = dictionary with key->(width, height), value->cached resized image
+        )  # K = Absolute image path, V = dictionary with key -> (width, height), value -> cached resized image
         self.__image_cache_resized_size: int = 0  # current resized cache size
 
         if self.__screen is None:
@@ -45,10 +45,14 @@ class PygameScreenController(metaclass=SingletonMeta):
         self.__screen.fill(rgb)
 
     def draw_asset(self, image_path: str, x: int, y: int, size: Optional[tuple[int, int]] = None, rotate: float = 0) -> pygame.Surface:
-        """Draw an asset on coordinates (x,y) on the screen.
+        """Draw an asset on coordinates (x,y) on the screen with the specified size and rotation.
+
+        Automatically caches assets at the specified size. However, this cache will be purged if the number of cached items
+        grows too large (limit specified by CACHE_RESIZED_MAX_SIZE). All loaded assets are cached seperately, and never
+        purged.
 
         Args:
-            asset_path: The path to the asset relative to root directory
+            image_path: The path to the asset relative to root directory
             x: x-coordinate
             y: y-coordinate
             size (optional): Requested width and height for the image in form (width, height)

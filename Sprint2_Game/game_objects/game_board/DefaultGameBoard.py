@@ -132,8 +132,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     # ------ GameBoard abstract class --------------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
         """Move a character by a number of steps along the game board. Characters can only re-enter their starting tiles
-        once they have visited all main tiles. If the character will overshoot their starting tile after visiting all tiles,
-        then the character will not move and their turn will end.
+        once they have visited all main tiles. If the character will overshoot their starting tile after visiting all tiles
+        or will overshoot their cave moving backwards, or will land on a tile occupied by another character, then the
+        character will not move and their turn will end.
 
         Args:
             character: The character to move
@@ -158,7 +159,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
             if current_tile in self.__starting_tiles_set:
                 # If the player is going to pass their own starting tile by moving backwards, end their turn.
-                # Note: GAME RULES AREN'T CLEAR ON THIS.
+                # Note: Our own interpretation of the game rules
                 if self.__character_starting_tiles[character] is current_tile and steps < 0:
                     character.set_should_continue_turn(False)
                     return
@@ -175,7 +176,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                     # go into its own starting tile
                     break
 
-                tile_intermediate_i = tile_intermediate_i - 2 if steps < 0 else tile_intermediate_i + 2
+                tile_intermediate_i = tile_intermediate_i - 2 if steps < 0 else tile_intermediate_i + 2  # 2 to account for duplicate starting destination tile
 
             # add the currently considered tile to visited tiles for character accounting for any skipping of tiles
             self.__character_tiles_visited[character].add(self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)])

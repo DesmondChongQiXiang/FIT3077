@@ -11,6 +11,7 @@ class PirateChitCard(ChitCard):
 
     Author: Rohan
     """
+
     def __init__(self, symbol_count: int, draw_properties: Optional[DrawProperties] = None) -> None:
         """
         Args:
@@ -19,7 +20,6 @@ class PirateChitCard(ChitCard):
         """
         super().__init__(symbol_count, draw_properties)
 
-    
     def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
         """Chit card displays its back when it is not flipped. Otherwise display its front. Don't draw if drawing properties have not been set.
 
@@ -50,7 +50,7 @@ class PirateChitCard(ChitCard):
                 self,
             )
         ]
-    
+
     def on_click(self, character: PlayableCharacter) -> None:
         """On click, reveal the chit card if its not flipped. Once revealed, the chit card cannot be flipped back by
         clicking. Move the player in the negative direction based on the symbol count
@@ -63,7 +63,7 @@ class PirateChitCard(ChitCard):
         """
         if self._board_delegate is not None:
             # For testing purposes, can move back even when the dragon pirate chit card has been flipped
-            #self._board_delegate.move_character_by_steps(character, self.get_symbol_count() * (-1))
+            # self._board_delegate.move_character_by_steps(character, self.get_symbol_count() * (-1))
 
             if not self.get_flipped():
                 self._board_delegate.move_character_by_steps(character, self.get_symbol_count() * (-1))

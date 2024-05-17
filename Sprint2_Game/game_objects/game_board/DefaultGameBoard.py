@@ -144,21 +144,20 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         current_tile_i = tile_intermediate_i % len(self.__main_tile_sequence)
         current_tile = self.__main_tile_sequence[current_tile_i]
 
-
         while steps_taken < abs(steps):
             # If the character is already in a starting tile and is going to move further back, end their turn
             if self.__character_starting_tiles[character] is current_tile and steps < 0:
-                    character.set_should_continue_turn(False)
-                    return
-            
-            tile_intermediate_i = tile_intermediate_i - 1 if steps < 0 else tile_intermediate_i + 1 # consider next tile
+                character.set_should_continue_turn(False)
+                return
+
+            tile_intermediate_i = tile_intermediate_i - 1 if steps < 0 else tile_intermediate_i + 1  # consider next tile
             steps_taken += 1
 
             current_tile_i = tile_intermediate_i % len(self.__main_tile_sequence)
             current_tile = self.__main_tile_sequence[current_tile_i]
 
             if current_tile in self.__starting_tiles_set:
-                # If the player is going to pass their own starting tile by moving backwards, end their turn. 
+                # If the player is going to pass their own starting tile by moving backwards, end their turn.
                 # Note: GAME RULES AREN'T CLEAR ON THIS.
                 if self.__character_starting_tiles[character] is current_tile and steps < 0:
                     character.set_should_continue_turn(False)
@@ -175,9 +174,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
                     # go into its own starting tile
                     break
-                
+
                 tile_intermediate_i = tile_intermediate_i - 2 if steps < 0 else tile_intermediate_i + 2
-            
+
             # add the currently considered tile to visited tiles for character accounting for any skipping of tiles
             self.__character_tiles_visited[character].add(self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)])
 

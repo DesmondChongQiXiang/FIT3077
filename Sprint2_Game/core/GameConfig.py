@@ -3,7 +3,7 @@
 # ===== SCREEN ==========================================================================================================================
 
 # REQUESTED_SCREEN_SIZE
-# For Windows - Screen size of the game will automatically adjust to your shortest dimension (height / width) if one of them is exceeded
+# For Windows - Screen size of the game will automatically adjust to your shortest dimension (height / width) if exceeded
 # For other OS - Specifies the screen size directly
 REQUESTED_SCREEN_SIZE = 1500
 

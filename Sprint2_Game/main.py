@@ -26,8 +26,8 @@ if __name__ == "__main__":
     if os.name == "nt":
         # For Windows: Automatically ensure screen size is within safe area for monitor
         user_screen_w, user_screen_h = nt_safe_value_for_screen_dimension(ScreenDimension.WIDTH), nt_safe_value_for_screen_dimension(ScreenDimension.HEIGHT)
-        min_safe_value: int = min(user_screen_h, user_screen_w)
-        game_screen_size: int = min_safe_value if REQUESTED_SCREEN_SIZE > min_safe_value else REQUESTED_SCREEN_SIZE
+        min_screen_dimension_value: int = min(user_screen_h, user_screen_w)
+        game_screen_size: int = min_screen_dimension_value if REQUESTED_SCREEN_SIZE > min_screen_dimension_value else REQUESTED_SCREEN_SIZE
         pygame.display.set_mode((game_screen_size, game_screen_size))
 
     else:

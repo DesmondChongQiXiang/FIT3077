@@ -26,11 +26,11 @@ if __name__ == "__main__":
     # Initialise pygame screen
     if os.name == "nt":
         # For Windows: Automatically ensure screen size is within safe area for monitor
-        user_screen_w, user_screen_h = nt_safe_value_for_program_window(ScreenDimension.WIDTH), nt_safe_value_for_program_window(ScreenDimension.HEIGHT)
-        min_screen_dimension_value: int = min(user_screen_h, user_screen_w)
-        game_screen_size: int = min_screen_dimension_value if REQUESTED_SCREEN_SIZE > min_screen_dimension_value else REQUESTED_SCREEN_SIZE
-        pygame.display.set_mode((game_screen_size, game_screen_size))
+        user_screen_w, user_screen_h = nt_safe_size_for_program_window(ScreenDimension.WIDTH), nt_safe_size_for_program_window(ScreenDimension.HEIGHT)
+        smallest_window_dimension: int = min(user_screen_h, user_screen_w)
+        game_screen_size: int = smallest_window_dimension if REQUESTED_SCREEN_SIZE > smallest_window_dimension else REQUESTED_SCREEN_SIZE
 
+        pygame.display.set_mode((game_screen_size, game_screen_size))
     else:
         # For all other OS: Use requested screen size
         pygame.display.set_mode((REQUESTED_SCREEN_SIZE, REQUESTED_SCREEN_SIZE))

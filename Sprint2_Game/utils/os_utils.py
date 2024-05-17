@@ -19,8 +19,8 @@ class ScreenDimension(Enum):
     HEIGHT = 1
 
 
-def nt_safe_value_for_program_window(dimension: ScreenDimension) -> int:
-    """Gets a safe value for a program window for the specified screen dimension. Safe means accounting for window screen 
+def nt_safe_size_for_program_window(dimension: ScreenDimension) -> int:
+    """Gets a safe size value for a program window for the specified screen dimension. Safe means accounting for window screen
     elements (e.g task bar, title bar, etc.), with some added buffer.
 
     Args:

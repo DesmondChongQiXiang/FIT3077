@@ -44,15 +44,14 @@ class PygameScreenController(metaclass=SingletonMeta):
         """
         self.__screen.fill(rgb)
 
-    def draw_asset(self, image_path: str, x: int, y: int, width: Optional[int] = None, height: Optional[int] = None, rotate: float = 0) -> pygame.Surface:
+    def draw_asset(self, image_path: str, x: int, y: int, size: Optional[tuple[int, int]] = None, rotate: float = 0) -> pygame.Surface:
         """Draw an asset on coordinates (x,y) on the screen.
 
         Args:
             asset_path: The path to the asset relative to root directory
             x: x-coordinate
             y: y-coordinate
-            width (optional): Width for the image
-            height (optional): Height for the image
+            size (optional): Requested width and height for the image in form (width, height)
             rotate: Degrees to rotate anti-clockwise by (default 0)
 
         Returns:
@@ -70,7 +69,9 @@ class PygameScreenController(metaclass=SingletonMeta):
         image: pygame.Surface = self.__image_cache[abs_image_path]
 
         # Resize image to requested width and height
-        if width is not None and height is not None:
+        if size is not None:
+            width, height = size[0], size[1]
+
             # purge cache on exceeding resized cache's max size
             if self.__image_cache_resized_size > PygameScreenController.__CACHE_RESIZED_MAX_SIZE:
                 self.__image_cache_resized = defaultdict(dict)
@@ -115,8 +116,7 @@ class PygameScreenController(metaclass=SingletonMeta):
                 instruction.get_asset_path(),
                 instruction.get_x_coord(),
                 instruction.get_y_coord(),
-                instruction.get_width(),
-                instruction.get_height(),
+                instruction.get_size(),
                 instruction.get_rotation(),
             )
             images.append(image)

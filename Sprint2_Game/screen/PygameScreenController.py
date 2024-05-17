@@ -10,9 +10,7 @@ import pygame
 
 
 class PygameScreenController(metaclass=SingletonMeta):
-    """Contains useful methods for interacting with pygame's screen.
-
-    Warning: Should be used as a singleton
+    """Singleton containing useful methods for interacting with pygame's screen.
 
     Throws:
         Will throw an Exception if the pygame screen does not yet exist.
@@ -28,7 +26,7 @@ class PygameScreenController(metaclass=SingletonMeta):
         Throws:
             Exception if the pygame screen does not yet exist
         """
-        self.__screen = pygame.display.get_surface()
+        self.__screen: pygame.Surface = pygame.display.get_surface()
         self.__image_cache: dict[str, pygame.Surface] = dict()  # K = Absolute image path, V = Loaded image in alpha form
         self.__image_cache_resized: dict[str, dict[tuple[int, int], pygame.Surface]] = defaultdict(
             dict
@@ -64,19 +62,21 @@ class PygameScreenController(metaclass=SingletonMeta):
         """
         abs_image_path: str = f"{ROOT_PATH}/{image_path}"
 
-        # Use image cache if possible. HIT: Load cached image. MISS: Load then cache image
+        # Use image cache to load image if possible. HIT: Load cached image. MISS: Load then cache image
         if abs_image_path not in self.__image_cache:
             self.__image_cache[abs_image_path] = pygame.image.load(abs_image_path).convert_alpha()
 
+        ### DRAWING
         image: pygame.Surface = self.__image_cache[abs_image_path]
 
+        # Resize image to requested width and height
         if width is not None and height is not None:
+            # purge cache on exceeding resized cache's max size
             if self.__image_cache_resized_size > PygameScreenController.__CACHE_RESIZED_MAX_SIZE:
-                # purge cache on exceeding resized cache's max size
                 self.__image_cache_resized = defaultdict(dict)
                 self.__image_cache_resized_size = 0
 
-            # Use resized cache as much as possible
+            # Resize image whilst using resized cache as much as possible
             requested_size: tuple[int, int] = (width, height)
             resized_cache_for_image: dict[tuple[int, int], pygame.Surface] = self.__image_cache_resized[abs_image_path]
 
@@ -85,8 +85,16 @@ class PygameScreenController(metaclass=SingletonMeta):
                 self.__image_cache_resized_size += 1
             image = resized_cache_for_image[requested_size]
 
+        # Rotate image
+        before_rotate_rect = image.get_rect()
+        before_rotate_width, before_rotate_height = before_rotate_rect.width, before_rotate_rect.height
+
         image = pygame.transform.rotate(image, rotate)
-        self.__screen.blit(image, (x, y))
+
+        # Draw rotated image, offsetting for padding of image size from rotation
+        image_rect = image.get_rect()
+        x_rotate_offset, y_rotate_offset = int((image_rect.width - before_rotate_width) / 2), int((image_rect.height - before_rotate_height) / 2)
+        self.__screen.blit(image, (x - x_rotate_offset, y - y_rotate_offset))
 
         return image
 

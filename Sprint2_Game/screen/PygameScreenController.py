@@ -62,7 +62,7 @@ class PygameScreenController(metaclass=SingletonMeta):
             self.__image_cache[abs_image_path] = pygame.image.load(abs_image_path).convert_alpha()
 
         image: pygame.Surface = self.__image_cache[abs_image_path]
-        image = pygame.transform.rotozoom(image, rotate, 1.0)
+        image = pygame.transform.rotate(image, rotate)
         if width is not None and height is not None:
             image = pygame.transform.smoothscale(image, (width, height))  # convert to 24/32 bit surface as required by pygame, and smoothly scale
         self.__screen.blit(image, (x, y))

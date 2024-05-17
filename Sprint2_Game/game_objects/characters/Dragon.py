@@ -11,7 +11,7 @@ class Dragon(PlayableCharacter):
     Author: Shen
     """
 
-    __TURN_ROTATE_SPEED: float = 3.5  # speed at which the sprite should rotate anti-clockwise during the dragon's turn
+    __TURN_ROTATE_SPEED: float = 2.0  # speed at which the sprite should rotate anti-clockwise during the dragon's turn
 
     def __init__(self, variant: PlayableCharacterVariant, name: str, draw_properties: Optional[DrawProperties] = None):
         """

@@ -195,6 +195,6 @@ class PygameScreenController(metaclass=SingletonMeta):
 
 # NOTES
 # SEQUENCE Type
-# What is Sequence type: Sequence means you cannot add to the list (it is read only)
+# What is Sequence type: Sequence means you cannot add to the list (it is read only). Equivalent to OOP <? extends Parent>
 # https://stackoverflow.com/questions/53275080/mypy-creating-a-type-that-accepts-list-of-instances-of-subclasses
 # https://stackoverflow.com/questions/5763750/why-we-cant-do-listparent-mylist-arraylistchild

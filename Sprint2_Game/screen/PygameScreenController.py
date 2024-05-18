@@ -4,6 +4,8 @@ from typing import Optional, cast
 from definitions import ROOT_PATH
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
+from screen.DrawableByAsset import DrawableByAsset
+from screen.ModularClickableSprite import ModularClickableSprite
 from metaclasses.SingletonMeta import SingletonMeta
 
 import pygame
@@ -107,7 +109,45 @@ class PygameScreenController(metaclass=SingletonMeta):
 
         return image
 
-    def draw_assets_from_instructions(self, instructions: list[DrawAssetInstruction]) -> list[pygame.Surface]:
+    def draw_drawable_by_assets(self, drawables: list[DrawableByAsset]) -> list[pygame.Surface]:
+        """Draw assets according to the list of drawables's instructions.
+
+        Args:
+            drawables: The drawables that can be drawn using assets
+
+        Returns:
+            The images that were drawn in order
+        """
+        images: list[pygame.Surface] = []
+
+        for drawable in drawables:
+            drawn_images = self.__draw_assets_from_instructions(drawable.get_draw_assets_instructions())
+            for image in drawn_images:
+                images.append(image)
+
+        return images
+
+    def draw_modular_clickable_sprites(self, clickables: list[ModularClickableSprite]) -> list[tuple[pygame.Rect, ModularClickableSprite]]:
+        """Draw clickable sprites according to the list of clickable's drawing instructions, and return their
+        hitboxes mapped to the associated object.
+
+        Args:
+            clickables: The clickables
+
+        Returns:
+            A list of tuples of form (rectangular hitbox, object associated with hitbox)
+        """
+        hitboxes_map: list[tuple[pygame.Rect, ModularClickableSprite]] = []
+        for clickable in clickables:
+            for instruction, clickable in clickable.get_draw_clickable_assets_instructions():
+                drawn_img = self.__draw_assets_from_instructions([instruction])
+                rect = drawn_img[0].get_rect()
+                rect.x, rect.y = instruction.get_x_coord(), instruction.get_y_coord()
+                hitboxes_map.append((rect, clickable))
+
+        return hitboxes_map
+
+    def __draw_assets_from_instructions(self, instructions: list[DrawAssetInstruction]) -> list[pygame.Surface]:
         """Draw assets in order based on instructions.
 
         Args:
@@ -115,8 +155,6 @@ class PygameScreenController(metaclass=SingletonMeta):
 
         Returns:
             The images that were drawn in order of instruction input
-
-        Author: Shen
         """
         images: list[pygame.Surface] = []
         for instruction in instructions:
@@ -130,26 +168,6 @@ class PygameScreenController(metaclass=SingletonMeta):
             images.append(image)
 
         return images
-
-    def draw_clickable_assets_from_instructions(
-        self, instructions: list[tuple[DrawAssetInstruction, ModularClickableSprite]]
-    ) -> list[tuple[pygame.Rect, ModularClickableSprite]]:
-        """Draws clickable assets from instructions in order and return their hitboxes mapped to an object.
-
-        Args:
-            instructions: List containing tuple of form (drawing instruction, object to return with click)
-
-        Returns:
-            A list of tuples of form (rectangular hitbox, object associated with hitbox)
-        """
-        hitboxes_map: list[tuple[pygame.Rect, ModularClickableSprite]] = []
-        for instruction, clickable in instructions:
-            drawn_img = self.draw_assets_from_instructions([instruction])
-            rect = drawn_img[0].get_rect()
-            rect.x, rect.y = instruction.get_x_coord(), instruction.get_y_coord()
-            hitboxes_map.append((rect, clickable))
-
-        return hitboxes_map
 
     def get_screen_size(self) -> tuple[int, int]:
         """Get the screen size.

@@ -16,6 +16,7 @@ from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 import random
 
 # TODO: Change chit card dimensions and random factor to use math for varying number of chit cards. Currently hard coded
+# TODO: See this later https://stackoverflow.com/questions/53275080/mypy-creating-a-type-that-accepts-list-of-instances-of-subclasses
 
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
@@ -308,19 +309,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         return draw_instructions
 
-    def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
-        """Draw the clickable chit cards for the default game board.
+    def get_all_clickable_sprites(self) -> list[ModularClickableSprite]:
+        """Get all the clickable sprites for the game board.
 
         Returns:
-            The drawing instructions for the chit cards in form (instruction, chit card object)
+            A list containing all the clickable sprites.
         """
-        ##### Getting instructions
-        instructions: list[tuple[DrawAssetInstruction, ModularClickableSprite]] = []
-        for chit_card in self.__chit_cards:
-            for click_inst in chit_card.get_draw_clickable_assets_instructions():
-                instructions.append(click_inst)
-
-        return instructions
+        return self.__chit_cards  # type: ignore
 
     # ------- Static methods -----------------------------------------------------------------------------------------
     @staticmethod

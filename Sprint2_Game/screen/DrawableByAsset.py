@@ -17,9 +17,3 @@ class DrawableByAsset(Protocol):
             The list of drawing instructions to draw the object
         """
         ...
-
-
-# References
-# https://typing.readthedocs.io/en/latest/spec/protocol.html#explicitly-declaring-implementation
-# https://stackoverflow.com/questions/71531417/defining-an-interface-in-python
-# protocols are used for static-type checking only in python

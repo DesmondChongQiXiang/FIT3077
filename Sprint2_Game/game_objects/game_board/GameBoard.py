@@ -38,10 +38,10 @@ class GameBoard(ABC, DrawableByAsset):
         ...
 
     @abstractmethod
-    def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
-        """Get the instructions to draw the clickable assets of the game board.
+    def get_all_clickable_sprites(self) -> list[ModularClickableSprite]:
+        """Get all the clickable sprites for the game board.
 
         Returns:
-            A list containing tuples in the form of (drawing instructions, object to return on click)
+            A list containing all the clickable sprites.
         """
         ...

@@ -90,16 +90,20 @@ class PygameScreenController(metaclass=SingletonMeta):
                 self.__image_cache_resized_size += 1
             image = resized_cache_for_image[requested_size]
 
-        # Rotate image
-        before_rotate_rect = image.get_rect()
-        before_rotate_width, before_rotate_height = before_rotate_rect.width, before_rotate_rect.height
+        # Rotate image if rotation is value other than 0 degrees before drawing. Otherwise draw without rotation.
+        if rotate != 0:
+            before_rotate_rect = image.get_rect()
+            before_rotate_width, before_rotate_height = before_rotate_rect.width, before_rotate_rect.height
 
-        image = pygame.transform.rotate(image, rotate)
+            # Rotate image
+            image = pygame.transform.rotate(image, rotate)
 
-        # Draw rotated image, offsetting for padding of image size from rotation
-        image_rect = image.get_rect()
-        x_rotate_offset, y_rotate_offset = int((image_rect.width - before_rotate_width) / 2), int((image_rect.height - before_rotate_height) / 2)
-        self.__screen.blit(image, (x - x_rotate_offset, y - y_rotate_offset))
+            # Draw rotated image, offsetting for padding of image size from rotation
+            image_rect = image.get_rect()
+            x_rotate_offset, y_rotate_offset = int((image_rect.width - before_rotate_width) / 2), int((image_rect.height - before_rotate_height) / 2)
+            self.__screen.blit(image, (x - x_rotate_offset, y - y_rotate_offset))
+        else:
+            self.__screen.blit(image, (x, y))
 
         return image
 

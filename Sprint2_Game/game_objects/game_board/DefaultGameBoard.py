@@ -353,7 +353,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             The properties of the main tile sequence
         """
         width, height = PygameScreenController.instance().get_screen_size()
-        main_width, main_height = width - 2 * (width // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2)), height - 2 * (height // (DefaultGameBoard.DIMENSION_CELL_COUNT + 2))
+        main_width, main_height = int(width - 2 * (width / (DefaultGameBoard.DIMENSION_CELL_COUNT + 2))), int(
+            height - 2 * (height / (DefaultGameBoard.DIMENSION_CELL_COUNT + 2))
+        )
         square_size: float = main_width / DefaultGameBoard.DIMENSION_CELL_COUNT
         main_x, main_y = get_coords_for_center_drawing_in_rect((0, 0), (width, height), (main_width, main_height))
         main_x0, main_x1, main_y0, main_y1 = (

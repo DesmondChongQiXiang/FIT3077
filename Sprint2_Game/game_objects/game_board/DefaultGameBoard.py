@@ -310,10 +310,10 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         return draw_instructions
 
     def get_all_clickable_sprites(self) -> Sequence[ModularClickableSprite]:
-        """Get all the clickable sprites for the game board.
+        """Get a read-only list of all the clickable sprites for the game board.
 
         Returns:
-            A list containing all the clickable sprites.
+            A read-only list containing all the clickable sprites.
         """
         return self.__chit_cards
 

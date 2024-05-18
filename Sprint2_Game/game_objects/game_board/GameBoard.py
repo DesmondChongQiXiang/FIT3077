@@ -40,9 +40,9 @@ class GameBoard(ABC, DrawableByAsset):
 
     @abstractmethod
     def get_all_clickable_sprites(self) -> Sequence[ModularClickableSprite]:
-        """Get all the clickable sprites for the game board.
+        """Get a read-only list all the clickable sprites for the game board.
 
         Returns:
-            A list containing all the clickable sprites.
+            A read-only list containing all the clickable sprites.
         """
         ...

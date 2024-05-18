@@ -129,8 +129,8 @@ class PygameScreenController(metaclass=SingletonMeta):
         return images
 
     def draw_modular_clickable_sprites(self, clickables: Sequence[ModularClickableSprite]) -> list[tuple[pygame.Rect, ModularClickableSprite]]:
-        """Draw clickable sprites according to the list of clickable's drawing instructions, and return their
-        hitboxes mapped to the associated object.
+        """Draw sprites according to the list of clickable's drawing instructions, and return their hitboxes mapped
+        to the associated object.
 
         Args:
             clickables: The clickables

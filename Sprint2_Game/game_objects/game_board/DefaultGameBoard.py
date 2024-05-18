@@ -1,6 +1,7 @@
 from __future__ import annotations
 from threading import Timer
 from typing import Optional
+from collections.abc import Sequence
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.tiles.Tile import Tile
@@ -16,7 +17,6 @@ from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 import random
 
 # TODO: Change chit card dimensions and random factor to use math for varying number of chit cards. Currently hard coded
-# TODO: See this later https://stackoverflow.com/questions/53275080/mypy-creating-a-type-that-accepts-list-of-instances-of-subclasses
 
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
@@ -309,13 +309,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         return draw_instructions
 
-    def get_all_clickable_sprites(self) -> list[ModularClickableSprite]:
+    def get_all_clickable_sprites(self) -> Sequence[ModularClickableSprite]:
         """Get all the clickable sprites for the game board.
 
         Returns:
             A list containing all the clickable sprites.
         """
-        return self.__chit_cards  # type: ignore
+        return self.__chit_cards
 
     # ------- Static methods -----------------------------------------------------------------------------------------
     @staticmethod

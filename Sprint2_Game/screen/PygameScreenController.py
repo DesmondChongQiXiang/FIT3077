@@ -1,5 +1,6 @@
 from __future__ import annotations
 from collections import defaultdict
+from collections.abc import Sequence
 from typing import Optional, cast
 from definitions import ROOT_PATH
 from screen.DrawAssetInstruction import DrawAssetInstruction
@@ -109,11 +110,11 @@ class PygameScreenController(metaclass=SingletonMeta):
 
         return image
 
-    def draw_drawable_by_assets(self, drawables: list[DrawableByAsset]) -> list[pygame.Surface]:
+    def draw_drawable_by_assets(self, drawables: Sequence[DrawableByAsset]) -> list[pygame.Surface]:
         """Draw assets according to the list of drawables's instructions.
 
         Args:
-            drawables: The drawables that can be drawn using assets
+            drawables: The drawables that can be drawn using assets.
 
         Returns:
             The images that were drawn in order
@@ -127,7 +128,7 @@ class PygameScreenController(metaclass=SingletonMeta):
 
         return images
 
-    def draw_modular_clickable_sprites(self, clickables: list[ModularClickableSprite]) -> list[tuple[pygame.Rect, ModularClickableSprite]]:
+    def draw_modular_clickable_sprites(self, clickables: Sequence[ModularClickableSprite]) -> list[tuple[pygame.Rect, ModularClickableSprite]]:
         """Draw clickable sprites according to the list of clickable's drawing instructions, and return their
         hitboxes mapped to the associated object.
 
@@ -190,3 +191,10 @@ class PygameScreenController(metaclass=SingletonMeta):
         if instance is not None:
             return instance
         return PygameScreenController()
+
+
+# NOTES
+# SEQUENCE Type
+# What is Sequence type: Sequence means you cannot add to the list (it is read only)
+# https://stackoverflow.com/questions/53275080/mypy-creating-a-type-that-accepts-list-of-instances-of-subclasses
+# https://stackoverflow.com/questions/5763750/why-we-cant-do-listparent-mylist-arraylistchild

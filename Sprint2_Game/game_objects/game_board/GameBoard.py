@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from collections.abc import Sequence
 from game_objects.tiles.Tile import Tile
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.DrawableByAsset import DrawableByAsset
@@ -38,7 +39,7 @@ class GameBoard(ABC, DrawableByAsset):
         ...
 
     @abstractmethod
-    def get_all_clickable_sprites(self) -> list[ModularClickableSprite]:
+    def get_all_clickable_sprites(self) -> Sequence[ModularClickableSprite]:
         """Get all the clickable sprites for the game board.
 
         Returns:

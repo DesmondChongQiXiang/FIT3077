@@ -23,15 +23,6 @@ class GameBoard(ABC, DrawableByAsset):
         """
         ...
 
-    def on_move_action_fired(self, character: PlayableCharacter, steps: int) -> None:
-        """Move the character by a number of steps.
-
-        Args:
-            character: The character which fired the move action
-            steps: The steps the character should move
-        """
-        self.move_character_by_steps(character, steps)
-
     @abstractmethod
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
         """Get the floor tile the character is standing on.

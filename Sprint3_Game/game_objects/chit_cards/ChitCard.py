@@ -41,11 +41,19 @@ class ChitCard(ModularClickableSprite, ABC):
         self._board_delegate = game_board
 
     def get_flipped(self) -> bool:
-        """Gets whether the chit card is flipped."""
+        """Gets whether the chit card is flipped.
+
+        Returns:
+            Whether the chit card is flipped
+        """
         return self.__flipped
 
     def get_symbol_count(self) -> int:
-        """Gets the number of symbols the chit card should have."""
+        """Gets the number of symbols on the chit card.
+
+        Returns:
+            The number of symbols on the chit card
+        """
         return self.__symbol_count
 
     def set_draw_properties(self, draw_properties: DrawProperties) -> None:

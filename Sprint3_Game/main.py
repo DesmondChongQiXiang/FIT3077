@@ -36,7 +36,7 @@ if __name__ == "__main__":
         pygame.display.set_mode((REQUESTED_SCREEN_SIZE, REQUESTED_SCREEN_SIZE))
 
     # ----- GAME CONFIG --------------------------------------------------------------------------------------------------
-    tiles: list[Tile] = normal_tiles_in_animal_sequence(24)
+    tiles: list[Tile] = randomised_volcano_card_sequence(8)
 
     chit_cards: list[ChitCard] = []
     add_animal_chit_cards_in_animal_sequence(12, chit_cards)

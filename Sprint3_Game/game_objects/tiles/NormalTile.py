@@ -27,7 +27,7 @@ class NormalTile(Tile):
     # ------- Tile abstract class --------------------------------------------------------------------------
     def place_character_on_tile(self, character: PlayableCharacter) -> None:
         """Place a character on the tile.
-        
+
         Args:
             character: The character to place on the tile
         """
@@ -41,7 +41,7 @@ class NormalTile(Tile):
         Returns:
             [Instructions to draw the game board tile]
         """
-        tile_draw_data = self.get_draw_data()
+        tile_draw_data = self._draw_data
         if tile_draw_data is None:  # don't draw anything if no draw data
             return []
 

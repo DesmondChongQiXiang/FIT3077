@@ -26,7 +26,7 @@ class PirateChitCard(ChitCard):
         Returns:
             Array containing (instruction to represent flipped state, this object)
         """
-        draw_properties = self.get_draw_properties()
+        draw_properties = self._draw_properties
         if draw_properties is None:
             return []
         asset_path: str = "assets/chit_cards"

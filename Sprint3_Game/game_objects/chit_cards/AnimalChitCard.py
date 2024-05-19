@@ -30,7 +30,7 @@ class AnimalChitCard(ChitCard):
         Returns:
             Array containing (instruction to represent flipped state, this object)
         """
-        draw_properties = self.get_draw_properties()
+        draw_properties = self._draw_properties
         if draw_properties is None:
             return []
         asset_path: str = "assets/chit_cards"
@@ -68,15 +68,15 @@ class AnimalChitCard(ChitCard):
         """
         if self._board_delegate is not None:
             tile_animal: Optional[Animal] = self._board_delegate.get_character_floor_tile(character).get_animal()
-            if not self.get_flipped():# Makes it so the players only move if the chit card has not been flipped before
+            if not self.get_flipped():  # Makes it so the players only move if the chit card has not been flipped before
 
                 if tile_animal is not None and tile_animal != self.__animal:
                     character.set_should_continue_turn(False)
-            
+
                 else:
-                    #self.set_flipped(not self.get_flipped())
+                    # self.set_flipped(not self.get_flipped())
                     self._board_delegate.move_character_by_steps(character, self.get_symbol_count())
-                
+
             if not self.get_flipped():
                 self.set_flipped(not self.get_flipped())
         else:

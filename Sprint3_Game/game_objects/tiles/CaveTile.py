@@ -44,7 +44,7 @@ class CaveTile(Tile):
         Returns:
             [Instructions to draw the game board tile]
         """
-        tile_draw_data = self.get_draw_data()
+        tile_draw_data = self._draw_data
         if tile_draw_data is None:  # don't draw anything if no draw data
             return []
 

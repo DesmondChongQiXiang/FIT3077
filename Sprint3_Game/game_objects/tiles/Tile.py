@@ -21,17 +21,9 @@ class Tile(ABC, DrawableByAsset):
             character (Optional): The character on the tile
             animal (Optional): The animal on the tile
         """
-        self.__draw_data = draw_data
+        self._draw_data = draw_data
         self.__character = character
         self.__animal = animal
-
-    def get_draw_data(self) -> Optional[DrawProperties]:
-        """Returns the data required to draw the tile if it exists.
-
-        Returns:
-            The data required to draw the tile
-        """
-        return self.__draw_data
 
     def set_draw_data(self, draw_data: DrawProperties) -> None:
         """Set the data specifying how to draw the tile.
@@ -39,7 +31,7 @@ class Tile(ABC, DrawableByAsset):
         Args:
             draw_data: The draw data
         """
-        self.__draw_data = draw_data
+        self._draw_data = draw_data
 
     def get_animal(self) -> Optional[Animal]:
         """Get the animal on the tile if it has one.
@@ -81,15 +73,15 @@ class Tile(ABC, DrawableByAsset):
             List of drawing instructions
         """
         instructions: list[DrawAssetInstruction] = []
-        if self.__draw_data is None:
+        if self._draw_data is None:
             return instructions
 
-        tile_width, tile_height = self.__draw_data.get_size()
+        tile_width, tile_height = self._draw_data.get_size()
         character = self.get_character_on_tile()
 
         if character is not None:
             char_width, char_height = int(tile_width), int(tile_height)
-            char_x, char_y = get_coords_for_center_drawing_in_rect(self.__draw_data.get_coordinates(), self.__draw_data.get_size(), (char_width, char_height))
+            char_x, char_y = get_coords_for_center_drawing_in_rect(self._draw_data.get_coordinates(), self._draw_data.get_size(), (char_width, char_height))
             character.set_draw_properties(DrawProperties((char_x, char_y), (char_width, char_height)))
 
             for inst in character.get_draw_assets_instructions():

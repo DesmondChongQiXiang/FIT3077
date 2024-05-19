@@ -18,7 +18,7 @@ class ChitCard(ModularClickableSprite):
         """
         self.__symbol_count = symbol_count
         self.__flipped: bool = False
-        self.__draw_properties = draw_properties
+        self._draw_properties: Optional[DrawProperties] = draw_properties
         self._board_delegate: Optional[GameBoard] = None
 
     def set_flipped(self, state: bool) -> None:
@@ -51,12 +51,4 @@ class ChitCard(ModularClickableSprite):
         Args:
             draw_properties: The draw properties
         """
-        self.__draw_properties = draw_properties
-
-    def get_draw_properties(self) -> Optional[DrawProperties]:
-        """Returns how the chit card should be drawn if the data exists.
-
-        Returns:
-            How the chit card should be drawn (i.e its properties)
-        """
-        return self.__draw_properties
+        self._draw_properties = draw_properties

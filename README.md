@@ -32,7 +32,7 @@ Tasks completed:
 
 **Shen**
 - Implement the turn functionality for the game
-- Implement the moving of the character based on chit card flipped
+- Implement the moving of the character based on chit card flipped (and entering of caves only if visited all main tiles)
 - Refactored the code to make portions (e.g Tile and ChitCard) more reusable
 - Reviewed everyones work, gave feedback before approving for submission
 - Reviewed Rohan's Sprint 2 prototype according to the IEC 25010 quality model
@@ -47,3 +47,14 @@ Tasks completed:
 - Reviewed Ian's Sprint 2 prototype using ISO/IEC 25010 quality model.
 - Advised about some grammar errors on the Google Doc for Sprint 3.
 - Created a video presentation demonstrating different types of chit card scenarios.
+
+**Rohan**
+- Implemented the winEventPublisher class with full functionality
+- Implemented the winEventListener class with full functionality
+- Implemented the PirateChitCard class with full functionality
+- Modified the presets to set up the chit cards to include dragon pirate chit cards
+- Modified the default game board method move character by steps to account for all functionality of moving backwards
+- Modified the dragon pirate and animal pirate chit card classes so that they don’t move the players forward if already flipped over
+- Reviewed Desmond’s Sprint 2 Prototype using IS0/IEC 25010 Quality model
+- Updated the class diagram to include the new classes and newest methods for all classes
+- Added all the cardinalities to the class diagram

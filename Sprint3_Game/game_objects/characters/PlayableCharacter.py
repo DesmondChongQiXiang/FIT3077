@@ -19,10 +19,10 @@ class PlayableCharacter(ABC, DrawableByAsset):
             name: The name for the character
             draw_properties (optional): The drawing properties specifying how to draw the character
         """
-        self._variant = variant
-        self._draw_properties = draw_properties
+        self._variant: PlayableCharacterVariant = variant
+        self._draw_properties: Optional[DrawProperties] = draw_properties
         self.__should_continue_turn: bool = True
-        self.__name = name
+        self.__name: str = name
         self._is_currently_playing: bool = False
 
     def should_continue_turn(self) -> bool:

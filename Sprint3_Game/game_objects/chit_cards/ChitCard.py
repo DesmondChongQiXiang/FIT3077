@@ -20,7 +20,7 @@ class ChitCard(ModularClickableSprite, ABC):
             symbol_count: The symbol count for the chit card
             draw_properties (optional): Properties specifying how and where the chit card should be drawn
         """
-        self.__symbol_count = symbol_count
+        self.__symbol_count: int = symbol_count
         self.__flipped: bool = False
         self._draw_properties: Optional[DrawProperties] = draw_properties
         self._board_delegate: Optional[GameBoard] = None

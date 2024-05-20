@@ -21,9 +21,9 @@ class Tile(ABC, DrawableByAsset):
             character (Optional): The character on the tile
             animal (Optional): The animal on the tile
         """
-        self._draw_data = draw_data
-        self.__character = character
-        self.__animal = animal
+        self._draw_data: Optional[DrawProperties] = draw_data
+        self.__character: Optional[PlayableCharacter] = character
+        self.__animal: Optional[Animal] = animal
 
     def set_draw_data(self, draw_data: DrawProperties) -> None:
         """Set the data specifying how to draw the tile.

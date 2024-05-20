@@ -54,7 +54,7 @@ class NormalTile(Tile):
         instructions.append(DrawAssetInstruction("assets/tiles/normal_tile.png", tile_x, tile_y, tile_draw_data.get_size()))
         if animal is not None:  # animal is never none
             instructions.append(DrawAssetInstruction(f"assets/animals/{animal.value}.png", animal_x, animal_y, (animal_size, animal_size)))
-        for instruction in self._get_character_draw_instructions():
+        for instruction in self._default_character_draw_instructions():
             instructions.append(instruction)
 
         return instructions

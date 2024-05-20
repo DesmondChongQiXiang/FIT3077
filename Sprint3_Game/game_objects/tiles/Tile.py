@@ -66,8 +66,8 @@ class Tile(ABC, DrawableByAsset):
         """
         ...
 
-    def _get_character_draw_instructions(self) -> list[DrawAssetInstruction]:
-        """Get the drawing instructions for showing the character currently on the tile.
+    def _default_character_draw_instructions(self) -> list[DrawAssetInstruction]:
+        """A set of default drawing instructions that shows the character directly on top of the tile.
 
         Returns:
             List of drawing instructions

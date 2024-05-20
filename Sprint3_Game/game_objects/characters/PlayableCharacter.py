@@ -20,7 +20,7 @@ class PlayableCharacter(ABC, DrawableByAsset):
             draw_properties (optional): The drawing properties specifying how to draw the character
         """
         self._variant = variant
-        self.__draw_properties = draw_properties
+        self._draw_properties = draw_properties
         self.__should_continue_turn: bool = True
         self.__name = name
         self._is_currently_playing: bool = False
@@ -41,21 +41,13 @@ class PlayableCharacter(ABC, DrawableByAsset):
         """
         self.__should_continue_turn = status
 
-    def get_draw_properties(self) -> Optional[DrawProperties]:
-        """Return the drawing properties for the character (if it exists).
-
-        Returns:
-            The drawing properties
-        """
-        return self.__draw_properties
-
     def set_draw_properties(self, draw_properties: DrawProperties) -> None:
         """Set the properties specifying how to draw the character.
 
         Args:
             draw_data: The draw data
         """
-        self.__draw_properties = draw_properties
+        self._draw_properties = draw_properties
 
     def set_is_currently_playing(self, playing: bool) -> None:
         """Set whether the character is currently playing. Affects how a character is drawn.

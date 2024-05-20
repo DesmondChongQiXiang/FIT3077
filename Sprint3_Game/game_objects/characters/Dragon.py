@@ -31,7 +31,7 @@ class Dragon(PlayableCharacter):
         Returns:
             The drawing instructions
         """
-        draw_properties = self.get_draw_properties()
+        draw_properties = self._draw_properties
         if draw_properties is None:
             return []
         x, y = draw_properties.get_coordinates()

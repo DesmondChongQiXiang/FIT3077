@@ -20,15 +20,17 @@ class PirateChitCard(ChitCard):
         """
         super().__init__(symbol_count, draw_properties)
 
-    def get_draw_clickable_assets_instructions(self) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
-        """Chit card displays its back when it is not flipped. Otherwise display its front. Don't draw if drawing properties have not been set.
+    def _on_draw_request(self, draw_properties: DrawProperties) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
+        """On draw request, returns instructions to draw a chit card that displays its back when its not flipped. When flipped,
+        it draws dragon pirate symbol with an indication of the number of sybmbols.
+
+        Args:
+            draw_properties: The draw properties requesting how to draw this object
 
         Returns:
-            Array containing (instruction to represent flipped state, this object)
+            A list containing tuples in the form of (drawing instruction, object to return when clicking on
+            graphic represented by instruction)
         """
-        draw_properties = self._draw_properties
-        if draw_properties is None:
-            return []
         asset_path: str = "assets/chit_cards"
         coord_x, coord_y = draw_properties.get_coordinates()
 
@@ -62,9 +64,6 @@ class PirateChitCard(ChitCard):
             Exception if the game board delegate was not set before calling
         """
         if self._board_delegate is not None:
-            # For testing purposes, can move back even when the dragon pirate chit card has been flipped
-            # self._board_delegate.move_character_by_steps(character, self.get_symbol_count() * (-1))
-
             if not self.get_flipped():
                 self._board_delegate.move_character_by_steps(character, self.get_symbol_count() * (-1))
                 self.set_flipped(not self.get_flipped())

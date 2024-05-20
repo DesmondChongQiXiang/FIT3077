@@ -19,7 +19,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
     Author: Shen, Rohan
     """
 
-    __GAME_END_CLOSE_DELAY: float = 2.0  # seconds after which to close the game after the game ends (i.e when a player wins)
+    __GAME_END_CLOSE_DELAY: float = 5.0  # seconds after which to close the game after the game ends (i.e when a player wins)
 
     def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard):
         """Configures the game world, with the first character in the list of playable characters being the starting player.

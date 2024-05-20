@@ -41,6 +41,7 @@ if __name__ == "__main__":
     chit_cards: list[ChitCard] = []
     add_animal_chit_cards_in_animal_sequence(12, chit_cards)
     add_dragon_pirate_chit_cards_in_sequence(4, chit_cards)
+    random.shuffle(chit_cards)
 
     playable_characters: list[PlayableCharacter] = [
         Dragon(PlayableCharacterVariant.BLUE, "Blue"),
@@ -48,15 +49,13 @@ if __name__ == "__main__":
         Dragon(PlayableCharacterVariant.ORANGE, "Orange"),
         Dragon(PlayableCharacterVariant.PURPLE, "Purple"),
     ]
+
     starting_tiles: list[Tile] = [
         CaveTile(Animal.BABY_DRAGON, CaveTileVariant.BLUE, character=playable_characters[0]),
         CaveTile(Animal.SALAMANDER, CaveTileVariant.GREEN, character=playable_characters[1]),
         CaveTile(Animal.SPIDER, CaveTileVariant.ORANGE, character=playable_characters[2]),
         CaveTile(Animal.BAT, CaveTileVariant.PURPLE, character=playable_characters[3]),
     ]
-
-    random.shuffle(chit_cards)
-    random.shuffle(tiles)
 
     game_board: GameBoard = DefaultGameBoard(
         tiles,

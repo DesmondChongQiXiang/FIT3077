@@ -1,29 +1,14 @@
 ## Navigation
 
-**Deliverables**:
-- Video Demonstration
-- Design Rationale
-- UML Class Diagram
-- UML Sequence Diagrams for requirements 1-5
+**Deliverables**
+- Sprint 3 Video demonstration
+- Sprint 3 Documentation
+- Sprint 3 Executable zip
 
-[**Press Here to Navigate**](./Sprint2_Deliverables)
+[**Click to Navigate**](./Sprint3_Deliverables)
 
 \
-**Source Code**
-- Game source sode
+**Game Source Code** 
+- Sprint 3 Game source code
 
-
-[**Press Here To Navigate**](./Sprint2_Game/)
-
-## Executable related things
-
-
-**WARNING: For Windows platform only**
-
-
-**Build & Run**: \
-See submitted executable zip (32483201_A2Executable.zip) README.txt
-
-
-**Run**: \
-Extract submitted executable zip (32483201_A2Executable.zip) and run main.exe 
+[**Click to Navigate**](./Sprint3_Game/)

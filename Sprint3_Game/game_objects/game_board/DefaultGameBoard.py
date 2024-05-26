@@ -265,7 +265,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             if tile in self.__starting_tiles_set:
                 tile.set_draw_data(
                     self.__linearly_extrapolate_circlular_draw_properties(
-                        square_size, self.__main_tile_sequence_length, main_circle_draw_properties[main_circle_draw_properties_i]
+                        square_size,
+                        self.__main_tile_sequence_length,
+                        main_circle_draw_properties[main_circle_draw_properties_i - 1],  # -1 for drawing on top of destination start tile
                     )
                 )
                 continue
@@ -308,7 +310,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             The draw properties to draw the circle
         """
         draw_properties: list[DrawProperties] = []
-        center_x: int = int(central_coordinate[0] - 0.5 * square_size)
+        center_x: int = int(central_coordinate[0] - 0.5 * square_size)  # 0.5 * square size to account for square overhang into circle
         center_y: int = int(central_coordinate[1] - 0.5 * square_size)
         circle_radius: float = polygon_radius_given_side_length(square_size, n)
 
@@ -345,7 +347,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         rot_from_normal: float = (180 - internal_deg) / 2
 
         pos_in_circle: int = round(
-            (rot - rot_from_normal) / central_deg
+            (((rot - rot_from_normal) + central_deg) / central_deg) % circle_sides
         )  # reverse calculation from rot formula for drawing in circle. 0 = square at 0 deg in unit circle
 
         return DrawProperties(

@@ -13,7 +13,7 @@ from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
 from core.GameWorld import GameWorld
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
-from utils.math_utils import cos_deg, sin_deg
+from utils.math_utils import *
 
 import random
 
@@ -324,13 +324,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         center_x, center_y = central_coordinate
 
         for i in range(n):
-            internal_deg: float = ((n - 2) * 180) / n
-            internal_center_deg: float = 360 / n
+            internal_deg: float = polygon_internal_deg(n)
+            central_deg: float = polygon_central_deg(n)
             rot_from_normal: float = (180 - internal_deg) / 2
 
-            x: int = int(center_x + square_size * cos_deg(internal_center_deg * i))
-            y: int = int(center_y + square_size * sin_deg(internal_center_deg * i))
-            rot: float = i * internal_center_deg + rot_from_normal
+            x: int = int(center_x + square_size * cos_deg(central_deg * i))
+            y: int = int(center_y + square_size * sin_deg(central_deg * i))
+            rot: float = i * central_deg + rot_from_normal
 
             draw_properties.append(DrawProperties((x, y), (int(square_size), int(square_size)), rot))
 
@@ -350,16 +350,16 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """
         x, y = draw_properties.get_coordinates()
         rot: float = draw_properties.get_rotation()
-        internal_deg: float = ((circle_sides - 2) * 180) / circle_sides
-        internal_center_deg: float = 360 / circle_sides
+        internal_deg: float = polygon_internal_deg(circle_sides)
+        central_deg: float = polygon_central_deg(circle_sides)
         rot_from_normal: float = (180 - internal_deg) / 2
 
         pos_in_circle: int = round(
-            (rot - rot_from_normal) / internal_center_deg
+            (rot - rot_from_normal) / central_deg
         )  # reverse calculation from rot formula for drawing in circle. 0 = square at 0 deg in unit circle
 
         return DrawProperties(
-            (int(x + length * cos_deg(pos_in_circle * internal_center_deg)), int(y + length * sin_deg(pos_in_circle * internal_center_deg))),
+            (int(x + length * cos_deg(pos_in_circle * central_deg)), int(y + length * sin_deg(pos_in_circle * central_deg))),
             draw_properties.get_size(),
             rot,
         )

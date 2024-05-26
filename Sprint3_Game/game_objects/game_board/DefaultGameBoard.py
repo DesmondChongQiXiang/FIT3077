@@ -13,10 +13,9 @@ from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
 from core.GameWorld import GameWorld
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
+from utils.math_utils import cos_deg, sin_deg
 
 import random
-
-# TODO: Change chit card dimensions and random factor to use math for varying number of chit cards. Currently hard coded
 
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
@@ -308,6 +307,62 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 draw_instructions.append(instruction)
 
         return draw_instructions
+
+    def __circular_draw_properties_for_squares(self, n: int, square_size: float, central_coordinate: tuple[int, int]) -> list[DrawProperties]:
+        """Gets the drawing properties (coordinates, rotation and size) that correspond to drawing squares such that their bottom corners
+        touch in a circle around a specified coordinate.
+
+        Args:
+            n: The number of squares making up the circle
+            square_size: The square size in pixels.
+            central_coordinate: The coordinate at which the circle should be centered
+
+        Returns:
+            The draw properties to draw the circle
+        """
+        draw_properties: list[DrawProperties] = []
+        center_x, center_y = central_coordinate
+
+        for i in range(n):
+            internal_deg: float = ((n - 2) * 180) / n
+            internal_center_deg: float = 360 / n
+            rot_from_normal: float = (180 - internal_deg) / 2
+
+            x: int = int(center_x + square_size * cos_deg(internal_center_deg * i))
+            y: int = int(center_y + square_size * sin_deg(internal_center_deg * i))
+            rot: float = i * internal_center_deg + rot_from_normal
+
+            draw_properties.append(DrawProperties((x, y), (int(square_size), int(square_size)), rot))
+
+        return draw_properties
+
+    def __linearly_extrapolate_circlular_draw_properties(self, length: float, circle_sides: int, draw_properties: DrawProperties) -> DrawProperties:
+        """Linearly extrapolate the drawing coordinates of the drawing property along its axis within the unit circle (as determined
+        by its degrees of rotation) for a particular circle.
+
+        Args:
+            length: The size in px along its unit circle axis to extrapolate by
+            circle_sides: The number of sides/squares making up the circle to extrapolate in
+            draw_properties: The draw properties to extrapolate
+
+        Returns:
+            The linearly extrapolated draw properties.
+        """
+        x, y = draw_properties.get_coordinates()
+        rot: float = draw_properties.get_rotation()
+        internal_deg: float = ((circle_sides - 2) * 180) / circle_sides
+        internal_center_deg: float = 360 / circle_sides
+        rot_from_normal: float = (180 - internal_deg) / 2
+
+        pos_in_circle: int = round(
+            (rot - rot_from_normal) / internal_center_deg
+        )  # reverse calculation from rot formula for drawing in circle. 0 = square at 0 deg in unit circle
+
+        return DrawProperties(
+            (int(x + length * cos_deg(pos_in_circle * internal_center_deg)), int(y + length * sin_deg(pos_in_circle * internal_center_deg))),
+            draw_properties.get_size(),
+            rot,
+        )
 
     def get_all_clickable_sprites(self) -> Sequence[ModularClickableSprite]:
         """Get a read-only list of all the clickable sprites for the game board.

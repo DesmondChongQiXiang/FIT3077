@@ -38,7 +38,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             chit_cards: The chit cards to use for the game board. Will be placed in order from left to right, top to bottom.
             playable_characters: The playable characters to play on the game board
         """
-        self.__main_tile_sequence: list[Tile] = []
+        self.__tile_sequence: list[Tile] = []
         self.__starting_tiles: list[Tile] = []
         self.__starting_tiles_set: set[Tile] = set()
         self.__starting_tiles_destinations_set: set[Tile] = set()  # stores the tiles that are the destinations for starting tiles
@@ -66,9 +66,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         for tile in main_tile_sequence:
             if tile in dest_to_start_tile:
                 # starting tiles should be connected like so: tile -> starting tile -> tile
-                self.__main_tile_sequence.append(tile)
-                self.__main_tile_sequence.append(dest_to_start_tile[tile])
-            self.__main_tile_sequence.append(tile)
+                self.__tile_sequence.append(tile)
+                self.__tile_sequence.append(dest_to_start_tile[tile])
+            self.__tile_sequence.append(tile)
 
         # Check enough tiles
         self.__check_enough_main_tiles()
@@ -82,7 +82,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             if char_on_tile is not None:
                 self.__character_starting_tiles[char_on_tile] = tile
 
-        for i, tile in enumerate(self.__main_tile_sequence):
+        for i, tile in enumerate(self.__tile_sequence):
             potential_char: Optional[PlayableCharacter] = tile.get_character_on_tile()
             if potential_char is not None:
                 self.__character_location[potential_char] = i
@@ -93,9 +93,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Throws:
             Exception if the number of main sequence tiles is incorrect (DIMENSION_CELL_COUNT * 4) - 4
         """
-        main_tiles_only_len = (
-            len(self.__main_tile_sequence) - len(self.__starting_tiles) * 2
-        )  # *2 to account for starting tiles + duplicate tiles used in starting tile path
+        main_tiles_only_len = len(self.__tile_sequence) - len(self.__starting_tiles) * 2  # *2 to account for starting tiles + duplicate tiles used in starting tile path
         if main_tiles_only_len != DefaultGameBoard.get_tiles_required():
             raise Exception(
                 f"There must be {DefaultGameBoard.get_tiles_required()} tiles in the main tile sequence (len={main_tiles_only_len}). DIMENSION_CELL_COUNT = {DefaultGameBoard.DIMENSION_CELL_COUNT}."
@@ -146,8 +144,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """
         tile_intermediate_i: int = self.__character_location[character]
         steps_taken: int = 0
-        current_tile_i = tile_intermediate_i % len(self.__main_tile_sequence)
-        current_tile = self.__main_tile_sequence[current_tile_i]
+        current_tile_i = tile_intermediate_i % len(self.__tile_sequence)
+        current_tile = self.__tile_sequence[current_tile_i]
 
         while steps_taken < abs(steps):
             # If the character is already in a starting tile and is going to move further back, end their turn
@@ -158,8 +156,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             tile_intermediate_i = tile_intermediate_i - 1 if steps < 0 else tile_intermediate_i + 1  # consider next tile
             steps_taken += 1
 
-            current_tile_i = tile_intermediate_i % len(self.__main_tile_sequence)
-            current_tile = self.__main_tile_sequence[current_tile_i]
+            current_tile_i = tile_intermediate_i % len(self.__tile_sequence)
+            current_tile = self.__tile_sequence[current_tile_i]
 
             if current_tile in self.__starting_tiles_set:
                 # If the player is going to re-enter/pass their own starting tile by moving backwards, end their turn.
@@ -169,7 +167,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
                 # Allow character to only re-enter its own starting tile and only when they've visited all main sequence tiles
                 if self.__character_starting_tiles[character] is current_tile and (
-                    len(self.__character_tiles_visited[character]) == len(self.__main_tile_sequence) - len(self.__starting_tiles) * 2
+                    len(self.__character_tiles_visited[character]) == len(self.__tile_sequence) - len(self.__starting_tiles) * 2
                 ):
                     if steps_taken < abs(steps):
                         # don't move character if starting tile will be overshot & end character's turn
@@ -182,19 +180,19 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 tile_intermediate_i = tile_intermediate_i - 2 if steps < 0 else tile_intermediate_i + 2  # 2 to account for duplicate starting destination tile
 
             # add the currently considered tile to visited tiles for character accounting for any skipping of tiles
-            self.__character_tiles_visited[character].add(self.__main_tile_sequence[tile_intermediate_i % len(self.__main_tile_sequence)])
+            self.__character_tiles_visited[character].add(self.__tile_sequence[tile_intermediate_i % len(self.__tile_sequence)])
 
         # place character on the calculated destination tile if not occupied and update character location. Otherwise end player's turn
-        final_tile_i: int = tile_intermediate_i % len(self.__main_tile_sequence)
-        final_tile: Tile = self.__main_tile_sequence[final_tile_i]
+        final_tile_i: int = tile_intermediate_i % len(self.__tile_sequence)
+        final_tile: Tile = self.__tile_sequence[final_tile_i]
 
         if final_tile.get_character_on_tile() is not None:
             # if there is a character on the destination tile, end player's turn and do not move
             character.set_should_continue_turn(False)
             return
 
-        self.__main_tile_sequence[final_tile_i].place_character_on_tile(character)
-        self.__main_tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
+        self.__tile_sequence[final_tile_i].place_character_on_tile(character)
+        self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
         self.__character_location[character] = final_tile_i
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
@@ -209,7 +207,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Raises:
             Exception if the character could not be found on any tile
         """
-        for tile in self.__main_tile_sequence:
+        for tile in self.__tile_sequence:
             if tile.get_character_on_tile() == character:
                 return tile
         raise Exception("Character could not be found on any tile.")
@@ -249,7 +247,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # setting draw data in clockwise pattern (including starting tiles), starting at top left
         i_top, i_right, i_bottom = DefaultGameBoard.DIMENSION_CELL_COUNT, DefaultGameBoard.DIMENSION_CELL_COUNT * 2 - 1, DefaultGameBoard.DIMENSION_CELL_COUNT * 3 - 2
         i_offset = 0
-        for i, tile in enumerate(self.__main_tile_sequence):
+        for i, tile in enumerate(self.__tile_sequence):
             i = i - i_offset
 
             # setting draw data for destinations of starting tiles whilst offsetting for duplicate
@@ -290,7 +288,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # getting draw instructions for the entire board after setting draw data
         starting_tile_destinations_drawn: set[Tile] = set()
 
-        for tile in self.__main_tile_sequence:
+        for tile in self.__tile_sequence:
             tile_draw_instructions: Optional[list[DrawAssetInstruction]] = None
 
             if tile in self.__starting_tiles_destinations_set:

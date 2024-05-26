@@ -319,8 +319,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             rot_from_normal: float = (180 - internal_deg) / 2
 
             x: int = int(center_x + circle_radius * cos_deg(central_deg * i))
-            y: int = int(center_y + circle_radius * sin_deg(central_deg * i))
-            rot: float = i * central_deg + rot_from_normal
+            y: int = int(center_y - circle_radius * sin_deg(central_deg * i))  # sign flipped because pygame y coordinate system is reversed
+            rot: float = (((n - 1) + i) % n) * central_deg + rot_from_normal
 
             draw_properties.append(DrawProperties((x, y), (int(square_size), int(square_size)), rot))
 
@@ -349,7 +349,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         )  # reverse calculation from rot formula for drawing in circle. 0 = square at 0 deg in unit circle
 
         return DrawProperties(
-            (int(x + length * cos_deg(pos_in_circle * central_deg)), int(y + length * sin_deg(pos_in_circle * central_deg))),
+            (int(x + length * cos_deg(pos_in_circle * central_deg)), int(y - length * sin_deg(pos_in_circle * central_deg))),
             draw_properties.get_size(),
             rot,
         )

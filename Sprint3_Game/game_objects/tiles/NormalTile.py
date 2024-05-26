@@ -45,7 +45,7 @@ class NormalTile(Tile):
         instructions: list[DrawAssetInstruction] = []
         tile_x, tile_y = draw_properties.get_coordinates()
 
-        instructions.append(DrawAssetInstruction(f"assets/tiles/normal_tile.png", tile_x, tile_y, draw_properties.get_size()))
+        instructions.append(DrawAssetInstruction(f"assets/tiles/normal_tile.png", tile_x, tile_y, draw_properties.get_size(), draw_properties.get_rotation()))
         instructions.extend(self._default_animal_draw_instructions(NormalTile.__ANIMAL_DRAW_SIZE_FACTOR))
         instructions.extend(self._default_character_draw_instructions())
 

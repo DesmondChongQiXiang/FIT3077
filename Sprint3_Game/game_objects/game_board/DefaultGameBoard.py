@@ -322,14 +322,16 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """
         draw_properties: list[DrawProperties] = []
         center_x, center_y = central_coordinate
+        circle_radius: float = polygon_radius_given_side_length(square_size, n)
 
+        # Going anti-clockwise for each vertex of the circle, get the coordinates and rotation to draw the square at
         for i in range(n):
             internal_deg: float = polygon_internal_deg(n)
             central_deg: float = polygon_central_deg(n)
             rot_from_normal: float = (180 - internal_deg) / 2
 
-            x: int = int(center_x + square_size * cos_deg(central_deg * i))
-            y: int = int(center_y + square_size * sin_deg(central_deg * i))
+            x: int = int(center_x + circle_radius * cos_deg(central_deg * i))
+            y: int = int(center_y + circle_radius * sin_deg(central_deg * i))
             rot: float = i * central_deg + rot_from_normal
 
             draw_properties.append(DrawProperties((x, y), (int(square_size), int(square_size)), rot))

@@ -39,6 +39,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             playable_characters: The playable characters to play on the game board
         """
         self.__tile_sequence: list[Tile] = []
+        self.__main_tile_sequence_length: int = len(main_tile_sequence)  # length of just the main sequence (excluding starting tiles)
         self.__starting_tiles: list[Tile] = []
         self.__starting_tiles_set: set[Tile] = set()
         self.__starting_tiles_destinations_set: set[Tile] = set()  # stores the tiles that are the destinations for starting tiles
@@ -243,14 +244,17 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         draw_instructions: list[DrawAssetInstruction] = []
         starting_tile_destinations_drawn: set[Tile] = set()
+        main_circle_draw_properties: list[DrawProperties] = self.__circular_draw_properties_for_squares(
+            self.__main_tile_sequence_length, square_size, (int((main_x0 + main_x1) / 2), int((main_y0 + main_y1) / 2))
+        )
+        main_circle_draw_properties_i: int = 0
 
-        # setting draw data in clockwise pattern (including starting tiles), starting at top left
-        i_top, i_right, i_bottom = DefaultGameBoard.DIMENSION_CELL_COUNT, DefaultGameBoard.DIMENSION_CELL_COUNT * 2 - 1, DefaultGameBoard.DIMENSION_CELL_COUNT * 3 - 2
+        # setting draw data in clockwise pattern (including starting tiles) for tiles, starting at right tile
         i_offset = 0
         for i, tile in enumerate(self.__tile_sequence):
             i = i - i_offset
 
-            # setting draw data for destinations of starting tiles whilst offsetting for duplicate
+            # offsetting for drawing of duplicate starting tile destinations; allow drawing of destination tile if it has not been drawn
             if tile in self.__starting_tiles_destinations_set:
                 i_offset += 1  # starting tile should be drawn on top of the destination tile
                 if tile in starting_tile_destinations_drawn:
@@ -259,31 +263,16 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
             # setting draw data for starting tiles
             if tile in self.__starting_tiles_set:
-                if i < i_top:  # draw for top row
-                    tile.set_draw_data(DrawProperties((int(main_x0 + square_size * i), int(main_y0 - square_size)), (int(square_size), int(square_size))))
-                elif i < i_right:  # draw for right column
-                    factor: int = i - i_top + 1
-                    tile.set_draw_data(DrawProperties((int(main_x1), int(main_y0 + square_size * factor)), (int(square_size), int(square_size)), 270))
-                elif i < i_bottom:  # draw for bottom column
-                    factor: int = i - i_right + 1
-                    tile.set_draw_data(DrawProperties((int(main_x1 - square_size * (factor + 1)), int(main_y1)), (int(square_size), int(square_size)), 180))
-                else:  # draw for left column
-                    factor: int = i - i_bottom + 1
-                    tile.set_draw_data(DrawProperties((int(main_x0 - square_size), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size)), 90))
+                tile.set_draw_data(
+                    self.__linearly_extrapolate_circlular_draw_properties(
+                        square_size, self.__main_tile_sequence_length, main_circle_draw_properties[main_circle_draw_properties_i]
+                    )
+                )
                 continue
 
             # setting draw data for main tile sequence
-            if i < i_top:  # draw top row
-                tile.set_draw_data(DrawProperties((int(main_x0 + square_size * i), int(main_y0)), (int(square_size), int(square_size))))
-            elif i < i_right:  # draw right column
-                factor: int = i - i_top + 1
-                tile.set_draw_data(DrawProperties((int(main_x1 - square_size), int(main_y0 + square_size * factor)), (int(square_size), int(square_size))))
-            elif i < i_bottom:  # draw bottom column
-                factor: int = i - i_right + 1
-                tile.set_draw_data(DrawProperties((int(main_x1 - square_size * (factor + 1)), int(main_y1 - square_size)), (int(square_size), int(square_size))))
-            else:  # draw left column
-                factor: int = i - i_bottom + 1
-                tile.set_draw_data(DrawProperties((int(main_x0), int(main_y1 - square_size * (factor + 1))), (int(square_size), int(square_size))))
+            tile.set_draw_data(main_circle_draw_properties[main_circle_draw_properties_i])
+            main_circle_draw_properties_i += 1
 
         # getting draw instructions for the entire board after setting draw data
         starting_tile_destinations_drawn: set[Tile] = set()
@@ -313,7 +302,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Args:
             n: The number of squares making up the circle
             square_size: The square size in pixels.
-            central_coordinate: The coordinate at which the circle should be centered
+            central_coordinate: The coordinate (x,y) at which the circle should be centered
 
         Returns:
             The draw properties to draw the circle

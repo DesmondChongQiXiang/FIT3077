@@ -308,7 +308,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             The draw properties to draw the circle
         """
         draw_properties: list[DrawProperties] = []
-        center_x, center_y = central_coordinate
+        center_x: int = int(central_coordinate[0] - 0.5 * square_size)
+        center_y: int = int(central_coordinate[1] - 0.5 * square_size)
         circle_radius: float = polygon_radius_given_side_length(square_size, n)
 
         # Going anti-clockwise for each vertex of the circle, get the coordinates and rotation to draw the square at

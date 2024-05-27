@@ -30,7 +30,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]):
         """
         Args:
-            main_tile_sequence: The main tile sequence (excluding starting tiles) to use for the game board. Must have (DIMENSION_CELL_COUNT * 4) - 4 tiles.
+            main_tile_sequence: The main tile sequence (excluding starting tiles) to use for the game board.
             starting_tiles: The starting tiles. In form: (starting tile, next tile)
             chit_cards: The chit cards to use for the game board. Will be placed in order from left to right, top to bottom.
             playable_characters: The playable characters to play on the game board

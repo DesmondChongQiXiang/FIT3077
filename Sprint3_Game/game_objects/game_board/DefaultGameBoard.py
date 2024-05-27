@@ -96,15 +96,15 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """
         # chit card generation factors
         screen_width: int = PygameScreenController.instance().get_screen_size()[0]
-        chit_card_rand_factor: int = 0
-        chit_card_rand_factor: int = int(screen_width * (0 / 1500))  # random factor for chit card generation in pixels.
-        chit_card_size: tuple[int, int] = (int(0.02 * screen_width), int(0.02 * screen_width))  # chit card dimensions (width, height) in px
 
         #### Generating chit cards
         safe_area = self.__get_chit_card_safe_area()
+        safe_area_width: int = safe_area[1][0] - safe_area[0][0]
+        chit_card_rand_factor: int = int(safe_area_width * (105 / 1500))  # random factor for chit card generation in pixels.
+        chit_card_size: tuple[int, int] = (int(0.18 * safe_area_width), int(0.18 * safe_area_width))  # chit card dimensions (width, height) in px
+
         x0, y0, x1, y1 = safe_area[0][0], safe_area[0][1], safe_area[1][0], safe_area[1][1]
         chit_card_w, chit_card_h = chit_card_size
-        next_x, next_y = 0, 0  # default coords = (0, 0) to draw at if can't generate
 
         # generate chit tiles randomly in manner that doesn't clip board tiles
         chit_card_i = 0
@@ -431,7 +431,7 @@ class _MainTileSequenceProperties:
 
         Discussion:
             The circle_ coordinates represent coordinates of the circle outline that the center of the drawn objects will be located on.
-            The circle_width / height represent the width / height of the circular outline specified by the circle_ coordinates
+            The circle_width / height represent the width / height of the circular outline located at the circle_ coordinates.
         """
         self.circle_width = circle_width
         self.circle_height = circle_height

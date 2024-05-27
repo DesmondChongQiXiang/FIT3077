@@ -13,20 +13,30 @@ from game_objects.tiles.NormalTile import NormalTile
 import random
 
 
-# --------- CONSTANTS ----------------------------------------------------------------------------------------------------------------
+# --------- CONFIG ----------------------------------------------------------------------------------------------------------------
 
-# VOLCANO_CARDS
-# The volcano cards used for volcano card generation methods.
-VOLCANO_CARDS: list[tuple[Tile, Tile, Tile]] = [
-    (NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.BAT), NormalTile(Animal.SPIDER)),
-    (NormalTile(Animal.SALAMANDER), NormalTile(Animal.SPIDER), NormalTile(Animal.BAT)),
-    (NormalTile(Animal.SPIDER), NormalTile(Animal.SALAMANDER), NormalTile(Animal.BABY_DRAGON)),
-    (NormalTile(Animal.BAT), NormalTile(Animal.SPIDER), NormalTile(Animal.BABY_DRAGON)),
-    (NormalTile(Animal.SPIDER), NormalTile(Animal.BAT), NormalTile(Animal.SALAMANDER)),
-    (NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.SALAMANDER), NormalTile(Animal.BAT)),
-    (NormalTile(Animal.BAT), NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.SALAMANDER)),
-    (NormalTile(Animal.SALAMANDER), NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.SPIDER)),
-]
+
+def __generate_volcano_card_tiles() -> list[tuple[Tile, Tile, Tile]]:
+    """Generates new instances of volcano card tiles as specified by the VOLCANO_CARDS constant within.
+    Configure the constant to change the volcano cards generated.
+
+    Returns:
+        The volcano cards in form (tile1, tile2, tile3) in a list.
+    """
+    ### VOLCANO_CARDS
+    # The volcano cards used for generating the volcano cards. Edit to change
+    VOLCANO_CARDS: list[tuple[Tile, Tile, Tile]] = [
+        (NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.BAT), NormalTile(Animal.SPIDER)),
+        (NormalTile(Animal.SALAMANDER), NormalTile(Animal.SPIDER), NormalTile(Animal.BAT)),
+        (NormalTile(Animal.SPIDER), NormalTile(Animal.SALAMANDER), NormalTile(Animal.BABY_DRAGON)),
+        (NormalTile(Animal.BAT), NormalTile(Animal.SPIDER), NormalTile(Animal.BABY_DRAGON)),
+        (NormalTile(Animal.SPIDER), NormalTile(Animal.BAT), NormalTile(Animal.SALAMANDER)),
+        (NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.SALAMANDER), NormalTile(Animal.BAT)),
+        (NormalTile(Animal.BAT), NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.SALAMANDER)),
+        (NormalTile(Animal.SALAMANDER), NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.SPIDER)),
+    ]
+
+    return VOLCANO_CARDS
 
 
 # --------- METHODS -----------------------------------------------------------------------------------------------------------
@@ -96,8 +106,6 @@ def randomised_volcano_card_sequence(n: int) -> list[Tile]:
     Volcano cards are a preset sequence of 3 tiles. Volcano cards are chosen randomly without replacement. Once volcano
     cards are exhausted, the volcano cards are replenished and once again chosen randomly.
 
-    Utilises the presets.VOLCANO_CARDS constant as the volcano cards.
-
     Args:
         n: The number of volcano cards to generate
 
@@ -105,17 +113,19 @@ def randomised_volcano_card_sequence(n: int) -> list[Tile]:
         The tiles composing the generated sequence.
     """
     generated: int = 0
+    volcano_cards: list[tuple[Tile, Tile, Tile]] = __generate_volcano_card_tiles()
     tiles: list[Tile] = []
-    choices: list[int] = [i for i in range(len(VOLCANO_CARDS))]
+    choices: list[int] = [i for i in range(len(volcano_cards))]
 
     while generated < n:
         # if available choices for volcano cards are empty, replenish choices
         if len(choices) == 0:
-            choices = [i for i in range(len(VOLCANO_CARDS))]
+            volcano_cards = __generate_volcano_card_tiles()  # regenerate to ensure fresh instances
+            choices = [i for i in range(len(volcano_cards))]
 
         # randomly choose from available volcano cards without replacement, and add its tiles to the growing tile sequence
         rand_i = random.choice(choices)
-        rand_volcano_card = VOLCANO_CARDS[rand_i]
+        rand_volcano_card = volcano_cards[rand_i]
 
         tiles.extend(rand_volcano_card)
 

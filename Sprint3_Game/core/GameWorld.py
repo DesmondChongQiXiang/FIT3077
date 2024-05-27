@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import cast
-from core.GameConfig import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
+from settings import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.game_board.GameBoard import GameBoard
 from screen.ModularClickableSprite import ModularClickableSprite

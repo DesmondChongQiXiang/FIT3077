@@ -1,6 +1,6 @@
 from presets import *
+from settings import *
 from core.GameWorld import GameWorld
-from core.GameConfig import *
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.characters.Dragon import Dragon
 from game_objects.chit_cards.ChitCard import ChitCard

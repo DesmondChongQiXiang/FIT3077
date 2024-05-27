@@ -15,7 +15,6 @@ from core.GameWorld import GameWorld
 from utils.math_utils import *
 
 import random
-import math
 
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
@@ -28,7 +27,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
     ### CONFIG
     TURN_END_RESET_DELAY: float = 2.0  # Seconds to delay resetting game board on player turn end
-    MAIN_BOARD_RADIUS_MULTIPLIER: float = 0.68  # Size of the radius for the main sequence relative to the screen's size. Must be in range 0-1.
 
     def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]):
         """
@@ -380,22 +378,28 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """
         width, height = PygameScreenController.instance().get_screen_size()
         screen_center_x, screen_center_y = width / 2, height / 2
-        circle_width, circle_height = int(DefaultGameBoard.MAIN_BOARD_RADIUS_MULTIPLIER * width), int(DefaultGameBoard.MAIN_BOARD_RADIUS_MULTIPLIER * height)
+
+        # getting optimal side length and radius to ensure the drawn board's circle fits within the user's screen
+        # optimal_side_length -> solving formula for side length given the radius of a polygon for side (length), letting r => solved for r, r + side/2 + side = screen_width/2 - 10
+        optimal_side_length: float = (
+            width * sin_deg(180 / self.__main_tile_sequence_length) - 30 * sin_deg(180 / self.__main_tile_sequence_length)) / (
+            1 + 3 * sin_deg(180 / self.__main_tile_sequence_length)
+        )
+        optimal_radius: float = polygon_radius_given_side_length(optimal_side_length, self.__main_tile_sequence_length)
 
         # calculating rect bounds of circle
-        circle_x0, circle_y0 = screen_center_x - circle_width / 2, screen_center_y - circle_height / 2
-        circle_x1, circle_y1 = circle_x0 + circle_width, circle_y0 + circle_height
+        circle_x0, circle_y0 = screen_center_x - optimal_radius, screen_center_y - optimal_radius
+        circle_x1, circle_y1 = circle_x0 + optimal_radius * 2, circle_y0 + optimal_radius * 2
 
         return _MainTileSequenceProperties(
-            circle_width,
-            circle_height,
+            optimal_radius,
             circle_x0,
             circle_x1,
             circle_y0,
             circle_y1,
             screen_center_x,
             screen_center_y,
-            polygon_side_length_given_radius(circle_width / 2, self.__main_tile_sequence_length),
+            optimal_side_length,
         )
 
 
@@ -407,8 +411,7 @@ class _MainTileSequenceProperties:
 
     def __init__(
         self,
-        circle_width: int,
-        circle_height: int,
+        circle_radius: float,
         circle_x0: float,
         circle_x1: float,
         circle_y0: float,
@@ -419,8 +422,7 @@ class _MainTileSequenceProperties:
     ):
         """
         Args:
-            circle_width: The width of the bounding outline for the circular main tile sequence
-            circle_height: The height of the bounding outline for the circular main tile sequence
+            circle_radius: The radius of the bounding outline for the circular main tile sequence
             circle_x0: The left x coordinate where the circular outline is to lie on
             circle_x1: The right x coordinate where the circular outline is to lie on
             circle_y0: The top y coordinate where the circular outline is to lie on
@@ -431,10 +433,9 @@ class _MainTileSequenceProperties:
 
         Discussion:
             The circle_ coordinates represent coordinates of the circle outline that the center of the drawn objects will be located on.
-            The circle_width / height represent the width / height of the circular outline located at the circle_ coordinates.
+            The circle_radius represents the distance from the middle of the circle to the outline that the center of drawn objects will be located on.
         """
-        self.circle_width = circle_width
-        self.circle_height = circle_height
+        self.circle_radius = circle_radius
         self.circle_x0 = circle_x0
         self.circle_x1 = circle_x1
         self.circle_y0 = circle_y0

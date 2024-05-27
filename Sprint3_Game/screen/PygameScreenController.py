@@ -52,7 +52,7 @@ class PygameScreenController(metaclass=SingletonMeta):
     def draw_asset(self, image_path: str, x: int, y: int, size: Optional[tuple[int, int]] = None, rotate: float = 0) -> pygame.Surface:
         """Draw an asset on coordinates (x,y) on the screen with the specified size and rotation.
 
-        Has caching behaviour that attempts to cache as much as possible. If the respective caches get too large,
+        Has caching behaviour that attempts to utilise caches whenever possible. If the respective caches get too large,
         the caches will be purged.
 
         Args:

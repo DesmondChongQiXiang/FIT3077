@@ -379,7 +379,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         screen_center_x, screen_center_y = width / 2, height / 2
 
         # getting optimal side length and radius to ensure the drawn board's circle fits within the user's screen
-        # optimal_side_length -> solving formula for side length given the radius of a polygon for side (length), letting r => solved for r, r + side/2 + side = screen_width/2 - 10
+        # optimal_side_length -> solving formula for side length given the radius of a polygon for side (length), letting r => solved for r, r + side/2 + side = screen_width/2 - 10.
+        #                        r + side/2 + side is the length from center of circle to the rightmost edge of a cave @ 0 deg
         optimal_side_length: float = (width * sin_deg(180 / self.__main_tile_sequence_length) - 30 * sin_deg(180 / self.__main_tile_sequence_length)) / (
             1 + 3 * sin_deg(180 / self.__main_tile_sequence_length)
         )

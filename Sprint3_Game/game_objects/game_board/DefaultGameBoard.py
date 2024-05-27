@@ -15,6 +15,7 @@ from core.GameWorld import GameWorld
 from utils.math_utils import *
 
 import random
+import math
 
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
@@ -84,7 +85,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             if potential_char is not None:
                 self.__character_location[potential_char] = i
 
-    # TODO: FIX CHIT CARD POSITION GEN
     def __set_chit_card_draw_properties(self) -> None:
         """Initialise the clickable chit cards to draw randomly within the inner zone (square) of the game board.
 
@@ -97,8 +97,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # chit card generation factors
         screen_width: int = PygameScreenController.instance().get_screen_size()[0]
         chit_card_rand_factor: int = 0
-        # chit_card_rand_factor: int = int(screen_width * (70 / 1500))  # random factor for chit card generation in pixels.
-        chit_card_size: tuple[int, int] = (int(0.07 * screen_width), int(0.07 * screen_width))  # chit card dimensions (width, height) in px
+        chit_card_rand_factor: int = int(screen_width * (35 / 1500))  # random factor for chit card generation in pixels.
+        chit_card_size: tuple[int, int] = (int(0.08 * screen_width), int(0.08 * screen_width))  # chit card dimensions (width, height) in px
 
         #### Generating chit cards
         safe_area = self.__get_chit_card_safe_area()
@@ -224,7 +224,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         Author: Shen
         """
-        main_properties = self.__get_main_tile_sequence_properties()
+        main_properties = self.__calculated_main_tile_sequence_properties()
         square_size = main_properties.square_size
 
         draw_instructions: list[DrawAssetInstruction] = []
@@ -357,33 +357,44 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             ((x0, y0), (x1, y1)), where the first & second pair corresponds to the top left & bottom right corner of the square
             shaped safe area.
         """
-        main_properties = self.__get_main_tile_sequence_properties()
-        return ((int(main_properties.circle_x0), int(main_properties.circle_y0)), (int(main_properties.circle_x1), int(main_properties.circle_y1)))
+        main_properties = self.__calculated_main_tile_sequence_properties()
+        center_x, center_y = main_properties.circle_center_x, main_properties.circle_center_y
+        safe_radius: float = (
+            main_properties.circle_x1 - center_x - main_properties.square_size / 2
+        )  # square_size / 2 because outline lies in middle of squares on circle outline
 
-    def __get_main_tile_sequence_properties(self) -> _MainTileSequenceProperties:
-        """Get the properties (bounds, size, square size) of the main tile sequence.
+        square_distance_from_center: float = square_in_circle_apothem(safe_radius)
+        x0, y0 = center_x - square_distance_from_center, center_y - square_distance_from_center
+        x1, y1 = center_x + square_distance_from_center, center_y + square_distance_from_center
+
+        return ((int(x0), int(y0)), (int(x1), int(y1)))
+
+    def __calculated_main_tile_sequence_properties(self) -> _MainTileSequenceProperties:
+        """Calculate and return the properties of the circular main tile sequence for drawing.
+
+        The properties correspond to a circle within the bounds of the screen
 
         Returns:
             The properties of the main tile sequence
         """
         width, height = PygameScreenController.instance().get_screen_size()
         screen_center_x, screen_center_y = width / 2, height / 2
-        inner_width, inner_height = int(DefaultGameBoard.MAIN_BOARD_RADIUS_MULTIPLIER * width), int(DefaultGameBoard.MAIN_BOARD_RADIUS_MULTIPLIER * height)
+        circle_width, circle_height = int(DefaultGameBoard.MAIN_BOARD_RADIUS_MULTIPLIER * width), int(DefaultGameBoard.MAIN_BOARD_RADIUS_MULTIPLIER * height)
 
         # calculating rect bounds of circle
-        circle_x0, circle_y0 = screen_center_x - inner_width / 2, screen_center_y - inner_height / 2
-        circle_x1, circle_y1 = circle_x0 + inner_width, circle_y0 + inner_height
+        circle_x0, circle_y0 = screen_center_x - circle_width / 2, screen_center_y - circle_height / 2
+        circle_x1, circle_y1 = circle_x0 + circle_width, circle_y0 + circle_height
 
         return _MainTileSequenceProperties(
-            inner_width,
-            inner_height,
+            circle_width,
+            circle_height,
             circle_x0,
             circle_x1,
             circle_y0,
             circle_y1,
             screen_center_x,
             screen_center_y,
-            polygon_side_length_given_radius(inner_width / 2, self.__main_tile_sequence_length),
+            polygon_side_length_given_radius(circle_width / 2, self.__main_tile_sequence_length),
         )
 
 
@@ -395,8 +406,8 @@ class _MainTileSequenceProperties:
 
     def __init__(
         self,
-        inner_width: int,
-        inner_height: int,
+        circle_width: int,
+        circle_height: int,
         circle_x0: float,
         circle_x1: float,
         circle_y0: float,
@@ -407,18 +418,22 @@ class _MainTileSequenceProperties:
     ):
         """
         Args:
-            inner_width: The width of the bounding rectangle for the inner region main tile sequence
-            inner_height: The height of the bounding rectangle for the inner main tile sequence
-            inner_x0: The left x coordinate where the circular outline lies on
-            inner_x1: The right x coordinate where the circular outline lies on
-            inner_y0: The top y coordinate where the circular outline lies on
-            inner_y1: The bottom y coordinate where the circular outline lies on
+            circle_width: The width of the bounding outline for the circular main tile sequence
+            circle_height: The height of the bounding outline for the circular main tile sequence
+            circle_x0: The left x coordinate where the circular outline is to lie on
+            circle_x1: The right x coordinate where the circular outline is to lie on
+            circle_y0: The top y coordinate where the circular outline is to lie on
+            circle_y1: The bottom y coordinate where the circular outline is to lie on
             circle_center_x: The x coordinate for the center of the circle
             circle_center_y: The y coordinate for the center of the circle
             square_size: The size of each dimension of the square tile
+
+        Discussion:
+            The circle_ coordinates represent coordinates of the circle outline that the center of the drawn objects will be located on.
+            The circle_width / height represent the width / height of the circular outline specified by the circle_ coordinates
         """
-        self.inner_width = inner_width
-        self.inner_height = inner_height
+        self.circle_width = circle_width
+        self.circle_height = circle_height
         self.circle_x0 = circle_x0
         self.circle_x1 = circle_x1
         self.circle_y0 = circle_y0

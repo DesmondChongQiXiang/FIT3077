@@ -78,3 +78,15 @@ def polygon_internal_deg(sides: int) -> float:
         The central degrees of the polygon
     """
     return ((sides - 2) * 180) / sides
+
+
+def square_in_circle_apothem(radius: float) -> float:
+    """Returns the apothem (inradius) for a square that is in a circle.
+
+    Args:
+        radius: The radius of the bounding circle
+
+    Returns:
+        The apothem (inradius)
+    """
+    return (radius * math.sqrt(2)) / 2

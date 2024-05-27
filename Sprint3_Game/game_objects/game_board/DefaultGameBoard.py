@@ -18,9 +18,8 @@ import random
 
 
 class DefaultGameBoard(GameBoard, DrawableByAsset):
-    """Initialises and represents the default fiery dragons game board. Cells are drawn in a square, using the
-    width of the screen as reference. Caves jut out from the main sequence of tiles. Chit cards are randomly
-    placed within the inner ring.
+    """Initialises and represents the default fiery dragons game board. Cells are drawn in a circle.
+    Caves jut out from the main sequence of tiles. Chit cards are randomly placed within the inner ring.
 
     Author: Shen
     """
@@ -381,8 +380,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         # getting optimal side length and radius to ensure the drawn board's circle fits within the user's screen
         # optimal_side_length -> solving formula for side length given the radius of a polygon for side (length), letting r => solved for r, r + side/2 + side = screen_width/2 - 10
-        optimal_side_length: float = (
-            width * sin_deg(180 / self.__main_tile_sequence_length) - 30 * sin_deg(180 / self.__main_tile_sequence_length)) / (
+        optimal_side_length: float = (width * sin_deg(180 / self.__main_tile_sequence_length) - 30 * sin_deg(180 / self.__main_tile_sequence_length)) / (
             1 + 3 * sin_deg(180 / self.__main_tile_sequence_length)
         )
         optimal_radius: float = polygon_radius_given_side_length(optimal_side_length, self.__main_tile_sequence_length)

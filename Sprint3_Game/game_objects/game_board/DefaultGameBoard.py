@@ -367,7 +367,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         return ((int(x0), int(y0)), (int(x1), int(y1)))
 
-    def __calculated_main_tile_sequence_properties(self) -> _MainTileSequenceProperties:
+    def __calculated_main_tile_sequence_properties(self) -> __MainTileSequenceProperties:
         """Calculate and return the properties of the circular main tile sequence for drawing.
 
         The properties correspond to a circle within the bounds of the screen
@@ -389,7 +389,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         circle_x0, circle_y0 = screen_center_x - optimal_radius, screen_center_y - optimal_radius
         circle_x1, circle_y1 = circle_x0 + optimal_radius * 2, circle_y0 + optimal_radius * 2
 
-        return _MainTileSequenceProperties(
+        return DefaultGameBoard.__MainTileSequenceProperties(
             optimal_radius,
             circle_x0,
             circle_x1,
@@ -400,44 +400,43 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             optimal_side_length,
         )
 
+    class __MainTileSequenceProperties:
+        """Private data class for organising the circular main tile sequence data for the default game board.
 
-class _MainTileSequenceProperties:
-    """Private data class for organising the circular main tile sequence data for the default game board.
-
-    Author: Shen
-    """
-
-    def __init__(
-        self,
-        circle_radius: float,
-        circle_x0: float,
-        circle_x1: float,
-        circle_y0: float,
-        circle_y1: float,
-        circle_center_x: float,
-        circle_center_y: float,
-        square_size: float,
-    ):
+        Author: Shen
         """
-        Args:
-            circle_radius: The radius of the bounding outline for the circular main tile sequence
-            circle_x0: The left x coordinate where the circular outline is to lie on
-            circle_x1: The right x coordinate where the circular outline is to lie on
-            circle_y0: The top y coordinate where the circular outline is to lie on
-            circle_y1: The bottom y coordinate where the circular outline is to lie on
-            circle_center_x: The x coordinate for the center of the circle
-            circle_center_y: The y coordinate for the center of the circle
-            square_size: The size of each dimension of the square tile
 
-        Discussion:
-            The circle_ coordinates represent coordinates of the circle outline that the center of the drawn objects will be located on.
-            The circle_radius represents the distance from the middle of the circle to the outline that the center of drawn objects will be located on.
-        """
-        self.circle_radius = circle_radius
-        self.circle_x0 = circle_x0
-        self.circle_x1 = circle_x1
-        self.circle_y0 = circle_y0
-        self.circle_y1 = circle_y1
-        self.circle_center_x: float = circle_center_x
-        self.circle_center_y: float = circle_center_y
-        self.square_size = square_size
+        def __init__(
+            self,
+            circle_radius: float,
+            circle_x0: float,
+            circle_x1: float,
+            circle_y0: float,
+            circle_y1: float,
+            circle_center_x: float,
+            circle_center_y: float,
+            square_size: float,
+        ):
+            """
+            Args:
+                circle_radius: The radius of the bounding outline for the circular main tile sequence
+                circle_x0: The left x coordinate where the circular outline is to lie on
+                circle_x1: The right x coordinate where the circular outline is to lie on
+                circle_y0: The top y coordinate where the circular outline is to lie on
+                circle_y1: The bottom y coordinate where the circular outline is to lie on
+                circle_center_x: The x coordinate for the center of the circle
+                circle_center_y: The y coordinate for the center of the circle
+                square_size: The size of each dimension of the square tile
+
+            Discussion:
+                The circle_ coordinates represent coordinates of the circle outline that the center of the drawn objects will be located on.
+                The circle_radius represents the distance from the middle of the circle to the outline that the center of drawn objects will be located on.
+            """
+            self.circle_radius = circle_radius
+            self.circle_x0 = circle_x0
+            self.circle_x1 = circle_x1
+            self.circle_y0 = circle_y0
+            self.circle_y1 = circle_y1
+            self.circle_center_x: float = circle_center_x
+            self.circle_center_y: float = circle_center_y
+            self.square_size = square_size

@@ -12,7 +12,6 @@ from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
 from core.GameWorld import GameWorld
-from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 from utils.math_utils import *
 
 import random
@@ -27,8 +26,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     """
 
     ### CONFIG
-    DIMENSION_CELL_COUNT: int = 7  # Cell count for each dimension
     TURN_END_RESET_DELAY: float = 2.0  # Seconds to delay resetting game board on player turn end
+    MAIN_BOARD_RADIUS_MULTIPLIER: float = 0.68  # Size of the radius for the main sequence relative to the screen's size. Must be in range 0-1.
 
     def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]):
         """
@@ -71,9 +70,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 self.__tile_sequence.append(dest_to_start_tile[tile])
             self.__tile_sequence.append(tile)
 
-        # Check enough tiles
-        self.__check_enough_main_tiles()
-
         # Initialise character tiles visited, character starting location, character location dictionaries to initial game board state
         for character in playable_characters:
             self.__character_tiles_visited[character] = set()
@@ -88,18 +84,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             if potential_char is not None:
                 self.__character_location[potential_char] = i
 
-    def __check_enough_main_tiles(self) -> None:
-        """Checks that there is the correct number of main tiles. If incorrect, throws an exception
-
-        Throws:
-            Exception if the number of main sequence tiles is incorrect (DIMENSION_CELL_COUNT * 4) - 4
-        """
-        main_tiles_only_len = len(self.__tile_sequence) - len(self.__starting_tiles) * 2  # *2 to account for starting tiles + duplicate tiles used in starting tile path
-        if main_tiles_only_len != DefaultGameBoard.get_tiles_required():
-            raise Exception(
-                f"There must be {DefaultGameBoard.get_tiles_required()} tiles in the main tile sequence (len={main_tiles_only_len}). DIMENSION_CELL_COUNT = {DefaultGameBoard.DIMENSION_CELL_COUNT}."
-            )
-
+    # TODO: FIX CHIT CARD POSITION GEN
     def __set_chit_card_draw_properties(self) -> None:
         """Initialise the clickable chit cards to draw randomly within the inner zone (square) of the game board.
 
@@ -111,11 +96,12 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """
         # chit card generation factors
         screen_width: int = PygameScreenController.instance().get_screen_size()[0]
-        chit_card_rand_factor: int = int(screen_width * (70 / 1500))  # random factor for chit card generation in pixels.
+        chit_card_rand_factor: int = 0
+        # chit_card_rand_factor: int = int(screen_width * (70 / 1500))  # random factor for chit card generation in pixels.
         chit_card_size: tuple[int, int] = (int(0.09 * screen_width), int(0.09 * screen_width))  # chit card dimensions (width, height) in px
 
         #### Generating chit cards
-        safe_area = DefaultGameBoard.__get_chit_card_safe_area()
+        safe_area = self.__get_chit_card_safe_area()
         x0, y0, x1, y1 = safe_area[0][0], safe_area[0][1], safe_area[1][0], safe_area[1][1]
         chit_card_w, chit_card_h = chit_card_size
         next_x, next_y = 0, 0  # default coords = (0, 0) to draw at if can't generate
@@ -239,13 +225,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Author: Shen
         """
         main_properties = self.__get_main_tile_sequence_properties()
-        main_x0, main_x1, main_y0, main_y1 = main_properties.main_x0, main_properties.main_x1, main_properties.main_y0, main_properties.main_y1
+        inner_x0, inner_x1, inner_y0, inner_y1 = main_properties.circle_x0, main_properties.circle_x1, main_properties.circle_y0, main_properties.circle_y1
         square_size = main_properties.square_size
 
         draw_instructions: list[DrawAssetInstruction] = []
         starting_tile_destinations_drawn: set[Tile] = set()
         main_circle_draw_properties: list[DrawProperties] = self.__circular_draw_properties_for_squares(
-            self.__main_tile_sequence_length, square_size, (int((main_x0 + main_x1) / 2), int((main_y0 + main_y1) / 2))
+            self.__main_tile_sequence_length, square_size, (int((inner_x0 + inner_x1) / 2), int((inner_y0 + inner_y1) / 2))
         )
         main_circle_draw_properties_i: int = 0
 
@@ -310,7 +296,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             The draw properties to draw the circle
         """
         draw_properties: list[DrawProperties] = []
-        center_x: int = int(central_coordinate[0] - 0.5 * square_size)  # 0.5 * square size to account for square overhang into circle
+        center_x: int = int(central_coordinate[0] - 0.5 * square_size)  # 0.5 * square size to offset for square overhang into circle
         center_y: int = int(central_coordinate[1] - 0.5 * square_size)
         circle_radius: float = polygon_radius_given_side_length(square_size, n)
 
@@ -348,7 +334,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         pos_in_circle: int = round(
             (((rot - rot_from_normal) + central_deg) / central_deg) % circle_sides
-        )  # reverse calculation from rot formula for drawing in circle. 0 = square at 0 deg in unit circle
+        )  # reverse calculation from rot formula for drawing in circle. 0 = square at 0 deg in unit circle (i.e first square)
 
         return DrawProperties(
             (int(x + length * cos_deg(pos_in_circle * central_deg)), int(y - length * sin_deg(pos_in_circle * central_deg))),
@@ -364,72 +350,57 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """
         return self.__chit_cards
 
-    # ------- Static methods -----------------------------------------------------------------------------------------
-    @staticmethod
-    def get_tiles_required() -> int:
-        """Get the number of tiles required to construct the default game board.
-
-        Returns:
-            The number of tiles required
-        """
-        return DefaultGameBoard.DIMENSION_CELL_COUNT * 4 - 4
-
-    @staticmethod
-    def __get_chit_card_safe_area() -> tuple[tuple[int, int], tuple[int, int]]:
+    # ------- Board properties -----------------------------------------------------------------------------------------
+    def __get_chit_card_safe_area(self) -> tuple[tuple[int, int], tuple[int, int]]:
         """Get the square safe area for the chit cards.
 
         Returns:
             ((x0, y0), (x1, y1)), where the first & second pair corresponds to the top left & bottom right corner of the square
             shaped safe area.
         """
-        main_properties = DefaultGameBoard.__get_main_tile_sequence_properties()
-        main_x0, main_x1, main_y0, main_y1 = main_properties.main_x0, main_properties.main_x1, main_properties.main_y0, main_properties.main_y1
-        square_size = main_properties.square_size
-        return ((int(main_x0 + square_size), int(main_y0 + square_size)), (int(main_x1 - square_size), int(main_y1 - square_size)))
+        main_properties = self.__get_main_tile_sequence_properties()
+        return ((int(main_properties.circle_x0), int(main_properties.circle_y0)), (int(main_properties.circle_x1), int(main_properties.circle_y1)))
 
-    @staticmethod
-    def __get_main_tile_sequence_properties() -> _MainTileSequenceProperties:
+    def __get_main_tile_sequence_properties(self) -> _MainTileSequenceProperties:
         """Get the properties (bounds, size, square size) of the main tile sequence.
 
         Returns:
             The properties of the main tile sequence
         """
         width, height = PygameScreenController.instance().get_screen_size()
-        main_width, main_height = int(width - 2 * (width / (DefaultGameBoard.DIMENSION_CELL_COUNT + 2))), int(
-            height - 2 * (height / (DefaultGameBoard.DIMENSION_CELL_COUNT + 2))
+        screen_center_x, screen_center_y = width / 2, height / 2
+        inner_width, inner_height = int(DefaultGameBoard.MAIN_BOARD_RADIUS_MULTIPLIER * width), int(DefaultGameBoard.MAIN_BOARD_RADIUS_MULTIPLIER * height)
+
+        # calculating rect bounds of circle
+        circle_x0, circle_y0 = screen_center_x - inner_width / 2, screen_center_y - inner_height / 2
+        circle_x1, circle_y1 = circle_x0 + inner_width, circle_y0 + inner_height
+
+        return _MainTileSequenceProperties(
+            inner_width, inner_height, circle_x0, circle_x1, circle_y0, circle_y1, polygon_side_length_given_radius(inner_width / 2, self.__main_tile_sequence_length)
         )
-        square_size: float = main_width / DefaultGameBoard.DIMENSION_CELL_COUNT
-        main_x, main_y = get_coords_for_center_drawing_in_rect((0, 0), (width, height), (main_width, main_height))
-        main_x0, main_x1, main_y0, main_y1 = (
-            main_x,
-            main_x + DefaultGameBoard.DIMENSION_CELL_COUNT * square_size,
-            main_y,
-            main_y + DefaultGameBoard.DIMENSION_CELL_COUNT * square_size,
-        )
-        return _MainTileSequenceProperties(width, height, main_x0, main_x1, main_y0, main_y1, square_size)
 
 
 class _MainTileSequenceProperties:
-    """Private data class for organising main tile sequence data for the default game board.
+    """Private data class for organising the circular main tile sequence data for the default game board.
 
     Author: Shen
     """
 
-    def __init__(self, width: int, height: int, x0: float, x1: float, y0: float, y1: float, square_size: float):
+    def __init__(self, inner_width: int, inner_height: int, circle_x0: float, circle_x1: float, circle_y0: float, circle_y1: float, square_size: float):
         """
         Args:
-            width: The width of the main tile sequence
-            height: The height of the main tile sequence
-            x0: The left bound x coordinate for the main tile sequence
-            x1: The right bound x coordinate for the main tile sequence
-            y0: The top bound y coordinate for the main tile sequence
-            y1: The bottom bound y coordinate for the main tile sequence
+            width: The width of the bounding rectangle for the inner region main tile sequence
+            height: The height of the bounding rectangle for the inner main tile sequence
+            inner_x0: The left x coordinate where the circular outline lies on
+            inner_x1: The right x coordinate where the circular outline lies on
+            inner_y0: The top y coordinate where the circular outline lies on
+            inner_y1: The bottom y coordinate where the circular outline lies on
             square_size: The size of each dimension of the square tile
         """
-        self.main_width = width
-        self.main_height = height
-        self.main_x0 = x0
-        self.main_x1 = x1
-        self.main_y0 = y0
-        self.main_y1 = y1
+        self.inner_width = inner_width
+        self.inner_height = inner_height
+        self.circle_x0 = circle_x0
+        self.circle_x1 = circle_x1
+        self.circle_y0 = circle_y0
+        self.circle_y1 = circle_y1
         self.square_size = square_size

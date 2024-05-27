@@ -97,8 +97,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # chit card generation factors
         screen_width: int = PygameScreenController.instance().get_screen_size()[0]
         chit_card_rand_factor: int = 0
-        chit_card_rand_factor: int = int(screen_width * (35 / 1500))  # random factor for chit card generation in pixels.
-        chit_card_size: tuple[int, int] = (int(0.08 * screen_width), int(0.08 * screen_width))  # chit card dimensions (width, height) in px
+        chit_card_rand_factor: int = int(screen_width * (0 / 1500))  # random factor for chit card generation in pixels.
+        chit_card_size: tuple[int, int] = (int(0.02 * screen_width), int(0.02 * screen_width))  # chit card dimensions (width, height) in px
 
         #### Generating chit cards
         safe_area = self.__get_chit_card_safe_area()
@@ -235,13 +235,12 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         main_circle_draw_properties_i: int = 0
 
         # setting draw data in clockwise pattern (including starting tiles) for tiles, starting at right tile
-        i_offset = 0
         for i, tile in enumerate(self.__tile_sequence):
-            i = i - i_offset
+            did_draw_start_destination: bool = False
 
             # offsetting for drawing of duplicate starting tile destinations; allow drawing of destination tile if it has not been drawn
             if tile in self.__starting_tiles_destinations_set:
-                i_offset += 1  # starting tile should be drawn on top of the destination tile
+                did_draw_start_destination = True  # starting tile should be drawn on top of the destination tile
                 if tile in starting_tile_destinations_drawn:
                     continue
                 starting_tile_destinations_drawn.add(tile)
@@ -252,14 +251,16 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                     self.__linearly_extrapolate_circlular_draw_properties(
                         square_size,
                         self.__main_tile_sequence_length,
-                        main_circle_draw_properties[main_circle_draw_properties_i - 1],  # -1 for drawing on top of destination start tile
+                        main_circle_draw_properties[main_circle_draw_properties_i],
                     )
                 )
+                main_circle_draw_properties_i += 1
                 continue
 
             # setting draw data for main tile sequence
             tile.set_draw_data(main_circle_draw_properties[main_circle_draw_properties_i])
-            main_circle_draw_properties_i += 1
+            if not did_draw_start_destination:
+                main_circle_draw_properties_i += 1
 
         # getting draw instructions for the entire board after setting draw data
         starting_tile_destinations_drawn: set[Tile] = set()

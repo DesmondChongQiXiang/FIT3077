@@ -234,7 +234,7 @@ class PygameScreenController(metaclass=SingletonMeta):
                 coordinates: The coordinates to draw the rotated image at
                 rotated_image: The rotated image
             """
-            rot_modded: float = rotation % 360
+            rot_modded: float = round(rotation, 1) % 360
             cache_for_asset_path = self.__cache[asset_path]
 
             if rot_modded not in cache_for_asset_path:
@@ -259,7 +259,7 @@ class PygameScreenController(metaclass=SingletonMeta):
             Returns
                 Tuple in form (The cached image, coordinates to draw the cached image at) if it exists.
             """
-            rot_modded: float = rotation % 360
+            rot_modded: float = round(rotation, 1) % 360
 
             if asset_path in self.__cache:
                 cache_for_asset_path: dict[float, tuple[pygame.Surface, tuple[int, int]]] = self.__cache[asset_path]

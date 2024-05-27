@@ -238,7 +238,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         for tile in self.__tile_sequence:
             did_draw_start_destination: bool = False
 
-            # offsetting for drawing of duplicate starting tile destinations; allow drawing of destination tile if it has not been drawn
+            # offsetting for drawing of duplicate starting tile destinations; allow drawing of destination tile only if it has not been drawn
             if tile in self.__starting_tiles_destinations_set:
                 did_draw_start_destination = True  # starting tile should be drawn on top of the destination tile
                 if tile in starting_tile_destinations_drawn:

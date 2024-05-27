@@ -98,8 +98,8 @@ class PygameScreenController(metaclass=SingletonMeta):
         if rotate != 0:
             cached_rotated_image: Optional[tuple[pygame.Surface, tuple[int, int]]] = self.__rotate_cache.get_cached_image(rotate, image_path)
             if cached_rotated_image is not None:
-                image, (x, y) = cached_rotated_image
-                self.__screen.blit(image, (x, y))
+                image, (x_rotate_offset, y_rotate_offset) = cached_rotated_image
+                self.__screen.blit(image, (x - x_rotate_offset, y - y_rotate_offset))
                 return image
             else:
                 # Cache miss, rotate the image and add to cache.
@@ -113,10 +113,9 @@ class PygameScreenController(metaclass=SingletonMeta):
                 # Draw rotated image, offsetting for padding of image size from rotation
                 image_rect = image.get_rect()
                 x_rotate_offset, y_rotate_offset = int((image_rect.width - before_rotate_width) / 2), int((image_rect.height - before_rotate_height) / 2)
-                x_offsetted, y_offsetted = x - x_rotate_offset, y - y_rotate_offset
 
-                self.__rotate_cache.add_cached_image(rotate, image_path, (x_offsetted, y_offsetted), image)
-                self.__screen.blit(image, (x_offsetted, y_offsetted))
+                self.__rotate_cache.add_cached_image(rotate, image_path, (x_rotate_offset, y_rotate_offset), image)
+                self.__screen.blit(image, (x - x_rotate_offset, y - y_rotate_offset))
         else:
             self.__screen.blit(image, (x, y))
 
@@ -222,16 +221,16 @@ class PygameScreenController(metaclass=SingletonMeta):
             self.__size: int = 0
             self.__cache: dict[str, dict[float, tuple[pygame.Surface, tuple[int, int]]]] = defaultdict(
                 dict
-            )  # K = Relative image path, V = dict [rotation, (cached image, coordinates for drawing)]
+            )  # K = Relative image path, V = dict [rotation, (cached image, offsets for drawing rotated image)]
 
-        def add_cached_image(self, rotation: float, asset_path: str, coordinates: tuple[int, int], rotated_image: pygame.Surface) -> None:
+        def add_cached_image(self, rotation: float, asset_path: str, offset: tuple[int, int], rotated_image: pygame.Surface) -> None:
             """Add the cached image for the cache only if the image at the specified rotation has not been cached.
             Otherwise does nothing.
 
             Args:
                 rotation: The rotation value for the image
                 asset_path: The relative asset path for the image
-                coordinates: The coordinates to draw the rotated image at
+                offset: The offset for coordinates (x, y) used to correct the rotation of the image
                 rotated_image: The rotated image
             """
             rot_modded: float = round(rotation, 1) % 360
@@ -246,7 +245,7 @@ class PygameScreenController(metaclass=SingletonMeta):
                     self.__cache = defaultdict(dict)
                     self.__size = 0
 
-                self.__cache[asset_path][rot_modded] = (rotated_image, coordinates)
+                self.__cache[asset_path][rot_modded] = (rotated_image, offset)
                 self.__size += 1
 
         def get_cached_image(self, rotation: float, asset_path: str) -> Optional[tuple[pygame.Surface, tuple[int, int]]]:
@@ -257,15 +256,15 @@ class PygameScreenController(metaclass=SingletonMeta):
                 asset_path: The relative asset path for the image
 
             Returns
-                Tuple in form (The cached image, coordinates to draw the cached image at) if it exists.
+                Tuple in form (The cached image, The offset for coordinates (x, y) used to correct the rotation of the image) if it exists.
             """
             rot_modded: float = round(rotation, 1) % 360
 
             if asset_path in self.__cache:
                 cache_for_asset_path: dict[float, tuple[pygame.Surface, tuple[int, int]]] = self.__cache[asset_path]
                 if rot_modded in cache_for_asset_path:
-                    image, coords = cache_for_asset_path[rot_modded]
-                    return (image, coords)
+                    image, offset = cache_for_asset_path[rot_modded]
+                    return (image, offset)
             return None
 
 

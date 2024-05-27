@@ -235,7 +235,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         main_circle_draw_properties_i: int = 0
 
         # setting draw data in clockwise pattern (including starting tiles) for tiles, starting at right tile
-        for i, tile in enumerate(self.__tile_sequence):
+        for tile in self.__tile_sequence:
             did_draw_start_destination: bool = False
 
             # offsetting for drawing of duplicate starting tile destinations; allow drawing of destination tile if it has not been drawn

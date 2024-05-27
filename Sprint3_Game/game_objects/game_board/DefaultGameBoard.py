@@ -98,7 +98,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         screen_width: int = PygameScreenController.instance().get_screen_size()[0]
         chit_card_rand_factor: int = 0
         # chit_card_rand_factor: int = int(screen_width * (70 / 1500))  # random factor for chit card generation in pixels.
-        chit_card_size: tuple[int, int] = (int(0.09 * screen_width), int(0.09 * screen_width))  # chit card dimensions (width, height) in px
+        chit_card_size: tuple[int, int] = (int(0.07 * screen_width), int(0.07 * screen_width))  # chit card dimensions (width, height) in px
 
         #### Generating chit cards
         safe_area = self.__get_chit_card_safe_area()
@@ -225,13 +225,12 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Author: Shen
         """
         main_properties = self.__get_main_tile_sequence_properties()
-        inner_x0, inner_x1, inner_y0, inner_y1 = main_properties.circle_x0, main_properties.circle_x1, main_properties.circle_y0, main_properties.circle_y1
         square_size = main_properties.square_size
 
         draw_instructions: list[DrawAssetInstruction] = []
         starting_tile_destinations_drawn: set[Tile] = set()
         main_circle_draw_properties: list[DrawProperties] = self.__circular_draw_properties_for_squares(
-            self.__main_tile_sequence_length, square_size, (int((inner_x0 + inner_x1) / 2), int((inner_y0 + inner_y1) / 2))
+            self.__main_tile_sequence_length, square_size, (int(main_properties.circle_center_x), int(main_properties.circle_center_y))
         )
         main_circle_draw_properties_i: int = 0
 
@@ -376,7 +375,15 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         circle_x1, circle_y1 = circle_x0 + inner_width, circle_y0 + inner_height
 
         return _MainTileSequenceProperties(
-            inner_width, inner_height, circle_x0, circle_x1, circle_y0, circle_y1, polygon_side_length_given_radius(inner_width / 2, self.__main_tile_sequence_length)
+            inner_width,
+            inner_height,
+            circle_x0,
+            circle_x1,
+            circle_y0,
+            circle_y1,
+            screen_center_x,
+            screen_center_y,
+            polygon_side_length_given_radius(inner_width / 2, self.__main_tile_sequence_length),
         )
 
 
@@ -386,15 +393,28 @@ class _MainTileSequenceProperties:
     Author: Shen
     """
 
-    def __init__(self, inner_width: int, inner_height: int, circle_x0: float, circle_x1: float, circle_y0: float, circle_y1: float, square_size: float):
+    def __init__(
+        self,
+        inner_width: int,
+        inner_height: int,
+        circle_x0: float,
+        circle_x1: float,
+        circle_y0: float,
+        circle_y1: float,
+        circle_center_x: float,
+        circle_center_y: float,
+        square_size: float,
+    ):
         """
         Args:
-            width: The width of the bounding rectangle for the inner region main tile sequence
-            height: The height of the bounding rectangle for the inner main tile sequence
+            inner_width: The width of the bounding rectangle for the inner region main tile sequence
+            inner_height: The height of the bounding rectangle for the inner main tile sequence
             inner_x0: The left x coordinate where the circular outline lies on
             inner_x1: The right x coordinate where the circular outline lies on
             inner_y0: The top y coordinate where the circular outline lies on
             inner_y1: The bottom y coordinate where the circular outline lies on
+            circle_center_x: The x coordinate for the center of the circle
+            circle_center_y: The y coordinate for the center of the circle
             square_size: The size of each dimension of the square tile
         """
         self.inner_width = inner_width
@@ -403,4 +423,6 @@ class _MainTileSequenceProperties:
         self.circle_x1 = circle_x1
         self.circle_y0 = circle_y0
         self.circle_y1 = circle_y1
+        self.circle_center_x: float = circle_center_x
+        self.circle_center_y: float = circle_center_y
         self.square_size = square_size

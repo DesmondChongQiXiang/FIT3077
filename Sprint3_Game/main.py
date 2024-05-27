@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     game_board: GameBoard = DefaultGameBoard(
         tiles,
-        [(starting_tiles[0], tiles[0]), (starting_tiles[1], tiles[1]), (starting_tiles[2], tiles[2]), (starting_tiles[3], tiles[3])],
+        [(starting_tiles[0], tiles[3]), (starting_tiles[1], tiles[9]), (starting_tiles[2], tiles[15]), (starting_tiles[3], tiles[21])],
         chit_cards,
         playable_characters,
     )

@@ -97,13 +97,14 @@ class PygameScreenController(metaclass=SingletonMeta):
         # Rotate image if rotation is value other than 0 degrees before drawing, whilst using cache as much as possible. Otherwise draw without rotation.
         if rotate != 0:
             cached_rotated_image: Optional[tuple[pygame.Surface, tuple[int, int]]] = self.__rotate_cache.get_cached_image(rotate, image_path)
+
+            # Cache hit. Use cached rotated image and offset to draw
             if cached_rotated_image is not None:
                 image, (x_rotate_offset, y_rotate_offset) = cached_rotated_image
                 self.__screen.blit(image, (x - x_rotate_offset, y - y_rotate_offset))
                 return image
+            # Cache miss, rotate the image, draw and add to cache
             else:
-                # Cache miss, rotate the image and add to cache.
-
                 before_rotate_rect = image.get_rect()
                 before_rotate_width, before_rotate_height = before_rotate_rect.width, before_rotate_rect.height
 

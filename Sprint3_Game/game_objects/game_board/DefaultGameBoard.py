@@ -1,6 +1,6 @@
 from __future__ import annotations
 from threading import Timer
-from typing import Optional
+from typing import Optional, overload
 from collections.abc import Sequence
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
@@ -115,7 +115,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), chit_card_size))
                 chit_card_i += 1
 
-    # ------ GameBoard abstract class --------------------------------------------------------------------------------------------
+    # ------ GameBoard abstract class & Moving --------------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
         """Move a character by a number of steps along the game board. Characters can only re-enter their starting tiles
         once they have visited all main tiles. If the character will overshoot their starting tile after visiting all tiles
@@ -175,9 +175,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             character.set_should_continue_turn(False)
             return
 
-        self.__tile_sequence[final_tile_i].place_character_on_tile(character)
-        self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
-        self.__character_location[character] = final_tile_i
+        self.__move_character_to_tile(character, final_tile_i)
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
         """Get the tile a character is on.
@@ -209,6 +207,44 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         unflip_timer = Timer(DefaultGameBoard.TURN_END_RESET_DELAY, unflip_chit_cards)
         unflip_timer.start()
         GameWorld.instance().disable_mouse_clicks()
+
+    @overload
+    def __move_character_to_tile(self, character: PlayableCharacter, tile: Tile) -> None:
+        """Move a character to the specified tile.
+
+        Warning:
+            More inefficient than overload of (PlayableCharacter, int). O(n) instead of O(1).
+
+        Args:
+            character: The character to move
+            tile: The tile to move the character to
+        """
+        ...
+
+    @overload
+    def __move_character_to_tile(self, character: PlayableCharacter, tile: int) -> None:
+        """Move a character to the specified tile along the tile sequence.
+
+        Args:
+            character: The character to move
+            tile: The index of the tile along the tile sequence
+        """
+        ...
+
+    def __move_character_to_tile(self, character: PlayableCharacter, tile: Tile | int) -> None:
+        """Overload implementation of __move_character_to_tile."""
+        match tile:
+            case int():
+                self.__tile_sequence[tile].place_character_on_tile(character)
+                self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
+                self.__character_location[character] = tile
+
+            case Tile():
+                tile.place_character_on_tile(character)
+                self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)
+                for i in range(len(self.__tile_sequence)):
+                    if self.__tile_sequence[i] == tile:
+                        self.__character_location[character] = i
 
     # ------ DrawableByAsset interface & Drawing --------------------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:

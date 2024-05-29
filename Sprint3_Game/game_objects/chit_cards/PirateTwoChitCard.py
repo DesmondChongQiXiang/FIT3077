@@ -5,13 +5,12 @@ from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 
-
-class PirateChitCard(ChitCard):
-    """Represents a chit card that when flipped lets characters move backwards based on number of dragon pirates on chit card.
-
-    Author: Rohan
+class PirateTwoChitCard(ChitCard):
     """
+    Represents a chit card that when flipped switches the position of the player who flips it with the player closest to them
 
+    Author : Rohan
+    """
     def __init__(self, symbol_count: int, draw_properties: Optional[DrawProperties] = None) -> None:
         """
         Args:
@@ -22,7 +21,7 @@ class PirateChitCard(ChitCard):
 
     def _on_draw_request(self, draw_properties: DrawProperties) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
         """On draw request, returns instructions to draw a chit card that displays its back when its not flipped. When flipped,
-        it draws dragon pirate symbol with an indication of the number of symbols.
+        it draws dragon pirate two symbol with an indication of the number of symbols.
 
         Args:
             draw_properties: The draw properties requesting how to draw this object
@@ -38,7 +37,7 @@ class PirateChitCard(ChitCard):
             return [
                 (
                     DrawAssetInstruction(
-                        f"{asset_path}/chit_card_dragon_pirate_{self.get_symbol_count()}.png",
+                        f"{asset_path}/chit_card_dragon_pirate_two{self.get_symbol_count()}.png",
                         x=coord_x,
                         y=coord_y,
                         size=draw_properties.get_size(),
@@ -52,20 +51,3 @@ class PirateChitCard(ChitCard):
                 self,
             )
         ]
-
-    def on_click(self, character: PlayableCharacter) -> None:
-        """On click, reveal the chit card if its not flipped. Once revealed, the chit card cannot be flipped back by
-        clicking. Move the player in the negative direction based on the symbol count
-
-        Args:
-            character: The character who clicked the sprite
-
-        Raises:
-            Exception if the game board delegate was not set before calling
-        """
-        if self._board_delegate is not None:
-            if not self.get_flipped():
-                self._board_delegate.move_character_by_steps(character, self.get_symbol_count() * (-1))
-                self.set_flipped(not self.get_flipped())
-        else:
-            raise Exception("Board delegate was not set when on_click() called.")

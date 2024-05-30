@@ -1,5 +1,7 @@
 from __future__ import annotations
 from typing import cast
+from game_events.PowerChitCardPublisher import PowerChitCardPublisher
+from game_objects.chit_cards.PowerChitCard import PowerChitCard
 from settings import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.game_board.GameBoard import GameBoard
@@ -44,6 +46,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
 
         self.__current_player.set_is_currently_playing(True)
         WinEventPublisher.instance().subscribe(self)
+        PowerChitCardPublisher.instance().subscribe(self)
 
     # ----------- Class methods ----------------------------------------------------------------------------------------------------------------
     def run(self) -> None:
@@ -151,6 +154,17 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         end_game_timer: Timer = Timer(GameWorld.__GAME_END_CLOSE_DELAY, self.stop_game)
         end_game_timer.start()
 
+    # --------- PowerChitCardListener interface -------------------------------------------------------------------------------------------------
+    def on_action_performed(self, symbol_count:int):
+        """On picked power chit card, perform skipping of player's turn based on skip count ('symbol count')
+
+        Args:
+            symbol_count: the skip count of chit card
+        """
+        for skip_player_num in range(1, symbol_count + 1):
+            self.__playable_characters[(self.__current_player_i + skip_player_num) % 4].set_should_continue_turn(False)
+        
+        
     # -------- Static methods ---------------------------------------------------------------------------------------------------------------
     @staticmethod
     def instance() -> GameWorld:

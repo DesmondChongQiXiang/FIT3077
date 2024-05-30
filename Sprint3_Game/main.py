@@ -39,6 +39,8 @@ if __name__ == "__main__":
     tiles: list[Tile] = randomised_volcano_card_sequence(8)
 
     chit_cards: list[ChitCard] = []
+    add_power_chit_cards_in_sequence(1, 2, chit_cards) # One chit card that has 2 skip counts
+    add_power_chit_cards_in_sequence(1, 1, chit_cards) # One chit card that has 1 skip count
     add_animal_chit_cards_in_animal_sequence(12, chit_cards)
     add_dragon_pirate_chit_cards_in_sequence(4, chit_cards)
     random.shuffle(chit_cards)
@@ -56,7 +58,7 @@ if __name__ == "__main__":
         CaveTile(Animal.SPIDER, CaveTileVariant.ORANGE, character=playable_characters[2]),
         CaveTile(Animal.BAT, CaveTileVariant.PURPLE, character=playable_characters[3]),
     ]
-
+    
     game_board: GameBoard = DefaultGameBoard(
         tiles,
         [(starting_tiles[0], tiles[3]), (starting_tiles[1], tiles[9]), (starting_tiles[2], tiles[15]), (starting_tiles[3], tiles[21])],

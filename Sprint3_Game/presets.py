@@ -3,6 +3,7 @@
 Author: Shen, Rohan
 """
 
+from game_objects.chit_cards.PowerChitCard import PowerChitCard
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.animals.Animal import Animal
 from game_objects.chit_cards.AnimalChitCard import AnimalChitCard
@@ -58,7 +59,25 @@ def add_animal_chit_cards_in_animal_sequence(number: int, chit_cards: list[ChitC
 
                 if generated >= number:
                     return
+                
+def add_power_chit_cards_in_sequence(number: int, skip_count: int, chit_cards: list[ChitCard]) -> None:
+    """Generate power chit cards with 1 or 2 skip count depending on 'skip_count' and appends them to the end of 
+    the list.
 
+    Args:
+        number: number of chit cards to generate
+        skip_count: the skip count of the chit card (i.e. how many player's turn will be skipped once this chit card is flipped)
+        chit_cards: the list of chit cards to append to
+    """
+    generated: int = 0
+
+    while generated < number:
+        for _ in range(number):
+            chit_cards.append(PowerChitCard(skip_count))
+            generated += 1
+
+            if generated >= number:
+                return
 
 def add_dragon_pirate_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> None:
     """Generate dragon pirate chit cards with symbol count 1 and 2 in sequence and appends them to the end of

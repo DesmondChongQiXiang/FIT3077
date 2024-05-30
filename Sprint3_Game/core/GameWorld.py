@@ -14,7 +14,8 @@ import pygame
 
 
 class GameWorld(WinEventListener, metaclass=SingletonMeta):
-    """A singleton. This class creates and manages a game instance. It provides the interface between it and the players.
+    """A singleton. This class creates and manages the running of the game instance. It also logically represents and manages 
+    the high level policy of player concepts (player turns, clicking).
 
     Author: Shen, Rohan
     """

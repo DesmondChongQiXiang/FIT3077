@@ -46,3 +46,19 @@ class GameBoard(ABC, DrawableByAsset):
             A read-only list containing all the clickable sprites.
         """
         ...
+
+    
+    @abstractmethod
+    def get_closest_player(self, character:PlayableCharacter) -> Tile:
+        """
+        Get's the player closest to the player passed into the function
+
+        Returns:
+            The tile the player occupied by the player closest to the player that is not in a cave
+        """
+
+    @abstractmethod
+    def swap_with_closest_player(self) -> None:
+        """
+        Swaps a player with the player closest to them
+        """

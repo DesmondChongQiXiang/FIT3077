@@ -177,6 +177,11 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         self.__move_character_to_tile(character, final_tile_i)
 
+    def get_closest_player(self, character: PlayableCharacter) -> Tile:
+        current_player : int = self.__character_location[character]
+        current_tile = self.__tile_sequence[current_player]
+        return current_tile
+
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
         """Get the tile a character is on.
 

@@ -1,15 +1,17 @@
 from __future__ import annotations
-# from game_objects.chit_cards.PowerChitCard import PowerChitCard
+
 from metaclasses.SingletonMeta import SingletonMeta
 from game_events.PowerChitCardListener import PowerChitCardListener
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from typing import Optional, cast
+
 
 class PowerChitCardPublisher(metaclass=SingletonMeta):
     """A publisher that allows subscribers to be notified of a character has flipped a Power Chit Card.
 
     Author: Desmond & Ian
     """
+
     def __init__(self) -> None:
         """Constructor."""
         self.__subscribers: list[PowerChitCardListener] = []
@@ -31,7 +33,7 @@ class PowerChitCardPublisher(metaclass=SingletonMeta):
         if listener in self.__subscribers:
             self.__subscribers.remove(listener)
 
-    def notify_subscribers(self, symbol_count:int) -> None:
+    def notify_subscribers(self, symbol_count: int) -> None:
         """Notify all subscribed objects a player flipped a power chit card and the number of symbol on power chit card.
 
         Args:

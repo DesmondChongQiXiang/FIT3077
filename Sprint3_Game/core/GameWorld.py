@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import cast
 from game_events.PowerChitCardPublisher import PowerChitCardPublisher
-from game_objects.chit_cards.PowerChitCard import PowerChitCard
 from settings import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.game_board.GameBoard import GameBoard
@@ -109,14 +108,9 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
             self.__current_player.set_is_currently_playing(False)
             self.__current_player.set_should_continue_turn(True)  # reset for the playable character's next turn
 
-            if self.__current_player_i + 1 > len(self.__playable_characters) - 1:
-                # if the current player was the last player, loop around to the starting player
-                self.__current_player = self.__playable_characters[0]
-                self.__current_player_i = 0
-            else:
-                # otherwise turn should go to next player
-                self.__current_player = self.__playable_characters[self.__current_player_i + 1]
-                self.__current_player_i += 1
+            # roll to next player's turn
+            self.__current_player_i = (self.__current_player_i + 1) % len(self.__playable_characters)
+            self.__current_player = self.__playable_characters[self.__current_player_i]
 
             self.__current_player.set_is_currently_playing(True)
             return True
@@ -162,7 +156,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
             symbol_count: the skip count of chit card
         """
         for skip_player_num in range(1, symbol_count + 1):
-            self.__playable_characters[(self.__current_player_i + skip_player_num) % 4].set_should_continue_turn(False)
+            self.__playable_characters[(self.__current_player_i + skip_player_num) % len(self.__playable_characters)].set_should_continue_turn(False)
         
         
     # -------- Static methods ---------------------------------------------------------------------------------------------------------------

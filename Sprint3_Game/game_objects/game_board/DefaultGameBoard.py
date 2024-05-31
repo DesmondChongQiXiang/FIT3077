@@ -198,7 +198,15 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         return smallest_i
     
     def swap_with_closest_player(self, character: PlayableCharacter) -> None:
-        closest_player = self.get_closest_player(character)
+        current_player_i = self.__character_location[character]
+        current_tile = self.__tile_sequence[current_player_i]
+        closest_player_i = self.get_closest_player(character)
+        if closest_player_i:
+            tile_to_swap = self.__tile_sequence[closest_player_i]
+            player_to_swap = tile_to_swap.get_character_on_tile()
+            tile_to_swap.set_character_on_tile(character)
+            current_tile.set_character_on_tile(player_to_swap)
+
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
         """Get the tile a character is on.

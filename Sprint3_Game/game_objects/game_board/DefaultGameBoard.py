@@ -181,9 +181,11 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         current_player_i : int = self.__character_location[character]
         if self.__tile_sequence[current_player_i] in self.__starting_tiles_set:
             return
-        smallest_i : Optional[int] = None
+        closest_i : Optional[int] = None
         shortest_distance : Optional[int] = None
         for player in self.__character_location:
+            if player == character:
+                continue
             player_i = self.__character_location[player]
             if self.__tile_sequence[player_i] in self.__starting_tiles_set:
                 continue
@@ -191,30 +193,28 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 forward_distance = abs(current_player_i - self.__character_location[player])
                 backward_distance = len(self.__tile_sequence) - forward_distance
                 if shortest_distance:
-                    if smallest_i:
-                        if min(forward_distance,backward_distance) < smallest_i:
-                            smallest_i = self.__character_location[player]
+                    if closest_i:
+                        if min(forward_distance,backward_distance) < shortest_distance:
+                            closest_i = self.__character_location[player]
                 else:
-                    smallest_i = self.__character_location[player]
+                    closest_i = self.__character_location[player]
                     shortest_distance = min(forward_distance,backward_distance)
 
-        return smallest_i
+        return closest_i
     
     def swap_with_closest_player(self, character: PlayableCharacter) -> None:
-        print(character.name)
+        print(f"the current player is player {character.name()}")
         current_player_i = self.__character_location[character]
         current_tile = self.__tile_sequence[current_player_i]
         closest_player_i = self.get_closest_player(character)
         if closest_player_i:
             tile_to_swap = self.__tile_sequence[closest_player_i]
-            player_to_swap = tile_to_swap.get_character_on_tile()
-            tile_to_swap.set_character_on_tile(None)
-            tile_to_swap.set_character_on_tile(character)
-            self.__character_location[character] = closest_player_i
-            current_tile.set_character_on_tile(None)
-            current_tile.set_character_on_tile(player_to_swap)
+            player_to_swap = tile_to_swap.get_character_on_tile()# Get's the player we are switching with
+
             if player_to_swap:
-                self.__character_location[player_to_swap] = current_player_i
+                print(f"the player we are swapping is Player {player_to_swap.name()}")
+                self.__move_character_to_tile(character,tile_to_swap)
+                self.__move_character_to_tile(player_to_swap,current_tile)
 
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:

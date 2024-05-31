@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from typing import Optional
 from collections.abc import Sequence
 from game_objects.tiles.Tile import Tile
 from game_objects.characters.PlayableCharacter import PlayableCharacter
@@ -49,7 +50,7 @@ class GameBoard(ABC, DrawableByAsset):
 
     
     @abstractmethod
-    def get_closest_player(self, character:PlayableCharacter) -> Tile:
+    def get_closest_player(self, character:PlayableCharacter) -> Optional[int]:
         """
         Get's the player closest to the player passed into the function
 

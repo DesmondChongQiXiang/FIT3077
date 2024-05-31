@@ -177,13 +177,25 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         self.__move_character_to_tile(character, final_tile_i)
 
-    def get_closest_player(self, character: PlayableCharacter) -> Tile:
-        current_player : int = self.__character_location[character]
-        current_tile = self.__tile_sequence[current_player]
+    def get_closest_player(self, character: PlayableCharacter) -> Optional[int]:
+        current_player_i : int = self.__character_location[character]
+        smallest_i : Optional[int] = None
+        shortest_distance : Optional[int] = None
         for player in self.__character_location:
-            print(player)
+            if self.__character_location[player] in self.__starting_tiles_set:
+                continue
+            else:
+                forward_distance = abs(current_player_i - self.__character_location[player])
+                backward_distance = len(self.__tile_sequence) - forward_distance
+                if shortest_distance:
+                    if smallest_i:
+                        if min(forward_distance,backward_distance) < smallest_i:
+                            smallest_i = current_player_i
+                else:
+                    smallest_i = current_player_i
+                    shortest_distance = min(forward_distance,backward_distance)
 
-        return current_tile
+        return smallest_i
     
     def swap_with_closest_player(self, character: PlayableCharacter) -> None:
         closest_player = self.get_closest_player(character)

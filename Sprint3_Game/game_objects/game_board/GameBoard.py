@@ -58,7 +58,7 @@ class GameBoard(ABC, DrawableByAsset):
         """
 
     @abstractmethod
-    def swap_with_closest_player(self) -> None:
+    def swap_with_closest_player(self,character:PlayableCharacter) -> None:
         """
         Swaps a player with the player closest to them
         """

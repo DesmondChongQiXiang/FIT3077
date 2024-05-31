@@ -180,7 +180,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     def get_closest_player(self, character: PlayableCharacter) -> Tile:
         current_player : int = self.__character_location[character]
         current_tile = self.__tile_sequence[current_player]
+        for player in self.__character_location:
+            print(player)
+
         return current_tile
+    
+    def swap_with_closest_player(self, character: PlayableCharacter) -> None:
+        closest_player = self.get_closest_player(character)
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
         """Get the tile a character is on.

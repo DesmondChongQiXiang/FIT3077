@@ -7,6 +7,7 @@ from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.animals.Animal import Animal
 from game_objects.chit_cards.AnimalChitCard import AnimalChitCard
 from game_objects.chit_cards.PirateChitCard import PirateChitCard
+from game_objects.chit_cards.PirateTwoChitCard import PirateTwoChitCard
 from game_objects.tiles.Tile import Tile
 from game_objects.tiles.NormalTile import NormalTile
 
@@ -73,6 +74,24 @@ def add_dragon_pirate_chit_cards_in_sequence(number: int, chit_cards: list[ChitC
     while generated < number:
         for i in range(1, 3):
             chit_cards.append(PirateChitCard(i))
+            generated += 1
+
+            if generated >= number:
+                return
+
+def add_dragon_pirate_two_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> None:
+    """Generate dragon pirate chit cards with symbol count 1 and 2 in sequence and appends them to the end of
+    the list.
+
+    Args:
+        number: number of chit cards to generate
+        chit_cards: the list of chit cards to append to
+    """
+    generated: int = 0
+
+    while generated < number:
+        for i in range(1, 3):
+            chit_cards.append(PirateTwoChitCard(i))
             generated += 1
 
             if generated >= number:

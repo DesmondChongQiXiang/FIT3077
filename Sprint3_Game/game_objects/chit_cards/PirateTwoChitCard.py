@@ -37,7 +37,7 @@ class PirateTwoChitCard(ChitCard):
             return [
                 (
                     DrawAssetInstruction(
-                        f"{asset_path}/chit_card_dragon_pirate_two{self.get_symbol_count()}.png",
+                        f"{asset_path}/chit_card_dragon_pirate_two.png",
                         x=coord_x,
                         y=coord_y,
                         size=draw_properties.get_size(),

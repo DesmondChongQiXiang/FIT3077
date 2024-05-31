@@ -54,12 +54,19 @@ class GameBoard(ABC, DrawableByAsset):
         """
         Get's the player closest to the player passed into the function
 
+        Args:
+            character : the player to find the closest players to
+
         Returns:
-            The tile the player occupied by the player closest to the player that is not in a cave
+            The index of the tile occupied by the player closest to the player that is not in a cave
         """
 
     @abstractmethod
     def swap_with_closest_player(self,character:PlayableCharacter) -> None:
         """
         Swaps a player with the player closest to them
+
+        Args:
+            character : the player we want to swap with the closest player to them
+
         """

@@ -54,8 +54,7 @@ class PirateTwoChitCard(ChitCard):
     
     def on_click(self, character: PlayableCharacter) -> None:
         """On click, reveal the chit card if its not flipped. Once revealed, the chit card cannot be flipped back by
-        clicking. Move the player in the negative direction based on the symbol count
-
+        clicking. Swap the player with the player closest to them
         Args:
             character: The character who clicked the sprite
 

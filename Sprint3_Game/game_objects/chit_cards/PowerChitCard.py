@@ -1,25 +1,28 @@
-from game_concepts.events.PowerChitCardPublisher import PowerChitCardPublisher
-from .ChitCard import ChitCard
 from typing import Optional
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from game_objects.characters.PlayableCharacter import PlayableCharacter
+from game_objects.chit_cards.ChitCard import ChitCard
+from game_concepts.powers.Power import Power
 
 
 class PowerChitCard(ChitCard):
-    """Represents a chit card that can skip the turn of the opponent of the player that flipped this
+    """Represents a chit card that can execute a power when clicked on.
 
-    Author: Desmond & Ian
+    Author: Desmond, Ian, Shen
     """
 
-    def __init__(self, symbol_count: int, draw_properties: Optional[DrawProperties] = None) -> None:
+    def __init__(self, power: Power, image_path: str, draw_properties: Optional[DrawProperties] = None) -> None:
         """
         Args:
-            symbol_count: The SKIP count for the chit card
+            power: The power for the chit card to execute when clicked
+            image_path: The image path relative to the root of this project to use for this chit card
             draw_properties (optional): Properties specifying how and where the chit card should be drawn
         """
-        super().__init__(symbol_count, draw_properties)
+        super().__init__(draw_properties=draw_properties)
+        self.__image_path: str = image_path
+        self.__power: Power = power
 
     def _on_draw_request(self, draw_properties: DrawProperties) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
         """On draw request, returns instructions to draw a chit card that displays its back when its not flipped. When flipped,
@@ -39,7 +42,7 @@ class PowerChitCard(ChitCard):
             return [
                 (
                     DrawAssetInstruction(
-                        f"{asset_path}/chit_card_power_{self._symbol_count}.png",
+                        self.__image_path,
                         x=coord_x,
                         y=coord_y,
                         size=draw_properties.get_size(),
@@ -67,13 +70,12 @@ class PowerChitCard(ChitCard):
         # guard statements
         if self._board_delegate is None:
             raise Exception("Board delegate was not set when on_click() called.")
-        if self._symbol_count is None:
-            raise Exception("There was no symbol count set.")
-        
+
         # flip logic
         if self._board_delegate is not None:
             if not self.get_flipped():
-                PowerChitCardPublisher.instance().notify_subscribers(self._symbol_count)
+                self.__power.set_user(character)
+                self.__power.execute()
                 self.set_flipped(not self.get_flipped())
         else:
             raise Exception("Board delegate was not set when on_click() called.")

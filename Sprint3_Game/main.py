@@ -3,6 +3,7 @@ from settings import *
 from core.GameWorld import GameWorld
 from game_concepts.turns.DefaultTurnManager import DefaultTurnManger
 from game_concepts.turns.TurnManager import TurnManager
+from game_concepts.powers.SkipTurnPower import SkipTurnPower
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.characters.Dragon import Dragon
 from game_objects.chit_cards.ChitCard import ChitCard
@@ -43,20 +44,15 @@ if __name__ == "__main__":
     # ----- GAME CONFIG --------------------------------------------------------------------------------------------------
     tiles: list[Tile] = randomised_volcano_card_sequence(8)
 
-    chit_cards: list[ChitCard] = []
-    for i, animal in enumerate(Animal):
-        for j in range(1, 3):
-            chit_cards.append(AnimalChitCard(animal, j))
-        chit_cards.append(PirateChitCard(1 if i % 2 == 0 else 2))
-        chit_cards.append(PowerChitCard(1))
-        chit_cards.append(SwapChitCard())
-
     playable_characters: list[PlayableCharacter] = [
         Dragon(PlayableCharacterVariant.BLUE, "Blue"),
         Dragon(PlayableCharacterVariant.GREEN, "Green"),
         Dragon(PlayableCharacterVariant.ORANGE, "Orange"),
         Dragon(PlayableCharacterVariant.PURPLE, "Purple"),
     ]
+
+    turn_manager: TurnManager = DefaultTurnManger(playable_characters, 0)
+
     starting_tiles: list[Tile] = [
         CaveTile(Animal.BABY_DRAGON, CaveTileVariant.BLUE, character=playable_characters[0]),
         CaveTile(Animal.SALAMANDER, CaveTileVariant.GREEN, character=playable_characters[1]),
@@ -64,14 +60,20 @@ if __name__ == "__main__":
         CaveTile(Animal.BAT, CaveTileVariant.PURPLE, character=playable_characters[3]),
     ]
 
+    chit_cards: list[ChitCard] = []
+    for i, animal in enumerate(Animal):
+        for j in range(1, 3):
+            chit_cards.append(AnimalChitCard(animal, j))
+        chit_cards.append(PirateChitCard(1 if i % 2 == 0 else 2))
+        chit_cards.append(PowerChitCard(SkipTurnPower(turn_manager, 1), "assets/chit_cards/chit_card_skip_1.png"))
+        chit_cards.append(SwapChitCard())
+
     game_board: GameBoard = DefaultGameBoard(
         tiles,
         [(starting_tiles[0], tiles[3]), (starting_tiles[1], tiles[9]), (starting_tiles[2], tiles[15]), (starting_tiles[3], tiles[21])],
         chit_cards,
         playable_characters,
     )
-
-    turn_manager: TurnManager = DefaultTurnManger(playable_characters, 0)
 
     # ----- GAME INSTANCE --------------------------------------------------------------------------------------------------
     world = GameWorld(playable_characters, game_board, turn_manager)

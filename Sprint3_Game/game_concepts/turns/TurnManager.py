@@ -22,6 +22,11 @@ class TurnManager(ABC):
         self._current_player: PlayableCharacter = player_characters[starting_player_i]
         self._current_player_i: int = starting_player_i
         self._player_characters: list[PlayableCharacter] = player_characters
+        self._player_char_to_i: dict[PlayableCharacter, int] = dict()
+
+        # initialise player character to index dictionary
+        for i, character in enumerate(self._player_characters):
+            self._player_char_to_i[character] = i
 
         self._current_player.set_is_currently_playing(True)
 
@@ -51,11 +56,12 @@ class TurnManager(ABC):
         ...
 
     @abstractmethod
-    def get_player_character_n_turns_downstream(self, n: int) -> PlayableCharacter:
-        """Get the playable character that is n turns downstream from the currently playing character.
+    def get_player_character_n_turns_downstream(self, n: int, character: PlayableCharacter) -> PlayableCharacter:
+        """Get the playable character that is n turns downstream from another playable character.
 
         Args:
             n: How many turns downstream
+            character: The playable character to track downstream from
 
         Returns:
             The playable character n turns downstream

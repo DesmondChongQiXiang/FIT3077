@@ -34,16 +34,17 @@ class DefaultTurnManger(TurnManager):
                 return
             current_char.set_should_continue_turn(False)
 
-    def get_player_character_n_turns_downstream(self, n: int) -> PlayableCharacter:
+    def get_player_character_n_turns_downstream(self, n: int, character: PlayableCharacter) -> PlayableCharacter:
         """Get the playable character that is n turns downstream from the currently playing character.
 
         Args:
             n: How many turns downstream
+            character: The playable character to track downstream from
 
         Returns:
             The playable character n turns downstream
         """
-        return self._player_characters[(self._current_player_i + n) % len(self._player_characters)]
+        return self._player_characters[(self._player_char_to_i[character] + n) % len(self._player_characters)]
 
     def tick(self) -> bool:
         """On game tick, ends the player's turn if it should end and transitions to the next player's turn.

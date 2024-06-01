@@ -7,7 +7,6 @@ from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
 from game_concepts.events.WinEventListener import WinEventListener
 from game_concepts.events.WinEventPublisher import WinEventPublisher
-from game_concepts.events.PowerChitCardPublisher import PowerChitCardPublisher
 from game_concepts.turns.TurnManager import TurnManager
 from metaclasses.SingletonMeta import SingletonMeta
 from threading import Timer
@@ -45,7 +44,6 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         self.__mouse_click_enabled = True
 
         WinEventPublisher.instance().subscribe(self)
-        PowerChitCardPublisher.instance().subscribe(self)
 
     # ----------- Class methods ----------------------------------------------------------------------------------------------------------------
     def run(self) -> None:
@@ -127,15 +125,6 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         # stop game after delay
         end_game_timer: Timer = Timer(GameWorld.__GAME_END_CLOSE_DELAY, self.stop_game)
         end_game_timer.start()
-
-    # --------- PowerChitCardListener interface -------------------------------------------------------------------------------------------------
-    def on_action_performed(self, symbol_count: int):
-        """On picked power chit card, perform skipping of player's turn based on skip count ('symbol count')
-
-        Args:
-            symbol_count: the skip count of chit card
-        """
-        self.__turn_manager.skip_to_player_on_turn_end(self.__turn_manager.get_player_character_n_turns_downstream(symbol_count + 1))
 
     # -------- Static methods ---------------------------------------------------------------------------------------------------------------
     @staticmethod

@@ -22,16 +22,17 @@ class DefaultTurnManger(TurnManager):
         """
         super().__init__(player_characters, starting_player_i)
 
-    def skip_to_player(self, player_char: PlayableCharacter) -> None:
-        """Skips to the player character's turn.
+    def skip_to_player_on_turn_end(self, player_char: PlayableCharacter) -> None:
+        """Skip to the playable character's turn once the current player's turn ends.
 
         Args:
-            player_char: The character for the player
+            player_char: The player's character to skip to
         """
-        self.__configure_current_player_for_turn_change()
-
-        self._current_player = player_char
-        player_char.set_is_currently_playing(True)
+        for i in range(self._current_player_i + 1, self._current_player_i + len(self._player_characters)):
+            current_char: PlayableCharacter = self._player_characters[i % len(self._player_characters)]
+            if current_char == player_char:
+                return
+            current_char.set_should_continue_turn(False)
 
     def get_player_character_n_turns_downstream(self, n: int) -> PlayableCharacter:
         """Get the playable character that is n turns downstream from the currently playing character.

@@ -42,11 +42,11 @@ class TurnManager(ABC):
         return self._current_player
 
     @abstractmethod
-    def skip_to_player(self, player_char: PlayableCharacter) -> None:
-        """Skip to the playable character's turn.
+    def skip_to_player_on_turn_end(self, player_char: PlayableCharacter) -> None:
+        """Skip to the playable character's turn once the current player's turn ends.
 
         Args:
-            player_char: The character for the player
+            player_char: The player's character to skip to
         """
         ...
 

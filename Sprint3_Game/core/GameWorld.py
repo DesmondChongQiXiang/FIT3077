@@ -135,7 +135,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         Args:
             symbol_count: the skip count of chit card
         """
-        self.__turn_manager.skip_to_player(self.__turn_manager.get_player_character_n_turns_downstream(symbol_count))
+        self.__turn_manager.skip_to_player_on_turn_end(self.__turn_manager.get_player_character_n_turns_downstream(symbol_count + 1))
 
     # -------- Static methods ---------------------------------------------------------------------------------------------------------------
     @staticmethod

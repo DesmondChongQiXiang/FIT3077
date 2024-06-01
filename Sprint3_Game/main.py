@@ -4,12 +4,12 @@ from core.GameWorld import GameWorld
 from game_concepts.turns.DefaultTurnManager import DefaultTurnManger
 from game_concepts.turns.TurnManager import TurnManager
 from game_concepts.powers.SkipTurnPower import SkipTurnPower
+from game_concepts.powers.SwapPower import SwapPower
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.characters.Dragon import Dragon
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.chit_cards.AnimalChitCard import AnimalChitCard
 from game_objects.chit_cards.PirateChitCard import PirateChitCard
-from game_objects.chit_cards.SwapChitCard import SwapChitCard
 from game_objects.tiles.Tile import Tile
 from game_objects.tiles.CaveTile import CaveTile
 from game_objects.tiles.CaveTileVariant import CaveTileVariant
@@ -51,8 +51,6 @@ if __name__ == "__main__":
         Dragon(PlayableCharacterVariant.PURPLE, "Purple"),
     ]
 
-    turn_manager: TurnManager = DefaultTurnManger(playable_characters, 0)
-
     starting_tiles: list[Tile] = [
         CaveTile(Animal.BABY_DRAGON, CaveTileVariant.BLUE, character=playable_characters[0]),
         CaveTile(Animal.SALAMANDER, CaveTileVariant.GREEN, character=playable_characters[1]),
@@ -60,13 +58,16 @@ if __name__ == "__main__":
         CaveTile(Animal.BAT, CaveTileVariant.PURPLE, character=playable_characters[3]),
     ]
 
+    turn_manager: TurnManager = DefaultTurnManger(playable_characters, 0)
+
     chit_cards: list[ChitCard] = []
+    swap_powers: list[SwapPower] = [SwapPower() for _ in range(len(Animal))]
     for i, animal in enumerate(Animal):
         for j in range(1, 3):
             chit_cards.append(AnimalChitCard(animal, j))
         chit_cards.append(PirateChitCard(1 if i % 2 == 0 else 2))
-        chit_cards.append(PowerChitCard(SkipTurnPower(turn_manager, 1), "assets/chit_cards/chit_card_skip_1.png"))
-        chit_cards.append(SwapChitCard())
+        chit_cards.append(PowerChitCard(SkipTurnPower(turn_manager, 2), "assets/chit_cards/chit_card_skip_2.png"))
+        chit_cards.append(PowerChitCard(swap_powers[i], "assets/chit_cards/chit_card_swap.png"))
 
     game_board: GameBoard = DefaultGameBoard(
         tiles,
@@ -74,6 +75,10 @@ if __name__ == "__main__":
         chit_cards,
         playable_characters,
     )
+
+    # configure all powers who need a game board
+    for power in swap_powers:
+        power.use_game_board(game_board)
 
     # ----- GAME INSTANCE --------------------------------------------------------------------------------------------------
     world = GameWorld(playable_characters, game_board, turn_manager)

@@ -120,11 +120,11 @@ def add_swap_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> 
         The list of swap powers that need their game board to use configured
     """
     generated: int = 0
-    swap_powers: list[SwapPower] = [SwapPower() for _ in range(number)]
+    swap_powers: list[SwapPower] = [SwapPower(None) for _ in range(number)]
 
     while generated < number:
         for _ in range(1, 2):
-            chit_cards.append(PowerChitCard(SwapPower(), "assets/chit_cards/chit_card_swap.png"))
+            chit_cards.append(PowerChitCard(SwapPower(None), "assets/chit_cards/chit_card_swap.png"))
             generated += 1
 
             if generated >= number:

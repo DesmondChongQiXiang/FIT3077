@@ -61,7 +61,7 @@ if __name__ == "__main__":
     turn_manager: TurnManager = DefaultTurnManger(playable_characters, 0)
 
     chit_cards: list[ChitCard] = []
-    swap_powers: list[SwapPower] = [SwapPower() for _ in range(len(Animal))]
+    swap_powers: list[SwapPower] = [SwapPower(None) for _ in range(len(Animal))]
     for i, animal in enumerate(Animal):
         for j in range(1, 3):
             chit_cards.append(AnimalChitCard(animal, j))

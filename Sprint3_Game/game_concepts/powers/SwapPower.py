@@ -13,9 +13,14 @@ class SwapPower(Power):
     Author: Shen, Rohan
     """
 
-    def __init__(self):
-        """Constructor."""
-        self.__game_board: Optional[GameBoard] = None
+    def __init__(self, game_board: Optional[GameBoard]):
+        """Constructor.
+
+        Args:
+            game_board (optional): The game board to use for calculating the nearest player to the user.
+                If None, the game board to use must be set before execution using use_game_board().
+        """
+        self.__game_board: Optional[GameBoard] = game_board
 
     def _on_execute(self, user: PlayableCharacter) -> None:
         """Swap with the player that is closest to the user of the power if there is one and ends the users turn if

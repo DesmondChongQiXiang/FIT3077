@@ -4,6 +4,9 @@ from core.GameWorld import GameWorld
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.characters.Dragon import Dragon
 from game_objects.chit_cards.ChitCard import ChitCard
+from game_objects.chit_cards.AnimalChitCard import AnimalChitCard
+from game_objects.chit_cards.PirateChitCard import PirateChitCard
+from game_objects.chit_cards.SwapChitCard import SwapChitCard
 from game_objects.tiles.Tile import Tile
 from game_objects.tiles.CaveTile import CaveTile
 from game_objects.tiles.CaveTileVariant import CaveTileVariant
@@ -39,11 +42,12 @@ if __name__ == "__main__":
     tiles: list[Tile] = randomised_volcano_card_sequence(8)
 
     chit_cards: list[ChitCard] = []
-    add_power_chit_cards_in_sequence(1, 2, chit_cards) # One chit card that has 2 skip counts
-    add_power_chit_cards_in_sequence(1, 1, chit_cards) # One chit card that has 1 skip count
-    add_swap_chit_cards_in_sequence(2, chit_cards)
-    add_animal_chit_cards_in_animal_sequence(12, chit_cards)
-    random.shuffle(chit_cards)
+    for i, animal in enumerate(Animal):
+        for j in range(1, 3):
+            chit_cards.append(AnimalChitCard(animal, j))
+        chit_cards.append(PirateChitCard(1 if i % 2 == 0 else 2))
+        chit_cards.append(PowerChitCard(1))
+        chit_cards.append(SwapChitCard())
 
     playable_characters: list[PlayableCharacter] = [
         Dragon(PlayableCharacterVariant.BLUE, "Blue"),
@@ -51,14 +55,13 @@ if __name__ == "__main__":
         Dragon(PlayableCharacterVariant.ORANGE, "Orange"),
         Dragon(PlayableCharacterVariant.PURPLE, "Purple"),
     ]
-
     starting_tiles: list[Tile] = [
         CaveTile(Animal.BABY_DRAGON, CaveTileVariant.BLUE, character=playable_characters[0]),
         CaveTile(Animal.SALAMANDER, CaveTileVariant.GREEN, character=playable_characters[1]),
         CaveTile(Animal.SPIDER, CaveTileVariant.ORANGE, character=playable_characters[2]),
         CaveTile(Animal.BAT, CaveTileVariant.PURPLE, character=playable_characters[3]),
     ]
-    
+
     game_board: GameBoard = DefaultGameBoard(
         tiles,
         [(starting_tiles[0], tiles[3]), (starting_tiles[1], tiles[9]), (starting_tiles[2], tiles[15]), (starting_tiles[3], tiles[21])],

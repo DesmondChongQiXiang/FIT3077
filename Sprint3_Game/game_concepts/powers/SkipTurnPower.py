@@ -4,7 +4,7 @@ from game_objects.characters.PlayableCharacter import PlayableCharacter
 
 
 class SkipTurnPower(Power):
-    """Skip a number of turns past the user of the power once his/her turn ends.
+    """Skip a number of player turns once the user's his/her turn ends.
 
     Author: Shen, Desmond, Ian
     """
@@ -13,7 +13,7 @@ class SkipTurnPower(Power):
         """Constructor.
 
         Args:
-            turn_manager: A turn manager managing the player characters currently playing
+            turn_manager: A turn manager managing the turns of players that are currently playing in the game
             players_to_skip: The number of players to skip ahead of the current player on execution
         """
         self.__turn_manager: TurnManager = turn_manager

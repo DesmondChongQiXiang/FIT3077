@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from metaclasses.SingletonMeta import SingletonMeta
-from game_events.PowerChitCardListener import PowerChitCardListener
-from game_objects.characters.PlayableCharacter import PlayableCharacter
+from game_concepts.events.PowerChitCardListener import PowerChitCardListener
 from typing import Optional, cast
 
 

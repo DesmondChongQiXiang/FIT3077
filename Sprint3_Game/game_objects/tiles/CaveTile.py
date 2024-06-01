@@ -2,7 +2,7 @@ from game_objects.tiles.Tile import Tile
 from game_objects.tiles.CaveTileVariant import CaveTileVariant
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.animals.Animal import Animal
-from game_events.WinEventPublisher import WinEventPublisher
+from game_concepts.events.WinEventPublisher import WinEventPublisher
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect

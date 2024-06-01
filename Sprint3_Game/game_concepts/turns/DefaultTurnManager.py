@@ -1,4 +1,4 @@
-from game_events.turns.TurnManager import TurnManager
+from game_concepts.turns.TurnManager import TurnManager
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 
 

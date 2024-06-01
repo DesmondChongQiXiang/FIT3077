@@ -5,10 +5,10 @@ from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.game_board.GameBoard import GameBoard
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
-from game_events.WinEventListener import WinEventListener
-from game_events.WinEventPublisher import WinEventPublisher
-from game_events.PowerChitCardPublisher import PowerChitCardPublisher
-from game_events.turns.TurnManager import TurnManager
+from game_concepts.events.WinEventListener import WinEventListener
+from game_concepts.events.WinEventPublisher import WinEventPublisher
+from game_concepts.events.PowerChitCardPublisher import PowerChitCardPublisher
+from game_concepts.turns.TurnManager import TurnManager
 from metaclasses.SingletonMeta import SingletonMeta
 from threading import Timer
 

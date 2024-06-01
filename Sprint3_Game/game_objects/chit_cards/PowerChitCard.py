@@ -1,4 +1,4 @@
-from game_events.PowerChitCardPublisher import PowerChitCardPublisher
+from game_concepts.events.PowerChitCardPublisher import PowerChitCardPublisher
 from .ChitCard import ChitCard
 from typing import Optional
 from screen.DrawProperties import DrawProperties

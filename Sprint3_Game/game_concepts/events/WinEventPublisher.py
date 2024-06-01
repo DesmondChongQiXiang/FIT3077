@@ -1,6 +1,6 @@
 from __future__ import annotations
 from metaclasses.SingletonMeta import SingletonMeta
-from game_events.WinEventListener import WinEventListener
+from game_concepts.events.WinEventListener import WinEventListener
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from typing import Optional, cast
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Any, Optional
-from game_events.WinEventListener import WinEventListener
+from game_concepts.events.WinEventListener import WinEventListener
 
 
 class SingletonMeta(type(WinEventListener)):

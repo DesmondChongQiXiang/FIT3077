@@ -10,7 +10,7 @@ class SwapChitCard(ChitCard):
     """
     Represents a chit card that when flipped switches the position of the player who flips it with the player closest to them
 
-    Author : Rohan
+    Author: Rohan
     """
 
     def __init__(self, draw_properties: Optional[DrawProperties] = None) -> None:
@@ -22,7 +22,7 @@ class SwapChitCard(ChitCard):
 
     def _on_draw_request(self, draw_properties: DrawProperties) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
         """On draw request, returns instructions to draw a chit card that displays its back when its not flipped. When flipped,
-        it draws dragon pirate two symbol with an indication of the number of symbols.
+        it draws the swap chit card.
 
         Args:
             draw_properties: The draw properties requesting how to draw this object

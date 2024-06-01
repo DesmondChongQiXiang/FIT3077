@@ -42,8 +42,10 @@ if __name__ == "__main__":
         pygame.display.set_mode((REQUESTED_SCREEN_SIZE, REQUESTED_SCREEN_SIZE))
 
     # ----- GAME CONFIG --------------------------------------------------------------------------------------------------
+    # tiles
     tiles: list[Tile] = randomised_volcano_card_sequence(8)
 
+    # playable characters
     playable_characters: list[PlayableCharacter] = [
         Dragon(PlayableCharacterVariant.BLUE, "Blue"),
         Dragon(PlayableCharacterVariant.GREEN, "Green"),
@@ -51,6 +53,7 @@ if __name__ == "__main__":
         Dragon(PlayableCharacterVariant.PURPLE, "Purple"),
     ]
 
+    # starting tiles
     starting_tiles: list[Tile] = [
         CaveTile(Animal.BABY_DRAGON, CaveTileVariant.BLUE, character=playable_characters[0]),
         CaveTile(Animal.SALAMANDER, CaveTileVariant.GREEN, character=playable_characters[1]),
@@ -58,8 +61,10 @@ if __name__ == "__main__":
         CaveTile(Animal.BAT, CaveTileVariant.PURPLE, character=playable_characters[3]),
     ]
 
+    # turn manager
     turn_manager: TurnManager = DefaultTurnManger(playable_characters, 0)
 
+    # chit cards
     chit_cards: list[ChitCard] = []
     swap_powers: list[SwapPower] = [SwapPower(None) for _ in range(len(Animal))]
     for i, animal in enumerate(Animal):
@@ -69,6 +74,7 @@ if __name__ == "__main__":
         chit_cards.append(PowerChitCard(SkipTurnPower(turn_manager, 2), "assets/chit_cards/chit_card_skip_2.png"))
         chit_cards.append(PowerChitCard(swap_powers[i], "assets/chit_cards/chit_card_swap.png"))
 
+    # game board
     game_board: GameBoard = DefaultGameBoard(
         tiles,
         [(starting_tiles[0], tiles[3]), (starting_tiles[1], tiles[9]), (starting_tiles[2], tiles[15]), (starting_tiles[3], tiles[21])],

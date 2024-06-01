@@ -41,8 +41,8 @@ if __name__ == "__main__":
     chit_cards: list[ChitCard] = []
     add_power_chit_cards_in_sequence(1, 2, chit_cards) # One chit card that has 2 skip counts
     add_power_chit_cards_in_sequence(1, 1, chit_cards) # One chit card that has 1 skip count
+    add_swap_chit_cards_in_sequence(2, chit_cards)
     add_animal_chit_cards_in_animal_sequence(12, chit_cards)
-    add_swap_chit_cards_in_sequence(4, chit_cards)
     random.shuffle(chit_cards)
 
     playable_characters: list[PlayableCharacter] = [

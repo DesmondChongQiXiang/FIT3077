@@ -39,7 +39,7 @@ class PowerChitCard(ChitCard):
             return [
                 (
                     DrawAssetInstruction(
-                        f"{asset_path}/chit_card_power_{self.get_symbol_count()}.png",
+                        f"{asset_path}/chit_card_power_{self._symbol_count}.png",
                         x=coord_x,
                         y=coord_y,
                         size=draw_properties.get_size(),
@@ -64,9 +64,16 @@ class PowerChitCard(ChitCard):
         Raises:
             Exception if the game board delegate was not set before calling
         """
+        # guard statements
+        if self._board_delegate is None:
+            raise Exception("Board delegate was not set when on_click() called.")
+        if self._symbol_count is None:
+            raise Exception("There was no symbol count set.")
+        
+        # flip logic
         if self._board_delegate is not None:
             if not self.get_flipped():
-                PowerChitCardPublisher.instance().notify_subscribers(self.get_symbol_count())
+                PowerChitCardPublisher.instance().notify_subscribers(self._symbol_count)
                 self.set_flipped(not self.get_flipped())
         else:
             raise Exception("Board delegate was not set when on_click() called.")

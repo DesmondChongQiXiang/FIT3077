@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     chit_cards: list[ChitCard] = []
     add_animal_chit_cards_in_animal_sequence(12, chit_cards)
-    add_dragon_pirate_two_chit_cards_in_sequence(4, chit_cards)
+    add_swap_chit_cards_in_sequence(4, chit_cards)
     random.shuffle(chit_cards)
 
     playable_characters: list[PlayableCharacter] = [

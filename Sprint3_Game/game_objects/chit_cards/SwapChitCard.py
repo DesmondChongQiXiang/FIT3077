@@ -6,7 +6,7 @@ from screen.ModularClickableSprite import ModularClickableSprite
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 
 
-class SkipChitCard(ChitCard):
+class SwapChitCard(ChitCard):
     """
     Represents a chit card that when flipped switches the position of the player who flips it with the player closest to them
 

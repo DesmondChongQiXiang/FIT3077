@@ -7,7 +7,7 @@ from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.animals.Animal import Animal
 from game_objects.chit_cards.AnimalChitCard import AnimalChitCard
 from game_objects.chit_cards.PirateChitCard import PirateChitCard
-from game_objects.chit_cards.SkipChitCard import SkipChitCard
+from game_objects.chit_cards.SwapChitCard import SwapChitCard
 from game_objects.tiles.Tile import Tile
 from game_objects.tiles.NormalTile import NormalTile
 
@@ -80,9 +80,8 @@ def add_dragon_pirate_chit_cards_in_sequence(number: int, chit_cards: list[ChitC
                 return
 
 
-def add_dragon_pirate_two_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> None:
-    """Generate dragon pirate chit cards with symbol count 1 and 2 in sequence and appends them to the end of
-    the list.
+def add_swap_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> None:
+    """Generate swap chit cards with symbol count 1 and 2 in sequence and appends them to the end of the list.
 
     Args:
         number: number of chit cards to generate
@@ -92,7 +91,7 @@ def add_dragon_pirate_two_chit_cards_in_sequence(number: int, chit_cards: list[C
 
     while generated < number:
         for _ in range(1, 2):
-            chit_cards.append(SkipChitCard())
+            chit_cards.append(SwapChitCard())
             generated += 1
 
             if generated >= number:

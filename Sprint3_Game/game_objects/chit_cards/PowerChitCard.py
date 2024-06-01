@@ -17,7 +17,7 @@ class PowerChitCard(ChitCard):
         """
         Args:
             power: The power for the chit card to execute when clicked
-            image_path: The image path relative to the root of this project to use for this chit card
+            image_path: The image path relative to the root of this project to use for the front of this chit card
             draw_properties (optional): Properties specifying how and where the chit card should be drawn
         """
         super().__init__(draw_properties=draw_properties)

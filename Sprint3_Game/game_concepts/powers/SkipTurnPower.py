@@ -22,6 +22,9 @@ class SkipTurnPower(Power):
     def _on_execute(self, user: PlayableCharacter) -> None:
         """Skip the number of turns as configured once the user's turn ends.
 
+        Args:
+            user: The user of the power
+
         Raises:
             Exception when the target was not set upon execution.
         """

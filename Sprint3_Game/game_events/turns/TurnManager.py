@@ -23,6 +23,8 @@ class TurnManager(ABC):
         self._current_player_i: int = starting_player_i
         self._player_characters: list[PlayableCharacter] = player_characters
 
+        self._current_player.set_is_currently_playing(True)
+
     def get_number_of_players(self) -> int:
         """Gets the number of players in the game.
 

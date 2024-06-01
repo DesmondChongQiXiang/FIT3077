@@ -233,10 +233,10 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Raises:
             Exception if the character could not be found on any tile
         """
-        for tile in self.__tile_sequence:
-            if tile.get_character_on_tile() == character:
-                return tile
-        raise Exception("Character could not be found on any tile.")
+        try:
+            return self.__tile_sequence[self.__character_location[character]]
+        except:
+            raise Exception("Character could not be found on any tile.")
 
     def on_player_turn_end(self) -> None:
         """When a player's turn ends, unflip all chit cards after a delay defined by DefaultGameBoard.TURN_END_RESET_DELAY.

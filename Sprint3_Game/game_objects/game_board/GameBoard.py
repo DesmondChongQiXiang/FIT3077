@@ -4,7 +4,6 @@ from collections.abc import Sequence
 from game_objects.tiles.Tile import Tile
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.DrawableByAsset import DrawableByAsset
-from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 
 

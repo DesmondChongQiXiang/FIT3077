@@ -87,9 +87,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Warning:
             Will not set all chit card positions if random factor / chit card size is too large
         """
-        # chit card generation factors
-        screen_width: int = PygameScreenController.instance().get_screen_size()[0]
-
         #### Generating chit cards
         safe_area = self.__get_chit_card_safe_area()
         safe_area_width: int = safe_area[1][0] - safe_area[0][0]
@@ -291,6 +288,14 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                     if self.__tile_sequence[i] == tile:
                         self.__character_location[character] = i
 
+    def get_all_clickable_sprites(self) -> Sequence[ModularClickableSprite]:
+        """Get a read-only list of all the clickable sprites for the game board.
+
+        Returns:
+            A read-only list containing all the clickable sprites.
+        """
+        return self.__chit_cards
+
     # ------ DrawableByAsset interface & Drawing --------------------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:
         """
@@ -419,14 +424,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             draw_properties.get_size(),
             rot,
         )
-
-    def get_all_clickable_sprites(self) -> Sequence[ModularClickableSprite]:
-        """Get a read-only list of all the clickable sprites for the game board.
-
-        Returns:
-            A read-only list containing all the clickable sprites.
-        """
-        return self.__chit_cards
 
     # ------- Board properties -----------------------------------------------------------------------------------------
     def __get_chit_card_safe_area(self) -> tuple[tuple[int, int], tuple[int, int]]:

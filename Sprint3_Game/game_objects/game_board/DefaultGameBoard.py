@@ -168,21 +168,23 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         self.__move_character_to_tile(character, final_tile_i)
 
-    def get_closest_player(self, character: PlayableCharacter) -> Optional[int]:
+    def get_closest_character(self, character: PlayableCharacter) -> Optional[PlayableCharacter]:
         """
-        Returns the index of the tile currently occupied by closest player to the current active player in the tile sequence. If the active player is currently in a cave
-        don't allow them to swap. Players also can't swap with players in a caves.
+        Get the character closest to the character if there is one.
 
         Args:
-            character: The player to find the closest player to
+            character: The character to find the closest character to
+
         Returns:
-            closest_i : The index of the tile occupied by the player closest to the player.
+            The closest character if there is one
         """
         current_player_i: int = self.__character_location[character]
-        if self.__tile_sequence[current_player_i] in self.__starting_tiles_set:
-            return  # Don't let a player in a cave swap
 
-        closest_i: Optional[int] = None
+        # Don't let a player in a cave swap
+        if self.__tile_sequence[current_player_i] in self.__starting_tiles_set:
+            return
+
+        closest_player: Optional[PlayableCharacter] = None
         shortest_distance: Optional[int] = None
 
         for player in self.__character_location:
@@ -194,47 +196,30 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             else:
                 forward_distance = abs(current_player_i - self.__character_location[player])
                 backward_distance = len(self.__tile_sequence) - forward_distance
-                if shortest_distance:  # If there has already been a player found that can be potentially be swapped with
-                    if closest_i:
-                        if (
-                            min(forward_distance, backward_distance) < shortest_distance
-                        ):  # Compare if it is closer than that player if it is update so that this player is now the closest
-                            closest_i = self.__character_location[player]
-                            shortest_distance = min(forward_distance, backward_distance)
+                if shortest_distance and closest_player:  # If there has already been a player found that can be potentially be swapped with
+                    if (
+                        min(forward_distance, backward_distance) < shortest_distance
+                    ):  # Compare if it is closer than that player if it is update so that this player is now the closest
+                        closest_player = player
+                        shortest_distance = min(forward_distance, backward_distance)
                 else:  # If no other player so far is valid for a swap , set this player as the closest player
-                    closest_i = self.__character_location[player]
+                    closest_player = player
                     shortest_distance = min(forward_distance, backward_distance)
 
-        return closest_i  # Return the index of the tile occupied by the player closest to the player
+        return closest_player  # Return the closest player
 
-    def swap_with_closest_player(self, character: PlayableCharacter) -> None:
+    def swap_characters(self, char1: PlayableCharacter, char2: PlayableCharacter) -> None:
         """
-        Swap the currently active player with the player closest to them. If there are no possible closest players that meet the criteria, do nothing and let the player
-        continue to flip chit cards.
+        Swaps two characters.
 
         Args:
-            character : The player we want to switch with the player closest to them
+            char1: The first character
+            char2: The second character
         """
-        current_player_i = self.__character_location[character]  # The index for the current active player
-        current_tile = self.__tile_sequence[current_player_i]  # This is the tile of the current active player
-        closest_player_i = self.get_closest_player(character)  # Gets the index in the tile sequence of the closest player
-
-        if closest_player_i:
-            tile_to_swap = self.__tile_sequence[closest_player_i]
-            player_to_swap = tile_to_swap.get_character_on_tile()  # Get's the player we are switching with
-
-            if player_to_swap:
-                # Remove both players from their tiles
-                tile_to_swap.set_character_on_tile(None)
-                current_tile.set_character_on_tile(None)
-
-                # Set them to opposite tiles
-                tile_to_swap.set_character_on_tile(character)
-                current_tile.set_character_on_tile(player_to_swap)
-
-                # Update their locations in the character location dictionaries
-                self.__character_location[character] = closest_player_i
-                self.__character_location[player_to_swap] = current_player_i
+        char1_tile, char2_tile = self.get_character_floor_tile(char1), self.get_character_floor_tile(char2)
+        self.__character_location[char1], self.__character_location[char2] = self.__character_location[char2], self.__character_location[char1]
+        char1_tile.set_character_on_tile(char2)
+        char2_tile.set_character_on_tile(char1)
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
         """Get the tile a character is on.

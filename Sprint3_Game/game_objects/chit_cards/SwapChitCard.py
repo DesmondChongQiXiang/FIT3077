@@ -55,7 +55,7 @@ class SwapChitCard(ChitCard):
 
     def on_click(self, character: PlayableCharacter) -> None:
         """On click, reveal the chit card if its not flipped. Once revealed, the chit card cannot be flipped back by
-        clicking. Swap the player with the player closest to them
+        clicking. Swap the player with the player closest to them if there is one.
         Args:
             character: The character who clicked the sprite
 
@@ -64,7 +64,13 @@ class SwapChitCard(ChitCard):
         """
         if self._board_delegate is not None:
             if not self.get_flipped():
-                self._board_delegate.swap_with_closest_player(character)
+                closest_char: Optional[PlayableCharacter] = self._board_delegate.get_closest_character(character)
+
+                # if there was a closest character, swap and end turn. Otherwise dont swap and dont end turn.
+                if closest_char is not None:
+                    self._board_delegate.swap_characters(character, closest_char)
+                    character.set_should_continue_turn(False)
+
                 self.set_flipped(not self.get_flipped())
         else:
             raise Exception("Board delegate was not set when on_click() called.")

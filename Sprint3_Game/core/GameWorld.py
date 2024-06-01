@@ -1,6 +1,5 @@
 from __future__ import annotations
 from typing import cast
-from game_events.PowerChitCardPublisher import PowerChitCardPublisher
 from settings import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.game_board.GameBoard import GameBoard
@@ -8,6 +7,8 @@ from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
 from game_events.WinEventListener import WinEventListener
 from game_events.WinEventPublisher import WinEventPublisher
+from game_events.PowerChitCardPublisher import PowerChitCardPublisher
+from game_events.turns.TurnManager import TurnManager
 from metaclasses.SingletonMeta import SingletonMeta
 from threading import Timer
 
@@ -15,20 +16,21 @@ import pygame
 
 
 class GameWorld(WinEventListener, metaclass=SingletonMeta):
-    """A singleton. This class creates and manages the running of the game instance. It also logically represents and manages 
-    the high level policy of player concepts (player turns, clicking).
+    """A singleton. This class creates and manages the running of the game instance. It also manages the interface between
+    player interactions and the game.
 
     Author: Shen, Rohan
     """
 
     __GAME_END_CLOSE_DELAY: float = 5.0  # seconds after which to close the game after the game ends (i.e when a player wins)
 
-    def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard):
+    def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard, turn_manager: TurnManager):
         """Configures the game world, with the first character in the list of playable characters being the starting player.
 
         Args:
             playable_characters: The list of playable characters to initialise the world (game) with
             game_board: The game board
+            turn_manager: The manager for managing turns
 
         Throws:
             Exception when the number of playable characters is less than 2.
@@ -38,12 +40,10 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
 
         self.__playable_characters: list[PlayableCharacter] = playable_characters
         self.__game_board: GameBoard = game_board
-        self.__current_player = playable_characters[0]
-        self.__current_player_i = 0  # for turn processing purposes only
+        self.__turn_manager: TurnManager = turn_manager
         self.__should_game_run: bool = True
         self.__mouse_click_enabled = True
 
-        self.__current_player.set_is_currently_playing(True)
         WinEventPublisher.instance().subscribe(self)
         PowerChitCardPublisher.instance().subscribe(self)
 
@@ -72,10 +72,10 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
 
                     case pygame.MOUSEBUTTONDOWN:  # handle mouse click
                         if self.__mouse_click_enabled:
-                            self.__fire_onclick_for_clicked_hitboxes(clickable_hitboxes, self.__current_player)
+                            self.__fire_onclick_for_clicked_hitboxes(clickable_hitboxes, self.__turn_manager.get_currently_playing_character())
 
             # Handle Player Turns
-            if self.__process_current_player_turn():
+            if self.__turn_manager.tick():
                 self.__game_board.on_player_turn_end()
 
             # Update screen & Set FPS
@@ -96,26 +96,6 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
             pos = pygame.mouse.get_pos()
             if rect.collidepoint(pos):
                 clickable.on_click(player)
-
-    def __process_current_player_turn(self) -> bool:
-        """Ends the current player's turn and transitions turn to the next player if their turn should end. Otherwise does
-        nothing.
-
-        Returns:
-            Whether the current player's turn ended.
-        """
-        if not self.__current_player.should_continue_turn():
-            self.__current_player.set_is_currently_playing(False)
-            self.__current_player.set_should_continue_turn(True)  # reset for the playable character's next turn
-
-            # roll to next player's turn
-            self.__current_player_i = (self.__current_player_i + 1) % len(self.__playable_characters)
-            self.__current_player = self.__playable_characters[self.__current_player_i]
-
-            self.__current_player.set_is_currently_playing(True)
-            return True
-
-        return False
 
     def disable_mouse_clicks(self) -> None:
         """Disable user interaction with the game by mouse clicks."""
@@ -149,16 +129,14 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         end_game_timer.start()
 
     # --------- PowerChitCardListener interface -------------------------------------------------------------------------------------------------
-    def on_action_performed(self, symbol_count:int):
+    def on_action_performed(self, symbol_count: int):
         """On picked power chit card, perform skipping of player's turn based on skip count ('symbol count')
 
         Args:
             symbol_count: the skip count of chit card
         """
-        for skip_player_num in range(1, symbol_count + 1):
-            self.__playable_characters[(self.__current_player_i + skip_player_num) % len(self.__playable_characters)].set_should_continue_turn(False)
-        
-        
+        self.__turn_manager.skip_to_player(self.__turn_manager.get_player_character_n_turns_downstream(symbol_count))
+
     # -------- Static methods ---------------------------------------------------------------------------------------------------------------
     @staticmethod
     def instance() -> GameWorld:

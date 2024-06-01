@@ -1,6 +1,8 @@
 from presets import *
 from settings import *
 from core.GameWorld import GameWorld
+from game_events.turns.DefaultTurnManager import DefaultTurnManger
+from game_events.turns.TurnManager import TurnManager
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.characters.Dragon import Dragon
 from game_objects.chit_cards.ChitCard import ChitCard
@@ -69,6 +71,8 @@ if __name__ == "__main__":
         playable_characters,
     )
 
+    turn_manager: TurnManager = DefaultTurnManger(playable_characters, 0)
+
     # ----- GAME INSTANCE --------------------------------------------------------------------------------------------------
-    world = GameWorld(playable_characters, game_board)
+    world = GameWorld(playable_characters, game_board, turn_manager)
     world.run()

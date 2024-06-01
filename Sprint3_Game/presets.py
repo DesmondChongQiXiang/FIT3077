@@ -7,7 +7,7 @@ from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.animals.Animal import Animal
 from game_objects.chit_cards.AnimalChitCard import AnimalChitCard
 from game_objects.chit_cards.PirateChitCard import PirateChitCard
-from game_objects.chit_cards.PirateTwoChitCard import PirateTwoChitCard
+from game_objects.chit_cards.SkipChitCard import SkipChitCard
 from game_objects.tiles.Tile import Tile
 from game_objects.tiles.NormalTile import NormalTile
 
@@ -91,7 +91,7 @@ def add_dragon_pirate_two_chit_cards_in_sequence(number: int, chit_cards: list[C
 
     while generated < number:
         for i in range(1, 3):
-            chit_cards.append(PirateTwoChitCard(i))
+            chit_cards.append(SkipChitCard(i))
             generated += 1
 
             if generated >= number:

@@ -8,9 +8,12 @@ from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.animals.Animal import Animal
 from game_objects.chit_cards.AnimalChitCard import AnimalChitCard
 from game_objects.chit_cards.PirateChitCard import PirateChitCard
-from game_objects.chit_cards.SwapChitCard import SwapChitCard
+from game_objects.chit_cards.PowerChitCard import PowerChitCard
 from game_objects.tiles.Tile import Tile
 from game_objects.tiles.NormalTile import NormalTile
+from game_concepts.powers.SkipTurnPower import SkipTurnPower
+from game_concepts.powers.SwapPower import SwapPower
+from game_concepts.turns.TurnManager import TurnManager
 
 import random
 
@@ -60,25 +63,28 @@ def add_animal_chit_cards_in_animal_sequence(number: int, chit_cards: list[ChitC
 
                 if generated >= number:
                     return
-                
-def add_power_chit_cards_in_sequence(number: int, skip_count: int, chit_cards: list[ChitCard]) -> None:
-    """Generate power chit cards with 1 or 2 skip count depending on 'skip_count' and appends them to the end of 
+
+
+def add_skip_chit_cards(number: int, skip_count: int, chit_cards: list[ChitCard], turn_manager: TurnManager) -> None:
+    """Generate skip chit cards with 1 or 2 skip count depending on 'skip_count' and appends them to the end of
     the list.
 
     Args:
         number: number of chit cards to generate
         skip_count: the skip count of the chit card (i.e. how many player's turn will be skipped once this chit card is flipped)
         chit_cards: the list of chit cards to append to
+        turn_manager: A turn manager managing the turns of players that are currently playing in the game
     """
     generated: int = 0
 
     while generated < number:
         for _ in range(number):
-            chit_cards.append(PowerChitCard(skip_count))
+            chit_cards.append(PowerChitCard(SkipTurnPower(turn_manager, skip_count), f"assets/chit_cards/chit_card_skip_{skip_count}.png"))
             generated += 1
 
             if generated >= number:
                 return
+
 
 def add_dragon_pirate_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> None:
     """Generate dragon pirate chit cards with symbol count 1 and 2 in sequence and appends them to the end of
@@ -99,22 +105,31 @@ def add_dragon_pirate_chit_cards_in_sequence(number: int, chit_cards: list[ChitC
                 return
 
 
-def add_swap_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> None:
+def add_swap_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> list[SwapPower]:
     """Generate swap chit cards with symbol count 1 and 2 in sequence and appends them to the end of the list.
+    Returns a list of swap powers that need their game board to use configured.
+
+    Important:
+        The list of swap powers need their game board to use configured.
 
     Args:
         number: number of chit cards to generate
         chit_cards: the list of chit cards to append to
+
+    Returns:
+        The list of swap powers that need their game board to use configured
     """
     generated: int = 0
+    swap_powers: list[SwapPower] = [SwapPower() for _ in range(number)]
 
     while generated < number:
         for _ in range(1, 2):
-            chit_cards.append(SwapChitCard())
+            chit_cards.append(PowerChitCard(SwapPower(), "assets/chit_cards/chit_card_swap.png"))
             generated += 1
 
             if generated >= number:
-                return
+                return swap_powers
+    return swap_powers
 
 
 def normal_tiles_in_animal_sequence(number: int) -> list[Tile]:

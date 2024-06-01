@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import cast
+from game_events.PowerChitCardPublisher import PowerChitCardPublisher
 from settings import FRAMES_PER_SECOND, SCREEN_BACKGROUND_COLOUR
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.game_board.GameBoard import GameBoard
@@ -14,7 +15,8 @@ import pygame
 
 
 class GameWorld(WinEventListener, metaclass=SingletonMeta):
-    """A singleton. This class creates and manages a game instance. It provides the interface between it and the players.
+    """A singleton. This class creates and manages the running of the game instance. It also logically represents and manages 
+    the high level policy of player concepts (player turns, clicking).
 
     Author: Shen, Rohan
     """
@@ -43,6 +45,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
 
         self.__current_player.set_is_currently_playing(True)
         WinEventPublisher.instance().subscribe(self)
+        PowerChitCardPublisher.instance().subscribe(self)
 
     # ----------- Class methods ----------------------------------------------------------------------------------------------------------------
     def run(self) -> None:
@@ -105,14 +108,9 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
             self.__current_player.set_is_currently_playing(False)
             self.__current_player.set_should_continue_turn(True)  # reset for the playable character's next turn
 
-            if self.__current_player_i + 1 > len(self.__playable_characters) - 1:
-                # if the current player was the last player, loop around to the starting player
-                self.__current_player = self.__playable_characters[0]
-                self.__current_player_i = 0
-            else:
-                # otherwise turn should go to next player
-                self.__current_player = self.__playable_characters[self.__current_player_i + 1]
-                self.__current_player_i += 1
+            # roll to next player's turn
+            self.__current_player_i = (self.__current_player_i + 1) % len(self.__playable_characters)
+            self.__current_player = self.__playable_characters[self.__current_player_i]
 
             self.__current_player.set_is_currently_playing(True)
             return True
@@ -150,6 +148,17 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         end_game_timer: Timer = Timer(GameWorld.__GAME_END_CLOSE_DELAY, self.stop_game)
         end_game_timer.start()
 
+    # --------- PowerChitCardListener interface -------------------------------------------------------------------------------------------------
+    def on_action_performed(self, symbol_count:int):
+        """On picked power chit card, perform skipping of player's turn based on skip count ('symbol count')
+
+        Args:
+            symbol_count: the skip count of chit card
+        """
+        for skip_player_num in range(1, symbol_count + 1):
+            self.__playable_characters[(self.__current_player_i + skip_player_num) % len(self.__playable_characters)].set_should_continue_turn(False)
+        
+        
     # -------- Static methods ---------------------------------------------------------------------------------------------------------------
     @staticmethod
     def instance() -> GameWorld:

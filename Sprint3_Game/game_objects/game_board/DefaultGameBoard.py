@@ -94,7 +94,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         safe_area = self.__get_chit_card_safe_area()
         safe_area_width: int = safe_area[1][0] - safe_area[0][0]
         chit_card_rand_factor: int = int(safe_area_width * (105 / 1500))  # random factor for chit card generation in pixels.
-        chit_card_size: tuple[int, int] = (int(0.18 * safe_area_width), int(0.18 * safe_area_width))  # chit card dimensions (width, height) in px
+        # We have modified chit card size to fit more than 16 chit cards (+2 skip chit cards)
+        chit_card_size: tuple[int, int] = (int(0.1 * safe_area_width), int(0.1 * safe_area_width))  # chit card dimensions (width, height) in px
 
         x0, y0, x1, y1 = safe_area[0][0], safe_area[0][1], safe_area[1][0], safe_area[1][1]
         chit_card_w, chit_card_h = chit_card_size

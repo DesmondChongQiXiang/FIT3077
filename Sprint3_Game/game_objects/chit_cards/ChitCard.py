@@ -14,13 +14,13 @@ class ChitCard(ModularClickableSprite, ABC):
     Author: Shen
     """
 
-    def __init__(self, symbol_count: int, draw_properties: Optional[DrawProperties] = None) -> None:
+    def __init__(self, symbol_count: Optional[int] = None, draw_properties: Optional[DrawProperties] = None) -> None:
         """
         Args:
-            symbol_count: The symbol count for the chit card
+            symbol_count (optional): The symbol count for the chit card
             draw_properties (optional): Properties specifying how and where the chit card should be drawn
         """
-        self.__symbol_count: int = symbol_count
+        self._symbol_count: Optional[int] = symbol_count
         self.__flipped: bool = False
         self._draw_properties: Optional[DrawProperties] = draw_properties
         self._board_delegate: Optional[GameBoard] = None
@@ -48,14 +48,6 @@ class ChitCard(ModularClickableSprite, ABC):
             Whether the chit card is flipped
         """
         return self.__flipped
-
-    def get_symbol_count(self) -> int:
-        """Gets the number of symbols on the chit card.
-
-        Returns:
-            The number of symbols on the chit card
-        """
-        return self.__symbol_count
 
     def set_draw_properties(self, draw_properties: DrawProperties) -> None:
         """Set how the chit card should be drawn.

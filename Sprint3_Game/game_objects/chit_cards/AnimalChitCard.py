@@ -42,7 +42,7 @@ class AnimalChitCard(ChitCard):
             return [
                 (
                     DrawAssetInstruction(
-                        f"{asset_path}/chit_card_{self.__animal.value}_{self.get_symbol_count()}.png",
+                        f"{asset_path}/chit_card_{self.__animal.value}_{self._symbol_count}.png",
                         x=coord_x,
                         y=coord_y,
                         size=draw_properties.get_size(),
@@ -68,18 +68,19 @@ class AnimalChitCard(ChitCard):
         Raises:
             Exception if the game board delegate was not set before calling
         """
-        if self._board_delegate is not None:
-            tile_animal: Optional[Animal] = self._board_delegate.get_character_floor_tile(character).get_animal()
-            if not self.get_flipped():  # Makes it so the players only move if the chit card has not been flipped before
-
-                if tile_animal is not None and tile_animal != self.__animal:
-                    character.set_should_continue_turn(False)
-
-                else:
-                    # self.set_flipped(not self.get_flipped())
-                    self._board_delegate.move_character_by_steps(character, self.get_symbol_count())
-
-            if not self.get_flipped():
-                self.set_flipped(not self.get_flipped())
-        else:
+        # guard statements
+        if self._board_delegate is None:
             raise Exception("Board delegate was not set when on_click() called.")
+        if self._symbol_count is None:
+            raise Exception("There was no symbol count set.")
+
+        # flip logic
+        tile_animal: Optional[Animal] = self._board_delegate.get_character_floor_tile(character).get_animal()
+        if not self.get_flipped():
+            if tile_animal is not None and tile_animal != self.__animal:
+                # failed match ends turn
+                character.set_should_continue_turn(False)
+            else:
+                self._board_delegate.move_character_by_steps(character, self._symbol_count)
+
+            self.set_flipped(not self.get_flipped())

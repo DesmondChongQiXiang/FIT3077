@@ -5,19 +5,20 @@ from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 
+
 class SkipChitCard(ChitCard):
     """
     Represents a chit card that when flipped switches the position of the player who flips it with the player closest to them
 
     Author : Rohan
     """
-    def __init__(self, symbol_count: int, draw_properties: Optional[DrawProperties] = None) -> None:
+
+    def __init__(self, draw_properties: Optional[DrawProperties] = None) -> None:
         """
         Args:
-            symbol_count: The symbol count for the chit card
             draw_properties (optional): Properties specifying how and where the chit card should be drawn
         """
-        super().__init__(symbol_count, draw_properties)
+        super().__init__(draw_properties=draw_properties)
 
     def _on_draw_request(self, draw_properties: DrawProperties) -> list[tuple[DrawAssetInstruction, ModularClickableSprite]]:
         """On draw request, returns instructions to draw a chit card that displays its back when its not flipped. When flipped,
@@ -51,7 +52,7 @@ class SkipChitCard(ChitCard):
                 self,
             )
         ]
-    
+
     def on_click(self, character: PlayableCharacter) -> None:
         """On click, reveal the chit card if its not flipped. Once revealed, the chit card cannot be flipped back by
         clicking. Swap the player with the player closest to them

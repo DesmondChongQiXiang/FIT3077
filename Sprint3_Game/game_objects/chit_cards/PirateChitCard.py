@@ -38,7 +38,7 @@ class PirateChitCard(ChitCard):
             return [
                 (
                     DrawAssetInstruction(
-                        f"{asset_path}/chit_card_dragon_pirate_{self.get_symbol_count()}.png",
+                        f"{asset_path}/chit_card_dragon_pirate_{self._symbol_count}.png",
                         x=coord_x,
                         y=coord_y,
                         size=draw_properties.get_size(),
@@ -63,9 +63,13 @@ class PirateChitCard(ChitCard):
         Raises:
             Exception if the game board delegate was not set before calling
         """
-        if self._board_delegate is not None:
-            if not self.get_flipped():
-                self._board_delegate.move_character_by_steps(character, self.get_symbol_count() * (-1))
-                self.set_flipped(not self.get_flipped())
-        else:
+        # guard statements
+        if self._board_delegate is None:
             raise Exception("Board delegate was not set when on_click() called.")
+        if self._symbol_count is None:
+            raise Exception("There was no symbol count set.")
+
+        # flip logic
+        if not self.get_flipped():
+            self._board_delegate.move_character_by_steps(character, self._symbol_count * (-1))
+            self.set_flipped(not self.get_flipped())

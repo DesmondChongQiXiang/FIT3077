@@ -79,6 +79,7 @@ def add_dragon_pirate_chit_cards_in_sequence(number: int, chit_cards: list[ChitC
             if generated >= number:
                 return
 
+
 def add_dragon_pirate_two_chit_cards_in_sequence(number: int, chit_cards: list[ChitCard]) -> None:
     """Generate dragon pirate chit cards with symbol count 1 and 2 in sequence and appends them to the end of
     the list.
@@ -90,8 +91,8 @@ def add_dragon_pirate_two_chit_cards_in_sequence(number: int, chit_cards: list[C
     generated: int = 0
 
     while generated < number:
-        for i in range(1, 3):
-            chit_cards.append(SkipChitCard(i))
+        for _ in range(1, 2):
+            chit_cards.append(SkipChitCard())
             generated += 1
 
             if generated >= number:

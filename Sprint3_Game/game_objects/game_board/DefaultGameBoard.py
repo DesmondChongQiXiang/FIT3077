@@ -41,7 +41,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         self.__starting_tiles_set: set[Tile] = set()
         self.__starting_tiles_destinations_set: set[Tile] = set()  # stores the tiles that are the destinations for starting tiles
         self.__chit_cards: list[ChitCard] = chit_cards
-        self.__character_tiles_visited: dict[PlayableCharacter, set[Tile]] = dict()  # K = character, V = set of tiles visited
         self.__character_location: dict[PlayableCharacter, int] = dict()  # K = character, V = index along main tile sequence
         self.__character_starting_tiles: dict[PlayableCharacter, Tile] = dict()  # K = character, V = their starting tile
 
@@ -68,10 +67,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 self.__tile_sequence.append(dest_to_start_tile[tile])
             self.__tile_sequence.append(tile)
 
-        # Initialise character tiles visited, character starting location, character location dictionaries to initial game board state
-        for character in playable_characters:
-            self.__character_tiles_visited[character] = set()
-
+        # Initialise character starting location, character location dictionaries to initial game board state
         for tile in self.__starting_tiles:
             char_on_tile = tile.get_character_on_tile()
             if char_on_tile is not None:
@@ -149,10 +145,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                     character.set_should_continue_turn(False)
                     return
 
-                # Allow character to only re-enter its own starting tile and only when they've visited all main sequence tiles
-                if self.__character_starting_tiles[character] is current_tile and (
-                    len(self.__character_tiles_visited[character]) == len(self.__tile_sequence) - len(self.__starting_tiles) * 2
-                ):
+                # Allow character to only re-enter its own starting tile only when moving forward and they dont overshoot
+                if self.__character_starting_tiles[character] is current_tile:
                     if steps_taken < abs(steps):
                         # don't move character if starting tile will be overshot & end character's turn
                         character.set_should_continue_turn(False)
@@ -162,9 +156,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                     break
 
                 tile_intermediate_i = tile_intermediate_i - 2 if steps < 0 else tile_intermediate_i + 2  # 2 to account for duplicate starting destination tile
-
-            # add the currently considered tile to visited tiles for character accounting for any skipping of tiles
-            self.__character_tiles_visited[character].add(self.__tile_sequence[tile_intermediate_i % len(self.__tile_sequence)])
 
         # place character on the calculated destination tile if not occupied and update character location. Otherwise end player's turn
         final_tile_i: int = tile_intermediate_i % len(self.__tile_sequence)
@@ -187,33 +178,35 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Returns:
             closest_i : The index of the tile occupied by the player closest to the player.
         """
-        current_player_i : int = self.__character_location[character]
+        current_player_i: int = self.__character_location[character]
         if self.__tile_sequence[current_player_i] in self.__starting_tiles_set:
-            return # Don't let a player in a cave swap
-        
-        closest_i : Optional[int] = None
-        shortest_distance : Optional[int] = None
+            return  # Don't let a player in a cave swap
+
+        closest_i: Optional[int] = None
+        shortest_distance: Optional[int] = None
 
         for player in self.__character_location:
             if player == character:
-                continue # Ignore the player itself
-            player_i = self.__character_location[player] # Get the index in the tile set of the closest player
-            if self.__tile_sequence[player_i] in self.__starting_tiles_set: # If the player is in a cave skip player
+                continue  # Ignore the player itself
+            player_i = self.__character_location[player]  # Get the index in the tile set of the closest player
+            if self.__tile_sequence[player_i] in self.__starting_tiles_set:  # If the player is in a cave skip player
                 continue
             else:
                 forward_distance = abs(current_player_i - self.__character_location[player])
                 backward_distance = len(self.__tile_sequence) - forward_distance
-                if shortest_distance: # If there has already been a player found that can be potentially be swapped with
+                if shortest_distance:  # If there has already been a player found that can be potentially be swapped with
                     if closest_i:
-                        if min(forward_distance,backward_distance) < shortest_distance: # Compare if it is closer than that player if it is update so that this player is now the closest
+                        if (
+                            min(forward_distance, backward_distance) < shortest_distance
+                        ):  # Compare if it is closer than that player if it is update so that this player is now the closest
                             closest_i = self.__character_location[player]
-                            shortest_distance = min(forward_distance,backward_distance)
-                else: # If no other player so far is valid for a swap , set this player as the closest player
+                            shortest_distance = min(forward_distance, backward_distance)
+                else:  # If no other player so far is valid for a swap , set this player as the closest player
                     closest_i = self.__character_location[player]
-                    shortest_distance = min(forward_distance,backward_distance)
+                    shortest_distance = min(forward_distance, backward_distance)
 
-        return closest_i # Return the index of the tile occupied by the player closest to the player
-    
+        return closest_i  # Return the index of the tile occupied by the player closest to the player
+
     def swap_with_closest_player(self, character: PlayableCharacter) -> None:
         """
         Swap the currently active player with the player closest to them. If there are no possible closest players that meet the criteria, do nothing and let the player
@@ -222,13 +215,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Args:
             character : The player we want to switch with the player closest to them
         """
-        current_player_i = self.__character_location[character] # The index for the current active player 
-        current_tile = self.__tile_sequence[current_player_i] # This is the tile of the current active player
-        closest_player_i = self.get_closest_player(character) # Gets the index in the tile sequence of the closest player
+        current_player_i = self.__character_location[character]  # The index for the current active player
+        current_tile = self.__tile_sequence[current_player_i]  # This is the tile of the current active player
+        closest_player_i = self.get_closest_player(character)  # Gets the index in the tile sequence of the closest player
 
         if closest_player_i:
             tile_to_swap = self.__tile_sequence[closest_player_i]
-            player_to_swap = tile_to_swap.get_character_on_tile()# Get's the player we are switching with
+            player_to_swap = tile_to_swap.get_character_on_tile()  # Get's the player we are switching with
 
             if player_to_swap:
                 # Remove both players from their tiles
@@ -242,7 +235,6 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 # Update their locations in the character location dictionaries
                 self.__character_location[character] = closest_player_i
                 self.__character_location[player_to_swap] = current_player_i
-
 
     def get_character_floor_tile(self, character: PlayableCharacter) -> Tile:
         """Get the tile a character is on.

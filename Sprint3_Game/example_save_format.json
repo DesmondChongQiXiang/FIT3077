@@ -1,0 +1,69 @@
+{
+  "_comments": "Save file format dummy",
+
+  "player_data": {
+    "players": [
+      {
+        "player": ["blue", "Blue"],
+        "location": 4
+      },
+      {
+        "player": ["green", "Green"],
+        "location": 1
+      },
+      {
+        "player": ["orange", "Orange"],
+        "location": 13
+      },
+      {
+        "player": ["purple", "Purple"],
+        "location": 3
+      }
+    ],
+    "currently_playing": 2
+  },
+
+  "volcano_card_sequence": [
+    {
+      "sequence": ["baby_dragon", "salamander", "spider"],
+      "cave": {
+        "location": 2,
+        "animal": "spider"
+      }
+    }
+  ],
+
+  "chit_card_sequence": [
+    {
+      "type": "animal",
+      "animal": "salamander",
+      "symbol_count": 2,
+      "flipped": true
+    },
+    {
+      "type": "pirate",
+      "symbol_count": 1,
+      "flipped": true
+    },
+    {
+      "type": "power",
+      "power": {
+        "type": "skip",
+        "attributes": {
+          "skip_value": 2
+        }
+      },
+      "asset_path": "assets/chit_cards/...",
+      "flipped": false
+    },
+    {
+      "type": "power",
+      "power": {
+        "type": "swap",
+        "attributes": null
+      },
+      "asset_path": "assets/chit_cards/...",
+      "flipped": true
+    }
+  ]
+}

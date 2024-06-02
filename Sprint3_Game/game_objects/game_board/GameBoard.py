@@ -1,13 +1,14 @@
 from abc import abstractmethod
 from typing import Optional, Protocol
 from collections.abc import Sequence
+from codec.saves.JSONSavable import JSONSavable
 from game_objects.tiles.Tile import Tile
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.DrawableByAsset import DrawableByAsset
 from screen.ModularClickableSprite import ModularClickableSprite
 
 
-class GameBoard(DrawableByAsset, Protocol):
+class GameBoard(DrawableByAsset, JSONSavable, Protocol):
     """Represents a game board that can be played on. Players can be placed on the board, and chit cards are used to
     interact with the game board.
 

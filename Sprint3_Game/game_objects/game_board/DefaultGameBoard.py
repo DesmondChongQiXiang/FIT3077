@@ -1,6 +1,6 @@
 from __future__ import annotations
 from threading import Timer
-from typing import Optional, overload
+from typing import Optional, overload, Any
 from collections.abc import Sequence
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
@@ -27,7 +27,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     ### CONFIG
     TURN_END_RESET_DELAY: float = 2.0  # Seconds to delay resetting game board on player turn end
 
-    def __init__(self, main_tile_sequence: Sequence[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]):
+    def __init__(
+        self, main_tile_sequence: Sequence[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]
+    ):
         """
         Args:
             main_tile_sequence: A read only main tile sequence (excluding starting tiles) to use for the game board.
@@ -47,6 +49,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         self.__starting_tiles_set: set[Tile] = set()
         self.__starting_tiles_destinations_set: set[Tile] = set()  # stores the tiles that are the destinations for starting tiles
         self.__chit_cards: list[ChitCard] = chit_cards
+        self.__playable_characters: list[PlayableCharacter] = playable_characters
         self.__character_location: dict[PlayableCharacter, int] = dict()  # K = character, V = index along main tile sequence
         self.__character_starting_tiles: dict[PlayableCharacter, Tile] = dict()  # K = character, V = their starting tile
 
@@ -430,6 +433,30 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             draw_properties.get_size(),
             rot,
         )
+
+    # ------- JSONSavable interface ------------------------------------------------------------------------------------
+    def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
+        """When requested on save, modify all player locations to be equal to their locations along the tile sequence
+        as indexes.
+
+        Warning: The dictionary must remain in json encodable format.
+
+        Args:
+            to_write: The dictionary that will be converted to the JSON save file.
+
+        Returns:
+            None
+
+        Raises:
+            Exception if player_data.players did not exist in the save dictionary.
+        """
+        try:
+            players_list: list[Any] = to_write["player_data"]["players"]
+        except:
+            raise Exception("player_data.players did not exist in the save dictionary when requested on save for DeafultGameBoard.")
+
+        for i, player_entry in enumerate(players_list):
+            player_entry["location"] = self.__character_location[self.__playable_characters[i]]
 
     # ------- Board properties -----------------------------------------------------------------------------------------
     def __get_chit_card_safe_area(self) -> tuple[tuple[int, int], tuple[int, int]]:

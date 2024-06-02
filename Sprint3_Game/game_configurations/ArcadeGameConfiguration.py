@@ -1,4 +1,4 @@
-from typing import Any, Sequence
+from typing import Any, Optional
 from presets import *
 from settings import *
 from core.GameWorld import GameWorld
@@ -62,6 +62,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         ]
         self.__starting_tile_positions_set: set[int] = set(self.STARTING_TILE_POSITIONS)  # positions as indexes along main sequence tiles
         self.__chit_cards: list[ChitCard] = []
+        self.__game_board: Optional[GameBoard] = None
 
         save_codec.register_saveable(self)
 
@@ -85,7 +86,7 @@ class ArcadeGameConfiguration(GameConfiguration):
             self.__chit_cards.append(PowerChitCard(swap_powers[i], "assets/chit_cards/chit_card_swap.png"))
 
         # game board
-        game_board: GameBoard = DefaultGameBoard(
+        self.__game_board = DefaultGameBoard(
             self.__main_tiles,
             [
                 (self.__starting_tiles[0], self.__main_tiles[self.STARTING_TILE_POSITIONS[0]]),
@@ -99,18 +100,18 @@ class ArcadeGameConfiguration(GameConfiguration):
 
         # configure all powers who need a game board
         for power in swap_powers:
-            power.use_game_board(game_board)
+            power.use_game_board(self.__game_board)
 
         # GAME WORLD
-        return GameWorld(game_board, turn_manager)
+        return GameWorld(self.__game_board, turn_manager)
 
     def on_save(self, to_write: dict[str, Any]) -> None:
-        """Upon save, add the key elements making up the game as placeholder properties to the save dictionary.
+        """Upon save, configure the save dictionary to represent the state of the current arcade type game.
 
         Warning: The dictionary must remain in json encodable format.
 
         Args:
-            to_write: The dictionary that will be converted to JSON.
+            to_write: The dictionary that will be converted to JSON on save.
         """
         to_write["player_data"] = dict()
         to_write["player_data"]["players"] = []
@@ -144,3 +145,8 @@ class ArcadeGameConfiguration(GameConfiguration):
         chit_card_seq_save_dict: list[Any] = to_write["chit_card_sequence"]
         for chit_card in self.__chit_cards:
             chit_card_seq_save_dict.append(chit_card.on_save(to_write))
+
+        # allow default game board to perform any configuration on existing data in save dictionary
+        if self.__game_board is None:
+            raise Exception("Game board not defined before save. Run generate_game_world() first.")
+        self.__game_board.on_save(to_write)

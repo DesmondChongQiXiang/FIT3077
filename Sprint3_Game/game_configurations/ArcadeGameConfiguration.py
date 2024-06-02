@@ -61,6 +61,7 @@ class ArcadeGameConfiguration(GameConfiguration):
             CaveTile(Animal.BAT, CaveTileVariant.PURPLE, character=self.PLAYABLE_CHARACTERS[3]),
         ]
         self.__starting_tile_positions_set: set[int] = set(self.STARTING_TILE_POSITIONS)  # positions as indexes along main sequence tiles
+        self.__chit_cards: list[ChitCard] = []
 
         save_codec.register_saveable(self)
 
@@ -75,14 +76,13 @@ class ArcadeGameConfiguration(GameConfiguration):
         turn_manager: TurnManager = DefaultTurnManger(self.PLAYABLE_CHARACTERS, 0)
 
         # chit cards
-        chit_cards: list[ChitCard] = []
         swap_powers: list[SwapPower] = [SwapPower(None) for _ in range(len(Animal))]
         for i, animal in enumerate(Animal):
             for j in range(1, 3):
-                chit_cards.append(AnimalChitCard(animal, j))
-            chit_cards.append(PirateChitCard(1 if i % 2 == 0 else 2))
-            chit_cards.append(PowerChitCard(SkipTurnPower(turn_manager, 2), "assets/chit_cards/chit_card_skip_2.png"))
-            chit_cards.append(PowerChitCard(swap_powers[i], "assets/chit_cards/chit_card_swap.png"))
+                self.__chit_cards.append(AnimalChitCard(animal, j))
+            self.__chit_cards.append(PirateChitCard(1 if i % 2 == 0 else 2))
+            self.__chit_cards.append(PowerChitCard(SkipTurnPower(turn_manager, 2), "assets/chit_cards/chit_card_skip_2.png"))
+            self.__chit_cards.append(PowerChitCard(swap_powers[i], "assets/chit_cards/chit_card_swap.png"))
 
         # game board
         game_board: GameBoard = DefaultGameBoard(
@@ -93,7 +93,7 @@ class ArcadeGameConfiguration(GameConfiguration):
                 (self.__starting_tiles[2], self.__main_tiles[self.STARTING_TILE_POSITIONS[2]]),
                 (self.__starting_tiles[3], self.__main_tiles[self.STARTING_TILE_POSITIONS[3]]),
             ],
-            chit_cards,
+            self.__chit_cards,
             self.PLAYABLE_CHARACTERS,
         )
 
@@ -113,18 +113,18 @@ class ArcadeGameConfiguration(GameConfiguration):
             to_write: The dictionary that will be converted to JSON.
         """
         to_write["player_data"] = dict()
+        to_write["player_data"]["players"] = []
         to_write["volcano_card_sequence"] = []
         to_write["chit_card_sequence"] = []
 
         # add player data to the save dictionary
-        to_write["player_data"]["players"] = []
         players_save_dict: list[Any] = to_write["player_data"]["players"]
         for player in self.PLAYABLE_CHARACTERS:
             players_save_dict.append(player.on_save(to_write))
 
         # add volcano card sequence (including caves) data to the save dictionary
+        volcano_card_seq_save_dict: list[Any] = to_write["volcano_card_sequence"]
         starting_tile_i: int = 0  # tracks starting tile to ask saving data from
-        volcano_card_sequence: list[Any] = to_write["volcano_card_sequence"]
 
         for i in range(0, len(self.__main_tiles), 3):  # volcano cards are in groups of 3
             current_volcano_card: list[Any] = []
@@ -137,5 +137,10 @@ class ArcadeGameConfiguration(GameConfiguration):
                 if j in self.__starting_tile_positions_set:
                     current_volcano_card.append(self.__starting_tiles[starting_tile_i].on_save(to_write))
                     starting_tile_i += 1
-            
-            volcano_card_sequence.append(current_volcano_card)
+
+            volcano_card_seq_save_dict.append(current_volcano_card)
+
+        # add chit card sequence to save dictionary
+        chit_card_seq_save_dict: list[Any] = to_write["chit_card_sequence"]
+        for chit_card in self.__chit_cards:
+            chit_card_seq_save_dict.append(chit_card.on_save(to_write))

@@ -4,6 +4,7 @@ from settings import *
 from utils.os_utils import *
 from game_configurations.GameConfiguration import GameConfiguration
 from game_configurations.ArcadeGameConfiguration import ArcadeGameConfiguration
+from core.GameWorld import GameWorld
 from codec.saves.SaveCodec import SaveCodec
 from codec.saves.JSONSaveCodec import JSONSaveCodec
 
@@ -36,9 +37,10 @@ if __name__ == "__main__":
     else:
         # For all other OS: Use requested screen size
         pygame.display.set_mode((REQUESTED_SCREEN_SIZE, REQUESTED_SCREEN_SIZE))
-
-    # ----- GAME CONFIG --------------------------------------------------------------------------------------------------
-    SAVE_CODEC.save()
+    
 
     # ----- GAME INSTANCE ------------------------------------------------------------------------------------------
-    GAME_CONFIG.generate_game_world().run()
+    game_world: GameWorld = GAME_CONFIG.generate_game_world()
+    SAVE_CODEC.save()
+    
+    game_world.run()

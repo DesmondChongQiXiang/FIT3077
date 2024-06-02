@@ -4,11 +4,22 @@ from settings import *
 from utils.os_utils import *
 from game_configurations.GameConfiguration import GameConfiguration
 from game_configurations.DefaultGameConfiguration import DefaultGameConfiguration
+from codec.saves.SaveCodec import SaveCodec
+from codec.saves.JSONSaveCodec import JSONSaveCodec
 
 import pygame
 import os
 
 if __name__ == "__main__":
+    # ----- CONFIGURATION VARIABLES --------------------------------------------------------------------------------------
+    # GAME_CONFIG
+    # The game configuration the game is to use
+    GAME_CONFIG: GameConfiguration = DefaultGameConfiguration()
+
+    # SAVE_CODEC
+    # The codec to use for encoding/decoding save files
+    SAVE_CODEC: SaveCodec = JSONSaveCodec("saves")
+
     # ----- PYGAME INIT -------------------------------------------------------------------------------------------------
     # Initialise pygame
     pygame.init()
@@ -27,4 +38,8 @@ if __name__ == "__main__":
         pygame.display.set_mode((REQUESTED_SCREEN_SIZE, REQUESTED_SCREEN_SIZE))
 
     # ----- GAME CONFIG --------------------------------------------------------------------------------------------------
-    DefaultGameConfiguration().generate_game_world().run()
+    SAVE_CODEC._JSONSaveCodec__json_dict["test"] = 5
+    SAVE_CODEC.save()
+
+    # ----- GAME INSTANCE ------------------------------------------------------------------------------------------
+    GAME_CONFIG.generate_game_world().run()

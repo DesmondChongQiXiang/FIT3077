@@ -4,18 +4,22 @@
   "player_data": {
     "players": [
       {
+        "type": "dragon",
         "player": ["blue", "Blue"],
         "location": 4
       },
       {
+        "type": "dragon",
         "player": ["green", "Green"],
         "location": 1
       },
       {
+        "type": "dragon",
         "player": ["orange", "Orange"],
         "location": 13
       },
       {
+        "type": "dragon",
         "player": ["purple", "Purple"],
         "location": 3
       }
@@ -25,10 +29,24 @@
 
   "volcano_card_sequence": [
     {
-      "sequence": ["baby_dragon", "salamander", "spider"],
-      "cave": {
-        "location": 2,
-        "animal": "spider"
+      "sequence": [
+        {
+          "type": "tile_animal",
+          "animal": "salamander"
+        },
+        {
+          "type": "tile_animal",
+          "animal": "baby_dragon"
+        },
+        {
+          "type": "tile_animal",
+          "animal": "spider"
+        }
+      ],
+      "starting_tile": {
+        "type": "cave",
+        "animal": "spider",
+        "location": 2
       }
     }
   ],

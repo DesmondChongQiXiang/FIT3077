@@ -27,10 +27,10 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     ### CONFIG
     TURN_END_RESET_DELAY: float = 2.0  # Seconds to delay resetting game board on player turn end
 
-    def __init__(self, main_tile_sequence: list[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]):
+    def __init__(self, main_tile_sequence: Sequence[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]):
         """
         Args:
-            main_tile_sequence: The main tile sequence (excluding starting tiles) to use for the game board.
+            main_tile_sequence: A read only main tile sequence (excluding starting tiles) to use for the game board.
             starting_tiles: The starting tiles. In form: (starting tile, next tile)
             chit_cards: The chit cards to use for the game board. Will be placed in order from left to right, top to bottom.
             playable_characters: The playable characters to play on the game board

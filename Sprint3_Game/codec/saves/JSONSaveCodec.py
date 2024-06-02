@@ -50,8 +50,10 @@ class JSONSaveCodec(SaveCodec):
             saveable.on_save(self.__json_dict)
 
         # encode json dict as JSON and save as file to path
-        with open(f"{ROOT_PATH}/{self._save_path}/{self.SAVE_FILE_NAME}.json") as fp:
+        with open(f"{ROOT_PATH}/{self._save_path}/{self.SAVE_FILE_NAME}.json" ,"w") as fp:
             try:
-                json.dump(self.__json_dict, fp)
+                json.dump(self.__json_dict, fp, indent=4)
             except Exception as e:
                 raise Exception(f"The final state of the json like dictionary cannot be encoded as json. Error: {e}")
+            finally:
+                fp.close()

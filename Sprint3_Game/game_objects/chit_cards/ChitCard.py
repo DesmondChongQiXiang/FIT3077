@@ -2,12 +2,13 @@ from screen.ModularClickableSprite import ModularClickableSprite
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from game_objects.game_board.GameBoard import GameBoard
+from codec.saves.JSONSavable import JSONSavable
 
 from typing import Optional
 from abc import ABC, abstractmethod
 
 
-class ChitCard(ModularClickableSprite, ABC):
+class ChitCard(ModularClickableSprite, ABC, JSONSavable):
     """Represents a chit card. A chit card is a game element that can be flipped, and can be pressed on to perform
     an associated functionality.
 

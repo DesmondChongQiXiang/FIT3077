@@ -1,9 +1,11 @@
-from .ChitCard import ChitCard
-from typing import Optional
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from game_objects.characters.PlayableCharacter import PlayableCharacter
+from game_objects.chit_cards.ChitCard import ChitCard
+from factories.ClassTypeIdentifier import ClassTypeIdentifier
+
+from typing import Optional, Any
 
 
 class PirateChitCard(ChitCard):
@@ -73,3 +75,21 @@ class PirateChitCard(ChitCard):
         if not self.get_flipped():
             self._board_delegate.move_character_by_steps(character, self._symbol_count * (-1))
             self.set_flipped(not self.get_flipped())
+
+    def on_save(self, to_write: dict[str, Any]) -> None:
+        """When requested on save, add the object describing the chit card to the chit card sequence list.
+
+        Warning: The dictionary must remain in json encodable format.
+
+        Args:
+            to_write: The dictionary that will be converted to the JSON save file.
+
+        Raises:
+            Exception if player_data.players did not exist in the writing dictionary before the request
+        """
+        try:
+            chit_card_sequence: list[Any] = to_write["chit_card_sequence"]
+        except Exception:
+            raise Exception(f"chit_card_sequence did not exist before issuing save request for this chit card. type=PirateChitCard")
+
+        chit_card_sequence.append({"type": ClassTypeIdentifier.chit_card_pirate, "symbol_count": self._symbol_count, "flipped": self.get_flipped()})

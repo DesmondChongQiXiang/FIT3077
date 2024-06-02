@@ -52,7 +52,7 @@ class Dragon(PlayableCharacter):
         Warning: The dictionary must remain in json encodable format.
 
         Args:
-            to_write: The dictionary that will be converted to JSON.
+            to_write: The dictionary that will be converted to the JSON save file.
 
         Raises:
             Exception if player_data.players did not exist in the writing dictionary before the request

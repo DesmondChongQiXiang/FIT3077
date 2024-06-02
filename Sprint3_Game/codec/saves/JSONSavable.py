@@ -16,6 +16,6 @@ class JSONSavable(Protocol):
         Warning: The dictionary must remain in json encodable format.
 
         Args:
-            to_write: The dictionary that will be converted to JSON.
+            to_write: The dictionary that will be converted to the JSON save file.
         """
         ...

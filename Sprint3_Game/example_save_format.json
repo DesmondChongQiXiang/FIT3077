@@ -82,7 +82,7 @@
     {
       "type": "chit_card_power",
       "power": {
-        "type": "skip",
+        "type": "power_skip",
         "attributes": {
           "skip_value": 2
         }
@@ -93,7 +93,7 @@
     {
       "type": "chit_card_power",
       "power": {
-        "type": "swap",
+        "type": "power_swap",
         "attributes": null
       },
       "asset_path": "assets/chit_cards/...",

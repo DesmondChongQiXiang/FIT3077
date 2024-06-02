@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from game_objects.characters.PlayableCharacter import PlayableCharacter
+from codec.saves.JSONSavable import JSONSavable
 
 
-class TurnManager(ABC):
+class TurnManager(ABC, JSONSavable):
     """Manages turns within the game. Inheritors can modify how turns are handled.
 
     Author: Shen

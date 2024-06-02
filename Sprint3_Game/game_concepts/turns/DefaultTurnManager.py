@@ -1,6 +1,8 @@
 from game_concepts.turns.TurnManager import TurnManager
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 
+from typing import Optional, Any
+
 
 class DefaultTurnManger(TurnManager):
     """Turn manager that executes and manages changes of turns as expected. It does not intervene or perform any special
@@ -69,3 +71,17 @@ class DefaultTurnManger(TurnManager):
         """Perform any required configurations to the current player immediately before their turn ends."""
         self._current_player.set_is_currently_playing(False)
         self._current_player.set_should_continue_turn(True)  # reset for the playable character's next turn
+
+    # ----------- JSONSavable interface -------------------------------------------------------------------------------------------
+    def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
+        """When requested on save, return the index of the currently playing character.
+
+        Warning: The dictionary must remain in json encodable format.
+
+        Args:
+            to_write: The dictionary that will be converted to the JSON save file.
+
+        Returns:
+            The index of the currently playing character
+        """
+        return self._player_char_to_i[self.get_currently_playing_character()]

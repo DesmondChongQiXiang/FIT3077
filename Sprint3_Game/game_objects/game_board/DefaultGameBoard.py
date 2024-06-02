@@ -453,7 +453,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         try:
             players_list: list[Any] = to_write["player_data"]["players"]
         except:
-            raise Exception("player_data.players did not exist in the save dictionary when requested on save for DeafultGameBoard.")
+            raise Exception("player_data.players did not exist in the save dictionary when requested on save for DefaultGameBoard.")
 
         for i, player_entry in enumerate(players_list):
             player_entry["location"] = self.__character_location[self.__playable_characters[i]]

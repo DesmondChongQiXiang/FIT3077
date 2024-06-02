@@ -52,7 +52,6 @@ class ArcadeGameConfiguration(GameConfiguration):
         Args:
             save_codec: The codec to use for saving.
         """
-        # variables for generating the game world
         self.__main_tiles: list[Tile] = randomised_volcano_card_sequence(8)
         self.__starting_tiles: list[Tile] = [
             CaveTile(Animal.BABY_DRAGON, CaveTileVariant.BLUE, character=self.PLAYABLE_CHARACTERS[0]),
@@ -62,6 +61,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         ]
         self.__starting_tile_positions_set: set[int] = set(self.STARTING_TILE_POSITIONS)  # positions as indexes along main sequence tiles
         self.__chit_cards: list[ChitCard] = []
+        self.__turn_manager: TurnManager = DefaultTurnManger(self.PLAYABLE_CHARACTERS, 0)
         self.__game_board: Optional[GameBoard] = None
 
         save_codec.register_saveable(self)
@@ -73,16 +73,13 @@ class ArcadeGameConfiguration(GameConfiguration):
             The generated game world
         """
 
-        # turn manager
-        turn_manager: TurnManager = DefaultTurnManger(self.PLAYABLE_CHARACTERS, 0)
-
         # chit cards
         swap_powers: list[SwapPower] = [SwapPower(None) for _ in range(len(Animal))]
         for i, animal in enumerate(Animal):
             for j in range(1, 3):
                 self.__chit_cards.append(AnimalChitCard(animal, j))
             self.__chit_cards.append(PirateChitCard(1 if i % 2 == 0 else 2))
-            self.__chit_cards.append(PowerChitCard(SkipTurnPower(turn_manager, 2), "assets/chit_cards/chit_card_skip_2.png"))
+            self.__chit_cards.append(PowerChitCard(SkipTurnPower(self.__turn_manager, 2), "assets/chit_cards/chit_card_skip_2.png"))
             self.__chit_cards.append(PowerChitCard(swap_powers[i], "assets/chit_cards/chit_card_swap.png"))
 
         # game board
@@ -103,7 +100,7 @@ class ArcadeGameConfiguration(GameConfiguration):
             power.use_game_board(self.__game_board)
 
         # GAME WORLD
-        return GameWorld(self.__game_board, turn_manager)
+        return GameWorld(self.__game_board, self.__turn_manager)
 
     def on_save(self, to_write: dict[str, Any]) -> None:
         """Upon save, configure the save dictionary to represent the state of the current arcade type game.
@@ -122,6 +119,9 @@ class ArcadeGameConfiguration(GameConfiguration):
         players_save_dict: list[Any] = to_write["player_data"]["players"]
         for player in self.PLAYABLE_CHARACTERS:
             players_save_dict.append(player.on_save(to_write))
+
+        player_data_save_dict: dict[str, Any] = to_write["player_data"]
+        player_data_save_dict["currently_playing"] = self.__turn_manager.on_save(to_write)  # add currently playing character index
 
         # add volcano card sequence (including caves) data to the save dictionary
         volcano_card_seq_save_dict: list[Any] = to_write["volcano_card_sequence"]

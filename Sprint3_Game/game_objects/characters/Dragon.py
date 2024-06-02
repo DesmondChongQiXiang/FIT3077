@@ -55,14 +55,6 @@ class Dragon(PlayableCharacter):
             to_write: The dictionary that will be converted to the JSON save file.
 
         Returns:
-            None
-            
-        Raises:
-            Exception if player_data.players did not exist in the writing dictionary before the request
+            A JSON compatible object describing this dragon
         """
-        try:
-            players_list: list[Any] = to_write["player_data"]["players"]
-        except Exception:
-            raise Exception(f"player_data.players did not exist before issuing save request for this dragon. name={self.name()}")
-
-        players_list.append({"type": ClassTypeIdentifier.player_dragon.value, "variant": self._variant.value, "name": self.name(), "location": None})
+        return {"type": ClassTypeIdentifier.player_dragon.value, "variant": self._variant.value, "name": self.name(), "location": None}

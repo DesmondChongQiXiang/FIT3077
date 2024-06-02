@@ -61,14 +61,6 @@ class NormalTile(Tile):
             to_write: The dictionary that will be converted to the JSON save file.
 
         Returns:
-            None
-            
-        Raises:
-            Exception if the animal was none when saving.
+            A JSON compatible object that describes this tile
         """
-        animal: Optional[Animal] = self.get_animal()
-        if animal is None:
-            raise Exception("Animal must not be none for the cave tile on save.")
-
-        sequence_list: list[Any] = to_write["volcano_card_sequence"][-1]  # last element in 'volcano_card_sequence' is the sequence currently being determined
-        sequence_list.append({"type": ClassTypeIdentifier.tile_normal.value, "animal": animal.value})
+        return {"type": ClassTypeIdentifier.tile_normal.value, "animal": self.get_animal()}

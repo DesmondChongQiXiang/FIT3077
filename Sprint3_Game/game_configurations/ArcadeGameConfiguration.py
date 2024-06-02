@@ -119,9 +119,10 @@ class ArcadeGameConfiguration(GameConfiguration):
         # add volcano card sequence (including caves) data to the saving dictionary
         starting_tile_i: int = 0  # tracks starting tile to ask saving data from
         volcano_card_sequence: list[Any] = to_write["volcano_card_sequence"]
-        volcano_card_sequence.append([])
 
         for i in range(0, len(self.__main_tiles), 3):  # volcano cards are in groups of 3
+            volcano_card_sequence.append([])
+
             for j in range(i, i + 3):
                 cur_tile: JSONSavable = self.__main_tiles[j]
                 cur_tile.on_save(to_write)
@@ -130,5 +131,3 @@ class ArcadeGameConfiguration(GameConfiguration):
                 if j in self.__starting_tile_positions_set:
                     self.__starting_tiles[starting_tile_i].on_save(to_write)
                     starting_tile_i += 1
-
-            volcano_card_sequence.append([])

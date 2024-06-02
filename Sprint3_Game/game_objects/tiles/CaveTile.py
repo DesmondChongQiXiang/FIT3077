@@ -5,7 +5,7 @@ from game_objects.animals.Animal import Animal
 from game_concepts.events.WinEventPublisher import WinEventPublisher
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
-from codec.saves.JSONSaveClassTypeIdentifiers import JSONSaveClassTypeIdentifiers
+from factories.ClassTypeIdentifier import ClassTypeIdentifier
 
 from typing import Optional, Any
 
@@ -77,4 +77,4 @@ class CaveTile(Tile):
             raise Exception("Animal must not be none for the cave tile on save.")
 
         sequence_list: list[Any] = to_write["volcano_card_sequence"][-1]  # last element in 'volcano_card_sequence' is the sequence currently being determined
-        sequence_list.append({"type": JSONSaveClassTypeIdentifiers.tile_cave.value, "variant": self.__variant.value, "animal": animal.value})
+        sequence_list.append({"type": ClassTypeIdentifier.tile_cave.value, "variant": self.__variant.value, "animal": animal.value})

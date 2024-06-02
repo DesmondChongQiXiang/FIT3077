@@ -34,7 +34,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             starting_tiles: The starting tiles. In form: (starting tile, next tile)
             chit_cards: The chit cards to use for the game board. Will be placed in order from left to right, top to bottom.
             playable_characters: The playable characters to play on the game board
+
+        Raises:
+            Exception if the number of players to be playing on the board is less than 2.
         """
+        if len(playable_characters) < 2:
+            raise Exception("The number of players must be at least 2 for the default game board.")
+
         self.__tile_sequence: list[Tile] = []
         self.__main_tile_sequence_length: int = len(main_tile_sequence)  # length of just the main sequence (excluding starting tiles)
         self.__starting_tiles: list[Tile] = []

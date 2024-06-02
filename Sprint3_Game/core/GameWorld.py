@@ -23,21 +23,13 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
 
     __GAME_END_CLOSE_DELAY: float = 5.0  # seconds after which to close the game after the game ends (i.e when a player wins)
 
-    def __init__(self, playable_characters: list[PlayableCharacter], game_board: GameBoard, turn_manager: TurnManager):
-        """Configures the game world, with the first character in the list of playable characters being the starting player.
+    def __init__(self, game_board: GameBoard, turn_manager: TurnManager):
+        """Creates the game world for running the game.
 
         Args:
-            playable_characters: The list of playable characters to initialise the world (game) with
             game_board: The game board
             turn_manager: The manager for managing turns
-
-        Throws:
-            Exception when the number of playable characters is less than 2.
         """
-        if len(playable_characters) < 2:
-            raise ValueError("Number of playable characters must be at least 2.")
-
-        self.__playable_characters: list[PlayableCharacter] = playable_characters
         self.__game_board: GameBoard = game_board
         self.__turn_manager: TurnManager = turn_manager
         self.__should_game_run: bool = True
@@ -116,9 +108,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
             character: The character
         """
         # print who won the game
-        for player_char in self.__playable_characters:
-            if player_char == character:
-                print(f"Player {player_char.name()} has won the game!")
+        print(f"Player {character.name()} has won the game!")
 
         self.disable_mouse_clicks()
 

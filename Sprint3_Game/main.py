@@ -87,5 +87,5 @@ if __name__ == "__main__":
         power.use_game_board(game_board)
 
     # ----- GAME INSTANCE --------------------------------------------------------------------------------------------------
-    world = GameWorld(playable_characters, game_board, turn_manager)
+    world = GameWorld(game_board, turn_manager)
     world.run()

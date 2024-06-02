@@ -29,7 +29,7 @@ class DefaultGameConfiguration(GameConfiguration):
     """
 
     def generate_game_world(self) -> GameWorld:
-        """Generate the game world with the configuration.
+        """Generate the game world with the default fiery dragons game configuration.
 
         Returns:
             The generated game world

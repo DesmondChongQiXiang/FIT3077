@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 
 class JSONSavable(Protocol):
-    """Implementers can receive python like JSON dictionaries for loading/saving purposes.
+    """Implementers can receive python like JSON dictionaries for saving purposes.
 
     Author: Shen
     """

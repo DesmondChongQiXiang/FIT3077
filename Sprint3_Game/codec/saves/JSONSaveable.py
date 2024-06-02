@@ -10,8 +10,8 @@ class JSONSaveable(Protocol):
 
     @abstractmethod
     def on_save(self, to_write: dict[str, Any]) -> None:
-        """Upon save, receive a json like python dictionary that can be edited. This json dictionary will be encoded,
-        and as such must remain in a json encodable format.
+        """Upon save, receive a json like python dictionary that can be edited. This json dictionary will be encoded
+        into the save file, and as such must remain in a json encodable format.
 
         Warning: The dictionary must remain in json encodable format.
 

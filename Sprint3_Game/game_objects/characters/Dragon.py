@@ -1,3 +1,4 @@
+from __future__ import annotations
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVariant
 from screen.DrawAssetInstruction import DrawAssetInstruction
@@ -58,3 +59,18 @@ class Dragon(PlayableCharacter):
             A JSON compatible object describing the dragon
         """
         return {"type": ClassTypeIdentifier.player_dragon.value, "variant": self._variant.value, "name": self.name(), "location": None}
+
+    @classmethod
+    def create_from_json_save(cls, save_data: dict[str, Any]) -> Dragon:
+        """Create a dragon based on player json save data.
+
+        Args:
+            save_data: The dictionary representing the JSON save data object for a player
+
+        Returns:
+            A dragon matching the save data
+        """
+        try:
+            return cls(PlayableCharacterVariant(save_data["variant"]), save_data["name"])
+        except:
+            raise Exception(f"Save data must have attributes 'variant' and 'name'. Passed in={save_data}")

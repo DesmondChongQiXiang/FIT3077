@@ -5,10 +5,11 @@ from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.animals.Animal import Animal
+from codec.saves.JSONSavable import JSONSavable
 from utils.pygame_utils import get_coords_for_center_drawing_in_rect
 
 
-class Tile(ABC, DrawableByAsset):
+class Tile(ABC, DrawableByAsset, JSONSavable):
     """Represents a tile that a character can stand on.
 
     Author: Shen

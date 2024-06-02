@@ -5,9 +5,9 @@ from game_objects.animals.Animal import Animal
 from game_concepts.events.WinEventPublisher import WinEventPublisher
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
-from utils.pygame_utils import get_coords_for_center_drawing_in_rect
+from codec.saves.JSONSaveClassTypeIdentifiers import JSONSaveClassTypeIdentifiers
 
-from typing import Optional
+from typing import Optional, Any
 
 
 class CaveTile(Tile):
@@ -60,3 +60,21 @@ class CaveTile(Tile):
         instructions.extend(self._default_character_draw_instructions())
 
         return instructions
+
+    def on_save(self, to_write: dict[str, Any]) -> None:
+        """Upon save request, add the object describing this tile to the respective volcano card sequence.
+
+        Warning: The dictionary must remain in json encodable format.
+
+        Args:
+            to_write: The dictionary that will be converted to JSON.
+
+        Raises:
+            Exception if the animal was none when saving.
+        """
+        animal: Optional[Animal] = self.get_animal()
+        if animal is None:
+            raise Exception("Animal must not be none for the cave tile on save.")
+
+        sequence_list: list[Any] = to_write["volcano_card_sequence"][-1]  # last element in 'volcano_card_sequence' is the sequence currently being determined
+        sequence_list.append({"type": JSONSaveClassTypeIdentifiers.tile_cave.value, "variant": self.__variant.value, "animal": animal.value})

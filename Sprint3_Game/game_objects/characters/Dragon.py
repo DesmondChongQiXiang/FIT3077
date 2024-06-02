@@ -46,7 +46,7 @@ class Dragon(PlayableCharacter):
         return [DrawAssetInstruction(f"assets/characters/dragon/dragon_{self._variant.value}.png", x, y, draw_properties.get_size(), self.__draw_rotation)]
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
-        """When requested on save, add the object describing the dragon to the respective player list. Location of the player is left
+        """When requested on save, return a JSON compatible object describing this dragon. Location of the player is left
         None for later modification.
 
         Warning: The dictionary must remain in json encodable format.
@@ -55,6 +55,6 @@ class Dragon(PlayableCharacter):
             to_write: The dictionary that will be converted to the JSON save file.
 
         Returns:
-            A JSON compatible object describing this dragon
+            A JSON compatible object describing the dragon
         """
         return {"type": ClassTypeIdentifier.player_dragon.value, "variant": self._variant.value, "name": self.name(), "location": None}

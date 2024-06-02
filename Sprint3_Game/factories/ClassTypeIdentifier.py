@@ -12,5 +12,6 @@ class ClassTypeIdentifier(Enum):
     player_dragon = "player_dragon"
     chit_card_animal = "chit_card_animal"
     chit_card_pirate = "chit_card_pirate"
+    chit_card_power = "chit_card_power"
     power_skip = "power_skip"
     power_swap = "power_swap"

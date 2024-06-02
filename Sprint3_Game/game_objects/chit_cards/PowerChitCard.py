@@ -1,10 +1,12 @@
-from typing import Optional
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_concepts.powers.Power import Power
+from factories.ClassTypeIdentifier import ClassTypeIdentifier
+
+from typing import Optional, Any
 
 
 class PowerChitCard(ChitCard):
@@ -79,3 +81,21 @@ class PowerChitCard(ChitCard):
                 self.set_flipped(not self.get_flipped())
         else:
             raise Exception("Board delegate was not set when on_click() called.")
+
+    def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
+        """When requested on save, return a JSON compatible object describing this power chit card.
+
+        Warning: The dictionary must remain in json encodable format.
+
+        Args:
+            to_write: The dictionary that will be converted to the JSON save file.
+
+        Returns:
+            A JSON compatible object describing this power chit card.
+        """
+        return {
+            "type": ClassTypeIdentifier.chit_card_power.value,
+            "power": self.__power.on_save(to_write),
+            "asset_path": self.__image_path,
+            "flipped": self.get_flipped(),
+        }

@@ -62,7 +62,7 @@ class CaveTile(Tile):
         return instructions
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
-        """Upon save request, add the object describing this tile to the respective volcano card sequence.
+        """When requested on save, return a JSON compatible object describing this cave tile.
 
         Warning: The dictionary must remain in json encodable format.
 
@@ -72,5 +72,10 @@ class CaveTile(Tile):
         Returns:
             A JSON compatible object describing this cave tile.
 
+        Raises:
+            Exception if animal was none when saving.
         """
-        return {"type": ClassTypeIdentifier.tile_cave.value, "variant": self.__variant.value, "animal": self.get_animal()}
+        animal: Optional[Animal] = self.get_animal()
+        if animal is None:
+            raise Exception("Animal was none for CaveTile when attempting to save.")
+        return {"type": ClassTypeIdentifier.tile_cave.value, "variant": self.__variant.value, "animal": animal.value}

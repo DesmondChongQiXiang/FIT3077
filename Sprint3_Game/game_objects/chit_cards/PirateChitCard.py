@@ -77,7 +77,7 @@ class PirateChitCard(ChitCard):
             self.set_flipped(not self.get_flipped())
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
-        """When requested on save, add the object describing the chit card to the chit card sequence list.
+        """When requested on save, return a JSON compatible object describing this pirate chit card.
 
         Warning: The dictionary must remain in json encodable format.
 
@@ -85,14 +85,6 @@ class PirateChitCard(ChitCard):
             to_write: The dictionary that will be converted to the JSON save file.
 
         Returns:
-            None
-
-        Raises:
-            Exception if player_data.players did not exist in the writing dictionary before the request
+            A JSON compatible object describing the pirate chit card.
         """
-        try:
-            chit_card_sequence: list[Any] = to_write["chit_card_sequence"]
-        except Exception:
-            raise Exception(f"chit_card_sequence did not exist before issuing save request for this chit card. type=PirateChitCard")
-
-        chit_card_sequence.append({"type": ClassTypeIdentifier.chit_card_pirate.value, "symbol_count": self._symbol_count, "flipped": self.get_flipped()})
+        return {"type": ClassTypeIdentifier.chit_card_pirate.value, "symbol_count": self._symbol_count, "flipped": self.get_flipped()}

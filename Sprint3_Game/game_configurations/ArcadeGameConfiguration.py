@@ -118,21 +118,24 @@ class ArcadeGameConfiguration(GameConfiguration):
 
         # add player data to the save dictionary
         to_write["player_data"]["players"] = []
+        players_save_dict: list[Any] = to_write["player_data"]["players"]
         for player in self.PLAYABLE_CHARACTERS:
-            player.on_save(to_write)
+            players_save_dict.append(player.on_save(to_write))
 
         # add volcano card sequence (including caves) data to the save dictionary
         starting_tile_i: int = 0  # tracks starting tile to ask saving data from
         volcano_card_sequence: list[Any] = to_write["volcano_card_sequence"]
 
         for i in range(0, len(self.__main_tiles), 3):  # volcano cards are in groups of 3
-            volcano_card_sequence.append([])
+            current_volcano_card: list[Any] = []
 
             for j in range(i, i + 3):
                 cur_tile: JSONSavable = self.__main_tiles[j]
-                cur_tile.on_save(to_write)
+                current_volcano_card.append(cur_tile.on_save(to_write))
 
-                # write cave data if the cave is attached to this tile
+                # write starting tile data if the starting tile is attached to this tile
                 if j in self.__starting_tile_positions_set:
-                    self.__starting_tiles[starting_tile_i].on_save(to_write)
+                    current_volcano_card.append(self.__starting_tiles[starting_tile_i].on_save(to_write))
                     starting_tile_i += 1
+            
+            volcano_card_sequence.append(current_volcano_card)

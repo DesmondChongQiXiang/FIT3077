@@ -2,10 +2,11 @@ from abc import ABC, abstractmethod
 from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawProperties import DrawProperties
 from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVariant
+from codec.saves.JSONSavable import JSONSavable
 from typing import Optional
 
 
-class PlayableCharacter(ABC, DrawableByAsset):
+class PlayableCharacter(ABC, DrawableByAsset, JSONSavable):
     """Represents a playable character in the game. Actions in the game interact with this class to determine their
     behaviour.
 

@@ -116,7 +116,12 @@ class ArcadeGameConfiguration(GameConfiguration):
         to_write["volcano_card_sequence"] = []
         to_write["chit_card_sequence"] = []
 
-        # add volcano card sequence (including caves) data to the saving dictionary
+        # add player data to the save dictionary
+        to_write["player_data"]["players"] = []
+        for player in self.PLAYABLE_CHARACTERS:
+            player.on_save(to_write)
+
+        # add volcano card sequence (including caves) data to the save dictionary
         starting_tile_i: int = 0  # tracks starting tile to ask saving data from
         volcano_card_sequence: list[Any] = to_write["volcano_card_sequence"]
 

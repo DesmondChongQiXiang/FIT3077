@@ -5,22 +5,26 @@
     "players": [
       {
         "type": "player_dragon",
-        "player": ["blue", "Blue"],
+        "variant": "blue",
+        "name": "Blue",
         "location": 4
       },
       {
         "type": "player_dragon",
-        "player": ["green", "Green"],
+        "variant": "green",
+        "name": "Green",
         "location": 1
       },
       {
         "type": "player_dragon",
-        "player": ["orange", "Orange"],
+        "variant": "orange",
+        "name": "Orange",
         "location": 13
       },
       {
         "type": "player_dragon",
-        "player": ["purple", "Purple"],
+        "variant": "purple",
+        "name": "Purple",
         "location": 3
       }
     ],

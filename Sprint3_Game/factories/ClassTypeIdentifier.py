@@ -9,3 +9,4 @@ class ClassTypeIdentifier(Enum):
 
     tile_cave = "tile_cave"
     tile_normal = "tile_normal"
+    player_dragon = "player_dragon"

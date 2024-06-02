@@ -2,7 +2,8 @@ from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVariant
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.DrawProperties import DrawProperties
-from typing import Optional
+from factories.ClassTypeIdentifier import ClassTypeIdentifier
+from typing import Optional, Any
 
 
 class Dragon(PlayableCharacter):
@@ -43,3 +44,22 @@ class Dragon(PlayableCharacter):
             self.__draw_rotation = 0
 
         return [DrawAssetInstruction(f"assets/characters/dragon/dragon_{self._variant.value}.png", x, y, draw_properties.get_size(), self.__draw_rotation)]
+
+    def on_save(self, to_write: dict[str, Any]) -> None:
+        """When requested on save, add the object describing the dragon to the respective player list. Location of the player is left
+        None for later modification.
+
+        Warning: The dictionary must remain in json encodable format.
+
+        Args:
+            to_write: The dictionary that will be converted to JSON.
+
+        Raises:
+            Exception if player_data.players did not exist in the writing dictionary before the request
+        """
+        try:
+            players_list: list[Any] = to_write["player_data"]["players"]
+        except Exception:
+            raise Exception(f"player_data.players did not exist before issuing save request for this dragon. name={self.name()}")
+
+        players_list.append({"type": ClassTypeIdentifier.player_dragon.value, "variant": self._variant.value, "name": self.name(), "location": None})

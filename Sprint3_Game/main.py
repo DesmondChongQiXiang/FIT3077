@@ -38,7 +38,6 @@ if __name__ == "__main__":
         pygame.display.set_mode((REQUESTED_SCREEN_SIZE, REQUESTED_SCREEN_SIZE))
 
     # ----- GAME CONFIG --------------------------------------------------------------------------------------------------
-    SAVE_CODEC._JSONSaveCodec__json_dict["test"] = [1, 2]
     SAVE_CODEC.save()
 
     # ----- GAME INSTANCE ------------------------------------------------------------------------------------------

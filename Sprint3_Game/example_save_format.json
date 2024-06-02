@@ -4,22 +4,22 @@
   "player_data": {
     "players": [
       {
-        "type": "dragon",
+        "type": "player_dragon",
         "player": ["blue", "Blue"],
         "location": 4
       },
       {
-        "type": "dragon",
+        "type": "player_dragon",
         "player": ["green", "Green"],
         "location": 1
       },
       {
-        "type": "dragon",
+        "type": "player_dragon",
         "player": ["orange", "Orange"],
         "location": 13
       },
       {
-        "type": "dragon",
+        "type": "player_dragon",
         "player": ["purple", "Purple"],
         "location": 3
       }
@@ -44,27 +44,45 @@
         }
       ],
       "starting_tile": {
-        "type": "cave",
+        "type": "tile_cave",
+        "variant": "blue",
         "animal": "spider",
         "location": 2
       }
+    },
+    {
+      "sequence": [
+        {
+          "type": "tile_animal",
+          "animal": "spider"
+        },
+        {
+          "type": "tile_animal",
+          "animal": "salamander"
+        },
+        {
+          "type": "tile_animal",
+          "animal": "bat"
+        }
+      ],
+      "starting_tile": null
     }
   ],
 
   "chit_card_sequence": [
     {
-      "type": "animal",
+      "type": "chit_card_animal",
       "animal": "salamander",
       "symbol_count": 2,
       "flipped": true
     },
     {
-      "type": "pirate",
+      "type": "chit_card_pirate",
       "symbol_count": 1,
       "flipped": true
     },
     {
-      "type": "power",
+      "type": "chit_card_power",
       "power": {
         "type": "skip",
         "attributes": {
@@ -75,7 +93,7 @@
       "flipped": false
     },
     {
-      "type": "power",
+      "type": "chit_card_power",
       "power": {
         "type": "swap",
         "attributes": null

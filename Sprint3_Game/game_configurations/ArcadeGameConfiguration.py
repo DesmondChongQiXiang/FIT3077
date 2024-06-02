@@ -1,7 +1,8 @@
-from typing import Any
+from typing import Any, Sequence
 from presets import *
 from settings import *
 from core.GameWorld import GameWorld
+from codec.saves.JSONSaveCodec import JSONSaveCodec
 from game_configurations.GameConfiguration import GameConfiguration
 from game_concepts.turns.DefaultTurnManager import DefaultTurnManger
 from game_concepts.turns.TurnManager import TurnManager
@@ -22,11 +23,24 @@ from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVa
 from utils.os_utils import *
 
 
-class DefaultGameConfiguration(GameConfiguration):
-    """The default fiery dragons game configuration.
+class ArcadeGameConfiguration(GameConfiguration):
+    """The default fiery dragons game configuration but with a more arcade style due to the addition of powers.
+    This configuration includes the the following extensions: swap chit cards, skip chit cards, universal tiles.
 
     Author: Shen
     """
+
+    def __init__(self, save_codec: JSONSaveCodec):
+        """
+        Constructor.
+
+        Args:
+            save_codec: The codec to use for saving.
+        """
+        save_codec.register_saveable(self)
+
+        # variables for generating the game world
+        self.__tiles: list[Tile] = randomised_volcano_card_sequence(8)
 
     def generate_game_world(self) -> GameWorld:
         """Generate the game world with the default fiery dragons game configuration.
@@ -34,9 +48,6 @@ class DefaultGameConfiguration(GameConfiguration):
         Returns:
             The generated game world
         """
-        # tiles
-        tiles: list[Tile] = randomised_volcano_card_sequence(8)
-
         # playable characters
         playable_characters: list[PlayableCharacter] = [
             Dragon(PlayableCharacterVariant.BLUE, "Blue"),
@@ -68,8 +79,8 @@ class DefaultGameConfiguration(GameConfiguration):
 
         # game board
         game_board: GameBoard = DefaultGameBoard(
-            tiles,
-            [(starting_tiles[0], tiles[3]), (starting_tiles[1], tiles[9]), (starting_tiles[2], tiles[15]), (starting_tiles[3], tiles[21])],
+            self.__tiles,
+            [(starting_tiles[0], self.__tiles[3]), (starting_tiles[1], self.__tiles[9]), (starting_tiles[2], self.__tiles[15]), (starting_tiles[3], self.__tiles[21])],
             chit_cards,
             playable_characters,
         )
@@ -82,20 +93,13 @@ class DefaultGameConfiguration(GameConfiguration):
         return GameWorld(game_board, turn_manager)
 
     def on_save(self, to_write: dict[str, Any]) -> None:
-        """Upon save, receive a json like python dictionary that can be edited. This json dictionary will be encoded,
-        and as such must remain in a json encodable format.
+        """Upon save, add the key elements making up the game as placeholder properties to the save dictionary.
 
         Warning: The dictionary must remain in json encodable format.
 
         Args:
             to_write: The dictionary that will be converted to JSON.
         """
-        ...
-
-    def on_load(self, loaded_data: dict[str, Any]) -> None:
-        """Upon load, load from the loaded JSON data.
-
-        Args:
-            loaded_data: The dictionary representing the loaded JSON.
-        """
-        ...
+        to_write["player_data"] = dict()
+        to_write["volcano_card_sequence"] = []
+        to_write["chit_card_sequence"] = []

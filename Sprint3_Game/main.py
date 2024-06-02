@@ -3,7 +3,7 @@
 from settings import *
 from utils.os_utils import *
 from game_configurations.GameConfiguration import GameConfiguration
-from game_configurations.DefaultGameConfiguration import DefaultGameConfiguration
+from game_configurations.ArcadeGameConfiguration import ArcadeGameConfiguration
 from codec.saves.SaveCodec import SaveCodec
 from codec.saves.JSONSaveCodec import JSONSaveCodec
 
@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     # GAME_CONFIG
     # The game configuration the game is to use
-    GAME_CONFIG: GameConfiguration = DefaultGameConfiguration(SAVE_CODEC)
+    GAME_CONFIG: GameConfiguration = ArcadeGameConfiguration(SAVE_CODEC)
 
     # ----- PYGAME INIT -------------------------------------------------------------------------------------------------
     # Initialise pygame

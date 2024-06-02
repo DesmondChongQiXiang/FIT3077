@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
+from typing import Any, TypeVar, Generic
+
+T = TypeVar("T")
 
 
-class SaveCodec(ABC):
+class SaveCodec(ABC, Generic[T]):
     """Represents a codec that can encode/decode from a save file.
 
     Author: Shen
@@ -16,8 +19,12 @@ class SaveCodec(ABC):
         self._save_path: str = save_path
 
     @abstractmethod
-    def load(self) -> None:
-        """Load data from the configured save path, and do something with it."""
+    def load(self) -> T:
+        """Load data from the configured save path into a python readable format.
+        
+        Returns:
+            The data in a python readable format.
+        """
         ...
 
     @abstractmethod

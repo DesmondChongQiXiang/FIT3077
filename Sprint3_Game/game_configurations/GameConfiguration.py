@@ -1,10 +1,10 @@
 from typing import Protocol
 from abc import abstractmethod
 from core.GameWorld import GameWorld
-from codec.saves.JSONSaveable import JSONSaveable
+from codec.saves.JSONSavable import JSONSavable
 
 
-class GameConfiguration(JSONSaveable, Protocol):
+class GameConfiguration(JSONSavable, Protocol):
     """Represents a pre-defined configuration that can be used to generate a game instance. Game configurations are
     saveable as JSONs.
 

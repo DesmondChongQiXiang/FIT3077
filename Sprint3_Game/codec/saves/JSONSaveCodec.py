@@ -1,12 +1,12 @@
 from typing import Any
 from definitions import ROOT_PATH
-from codec.saves.JSONSaveable import JSONSaveable
+from codec.saves.JSONSavable import JSONSavable
 from codec.saves.SaveCodec import SaveCodec
 
 import json
 
 
-class JSONSaveCodec(SaveCodec):
+class JSONSaveCodec(SaveCodec[dict[str, Any]]):
     """Save to and load from a JSON file using json like python dictionaries.
 
     Author: Shen
@@ -22,9 +22,9 @@ class JSONSaveCodec(SaveCodec):
         """
         super().__init__(save_path)
         self.__json_dict: dict[str, Any] = dict()
-        self.__saveables: list[JSONSaveable] = []
+        self.__saveables: list[JSONSavable] = []
 
-    def register_saveable(self, saveable: JSONSaveable) -> None:
+    def register_saveable(self, saveable: JSONSavable) -> None:
         """Register a saveable that can load and receive a json like dictionary.
 
         Args:
@@ -32,12 +32,24 @@ class JSONSaveCodec(SaveCodec):
         """
         self.__saveables.append(saveable)
 
-    def load(self) -> None:
-        """Notify all registered saveables of a load occuring, and pass in the data that those saveables can
-        use to load themselves.
+    def load(self) -> dict[str, Any]:
+        """Load the data in the JSON save file as a python dictionary.
+
+        Returns:
+            The dictionary parsed from the JSON save file
+
+        Raises:
+            Exception if the file could not be parsed as a JSON.
         """
-        for saveable in self.__saveables:
-            saveable.on_load(self.__json_dict)
+        json_load_path: str = f"{ROOT_PATH}/{self._save_path}/{self.SAVE_FILE_NAME}.json"
+        with open(json_load_path, "r") as fp:
+            try:
+                loaded_dict: dict[str, Any] = json.load(fp)
+                return loaded_dict
+            except Exception as e:
+                raise Exception(f"The json save file at: {json_load_path} cannot be parsed as JSON. Error: {e}")
+            finally:
+                fp.close()
 
     def save(self) -> None:
         """Notify all registered saveables of a save occuring, and pass in a json like dictionary that saveables
@@ -50,7 +62,7 @@ class JSONSaveCodec(SaveCodec):
             saveable.on_save(self.__json_dict)
 
         # encode json dict as JSON and save as file to path
-        with open(f"{ROOT_PATH}/{self._save_path}/{self.SAVE_FILE_NAME}.json" ,"w") as fp:
+        with open(f"{ROOT_PATH}/{self._save_path}/{self.SAVE_FILE_NAME}.json", "w") as fp:
             try:
                 json.dump(self.__json_dict, fp, indent=4)
             except Exception as e:

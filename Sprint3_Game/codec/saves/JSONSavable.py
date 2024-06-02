@@ -2,7 +2,7 @@ from typing import Protocol, Any
 from abc import abstractmethod
 
 
-class JSONSaveable(Protocol):
+class JSONSavable(Protocol):
     """Implementers can receive python like JSON dictionaries for loading/saving purposes.
 
     Author: Shen
@@ -17,14 +17,5 @@ class JSONSaveable(Protocol):
 
         Args:
             to_write: The dictionary that will be converted to JSON.
-        """
-        ...
-
-    @abstractmethod
-    def on_load(self, loaded_data: dict[str, Any]) -> None:
-        """Upon load, load from the loaded JSON data.
-
-        Args:
-            loaded_data: The dictionary representing the loaded JSON.
         """
         ...

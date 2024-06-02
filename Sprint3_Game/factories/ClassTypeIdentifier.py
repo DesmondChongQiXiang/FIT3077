@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class ClassTypeIdentifier(Enum):
-    """Identifiers that identify the type of a python class in the game.
+    """Identifiers that uniquely identify the type of a python class in the game.
 
     Author: Shen
     """
@@ -12,3 +12,5 @@ class ClassTypeIdentifier(Enum):
     player_dragon = "player_dragon"
     chit_card_animal = "chit_card_animal"
     chit_card_pirate = "chit_card_pirate"
+    power_skip = "power_skip"
+    power_swap = "power_swap"

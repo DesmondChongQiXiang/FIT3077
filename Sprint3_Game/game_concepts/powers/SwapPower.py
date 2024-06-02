@@ -1,7 +1,9 @@
+from factories.ClassTypeIdentifier import ClassTypeIdentifier
 from game_concepts.powers.Power import Power
 from game_objects.game_board.GameBoard import GameBoard
 from game_objects.characters.PlayableCharacter import PlayableCharacter
-from typing import Optional
+
+from typing import Optional, Any
 
 
 class SwapPower(Power):
@@ -49,3 +51,17 @@ class SwapPower(Power):
             game_board: The game board to use.
         """
         self.__game_board = game_board
+
+    def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
+        """When requested on save, return data describing the skip power.
+
+        Warning: The dictionary must remain in json encodable format.
+
+        Args:
+            to_write: The dictionary that will be converted to the JSON save file.
+
+        Returns:
+            A JSON compatible object describing the skip turn power
+
+        """
+        return {"type": ClassTypeIdentifier.power_swap.value}

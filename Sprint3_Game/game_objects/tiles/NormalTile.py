@@ -52,7 +52,7 @@ class NormalTile(Tile):
 
         return instructions
 
-    def on_save(self, to_write: dict[str, Any]) -> None:
+    def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
         """Upon save request, add the object describing this tile to the respective volcano card sequence.
 
         Warning: The dictionary must remain in json encodable format.
@@ -60,6 +60,9 @@ class NormalTile(Tile):
         Args:
             to_write: The dictionary that will be converted to the JSON save file.
 
+        Returns:
+            None
+            
         Raises:
             Exception if the animal was none when saving.
         """

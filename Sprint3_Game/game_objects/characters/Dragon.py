@@ -45,7 +45,7 @@ class Dragon(PlayableCharacter):
 
         return [DrawAssetInstruction(f"assets/characters/dragon/dragon_{self._variant.value}.png", x, y, draw_properties.get_size(), self.__draw_rotation)]
 
-    def on_save(self, to_write: dict[str, Any]) -> None:
+    def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
         """When requested on save, add the object describing the dragon to the respective player list. Location of the player is left
         None for later modification.
 
@@ -54,6 +54,9 @@ class Dragon(PlayableCharacter):
         Args:
             to_write: The dictionary that will be converted to the JSON save file.
 
+        Returns:
+            None
+            
         Raises:
             Exception if player_data.players did not exist in the writing dictionary before the request
         """

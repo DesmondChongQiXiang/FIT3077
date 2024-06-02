@@ -1,11 +1,13 @@
+from game_objects.characters.PlayableCharacter import PlayableCharacter
+from codec.saves.JSONSavable import JSONSavable
+
 from abc import abstractmethod, ABC
 from typing import Optional
-from game_objects.characters.PlayableCharacter import PlayableCharacter
 
 
-class Power(ABC):
+class Power(ABC, JSONSavable):
     """
-    Represents a power that can cause effects to playable characters when executed. 
+    Represents a power that can cause effects to playable characters when executed.
 
     Warning: The user of the power must be set, otherwise execution will fail.
 

@@ -146,9 +146,10 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     def add_chit_card(self, chit_card: ChitCard, random_mode: bool, position: int = -1) -> None:
         """Adds a chit card to the default game board either randomly or at a specified position.
 
-        If not adding randomly, the position to can be set. Adding to a specified position moves all chit cards from that position onwards to the right.
+        Adding to a specified position moves all chit cards from that position onwards to the right. If position is not
+        set, the chit card is added to the end of the chit card sequence.
 
-        If position is not set, the chit card is added to the end of the chit card sequence.
+        Random adding takes priority over position adding.
 
         Args:
             chit_card: The chit card to add
@@ -157,13 +158,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 Default is add to the back.
 
         Raises:
-            Exception if position is beyond the number of chit cards - 1
+            Exception if position corresponds to adding past the end of the list
         """
-        chit_card_max_i: int = len(self.__chit_cards) - 1
+        chit_card_last_i: int = len(self.__chit_cards) - 1
 
         # check position doesn't exceed the max valid index for chit cards
-        if position > chit_card_max_i:
-            raise Exception(f"Position {position} exceeded max index for chit cards ({chit_card_max_i})")
+        if position > chit_card_last_i + 1:
+            raise Exception(f"Position {position} exceeded max index for inserting for chit cards ({chit_card_last_i+1})")
 
         # add the chit card
         if not random_mode:
@@ -172,7 +173,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             else:
                 self.__chit_cards.insert(position, chit_card)
         else:
-            self.__chit_cards.insert(random.randint(0, chit_card_max_i), chit_card)
+            self.__chit_cards.insert(random.randint(0, chit_card_last_i), chit_card)
 
     # ------ GameBoard abstract class & Moving --------------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:

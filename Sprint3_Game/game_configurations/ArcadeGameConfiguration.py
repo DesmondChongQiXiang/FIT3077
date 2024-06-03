@@ -178,8 +178,9 @@ class ArcadeGameConfiguration(GameConfiguration):
         """
         class_factory: JSONSaveClassFactory = JSONSaveClassFactory()
         playable_chars: list[PlayableCharacter] = []
+        turn_manager: TurnManager
         main_tiles: list[Tile] = []
-        starting_tiles: list[Tile] = []
+        starting_tiles: list[tuple[Tile, int]] = []  # (starting tile, connected tile index for main tile)
         powers: list[Power] = []
 
         # initialise players
@@ -192,15 +193,32 @@ class ArcadeGameConfiguration(GameConfiguration):
             player: PlayableCharacter = class_factory.create_concrete_class(ClassTypeIdentifier(player_data["type"]), player_data)
             playable_chars.append(player)
 
+        # initialise turn manager
+        current_player_i: int = save_data["player_data"]["currently_playing"]
+        turn_manager = DefaultTurnManger(playable_chars, current_player_i)
+
         # initialise tiles + caves from volcano cards
+        cur_tile_i: int = 0
         try:
             volcano_card_seq_save_dict: list[dict[str, Any]] = save_data["volcano_card_sequence"]
         except:
             raise Exception("volcano_card_sequence did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
 
         for volcano_card in volcano_card_seq_save_dict:
-            volcano_card_main_seq = volcano_card["sequence"]
-            volcano_card_start_tiles = volcano_card["starting_tiles"]
+            volcano_card_main_seq: list[dict[str, Any]] = volcano_card["sequence"]
+            volcano_card_start_tiles: Optional[list[dict[str, Any]]] = volcano_card["starting_tiles"]
 
+            # initialise main tile sequence tiles
             for tile_data in volcano_card_main_seq:
                 tile: Tile = class_factory.create_concrete_class(ClassTypeIdentifier(tile_data["type"]), tile_data)
+                main_tiles.append(tile)
+
+            # initialising starting tiles
+            if volcano_card_start_tiles is not None:
+                for start_tile_data in volcano_card_start_tiles:
+                    starting_tile: Tile = class_factory.create_concrete_class(ClassTypeIdentifier(start_tile_data["type"]), start_tile_data)
+                    starting_tiles.append((starting_tile, start_tile_data["location"] + cur_tile_i))
+
+            cur_tile_i += len(volcano_card_main_seq)
+
+        # initialise chit cards

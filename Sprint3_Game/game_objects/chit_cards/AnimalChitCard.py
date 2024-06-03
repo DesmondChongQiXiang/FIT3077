@@ -106,7 +106,7 @@ class AnimalChitCard(ChitCard):
         """Create an animal chit card based on a animal chit card type json save data object.
 
         Args:
-            save_data: The dictionary representing the JSON save data object for an animal chit card type type
+            save_data: The dictionary representing the JSON save data object for an animal chit card type
 
         Returns:
             An animal chit card matching the save data

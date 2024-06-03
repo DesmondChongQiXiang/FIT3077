@@ -95,7 +95,7 @@ class PirateChitCard(ChitCard):
         """Create a pirate chit card based on a pirate chit card type json save data object.
 
         Args:
-            save_data: The dictionary representing the JSON save data object for a pirate chit card type type
+            save_data: The dictionary representing the JSON save data object for a pirate chit card type
 
         Returns:
             A pirate chit card matching the save data

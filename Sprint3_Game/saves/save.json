@@ -32,21 +32,21 @@
         [
             {
                 "type": "tile_normal",
+                "animal": "spider"
+            },
+            {
+                "type": "tile_normal",
                 "animal": "salamander"
             },
             {
                 "type": "tile_normal",
                 "animal": "baby_dragon"
-            },
-            {
-                "type": "tile_normal",
-                "animal": "spider"
             }
         ],
         [
             {
                 "type": "tile_normal",
-                "animal": "bat"
+                "animal": "baby_dragon"
             },
             {
                 "type": "tile_cave",
@@ -55,11 +55,11 @@
             },
             {
                 "type": "tile_normal",
-                "animal": "spider"
+                "animal": "salamander"
             },
             {
                 "type": "tile_normal",
-                "animal": "baby_dragon"
+                "animal": "bat"
             }
         ],
         [
@@ -79,7 +79,7 @@
         [
             {
                 "type": "tile_normal",
-                "animal": "bat"
+                "animal": "salamander"
             },
             {
                 "type": "tile_cave",
@@ -88,21 +88,7 @@
             },
             {
                 "type": "tile_normal",
-                "animal": "baby_dragon"
-            },
-            {
-                "type": "tile_normal",
-                "animal": "salamander"
-            }
-        ],
-        [
-            {
-                "type": "tile_normal",
-                "animal": "baby_dragon"
-            },
-            {
-                "type": "tile_normal",
-                "animal": "salamander"
+                "animal": "spider"
             },
             {
                 "type": "tile_normal",
@@ -112,7 +98,21 @@
         [
             {
                 "type": "tile_normal",
-                "animal": "spider"
+                "animal": "bat"
+            },
+            {
+                "type": "tile_normal",
+                "animal": "baby_dragon"
+            },
+            {
+                "type": "tile_normal",
+                "animal": "salamander"
+            }
+        ],
+        [
+            {
+                "type": "tile_normal",
+                "animal": "baby_dragon"
             },
             {
                 "type": "tile_cave",
@@ -121,31 +121,31 @@
             },
             {
                 "type": "tile_normal",
-                "animal": "salamander"
-            },
-            {
-                "type": "tile_normal",
-                "animal": "baby_dragon"
-            }
-        ],
-        [
-            {
-                "type": "tile_normal",
-                "animal": "salamander"
+                "animal": "bat"
             },
             {
                 "type": "tile_normal",
                 "animal": "spider"
-            },
-            {
-                "type": "tile_normal",
-                "animal": "bat"
             }
         ],
         [
             {
                 "type": "tile_normal",
+                "animal": "salamander"
+            },
+            {
+                "type": "tile_normal",
                 "animal": "baby_dragon"
+            },
+            {
+                "type": "tile_normal",
+                "animal": "spider"
+            }
+        ],
+        [
+            {
+                "type": "tile_normal",
+                "animal": "bat"
             },
             {
                 "type": "tile_cave",
@@ -154,11 +154,11 @@
             },
             {
                 "type": "tile_normal",
-                "animal": "bat"
+                "animal": "spider"
             },
             {
                 "type": "tile_normal",
-                "animal": "spider"
+                "animal": "baby_dragon"
             }
         ]
     ],

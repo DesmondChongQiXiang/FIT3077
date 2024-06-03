@@ -1,3 +1,4 @@
+from __future__ import annotations
 from factories.ClassTypeIdentifier import ClassTypeIdentifier
 from game_concepts.powers.Power import Power
 from game_objects.game_board.GameBoard import GameBoard
@@ -65,3 +66,17 @@ class SwapPower(Power):
 
         """
         return {"type": ClassTypeIdentifier.power_swap.value}
+
+    @classmethod
+    def create_from_json_save(cls, save_data: dict[str, Any], game_board: Optional[GameBoard] = None) -> SwapPower:
+        """Create a swap power based on a swap power type json save data object. May also receive a game board
+        so that the game board to be used can be pre-configured.
+
+        Args:
+            save_data: The dictionary representing the JSON save data object for a skip power
+            game_board (optional): A game board
+
+        Returns:
+            A swap power
+        """
+        return cls(game_board)

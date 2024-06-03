@@ -87,6 +87,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             if potential_char is not None:
                 self.__character_location[potential_char] = i
 
+    # ----------- Initialisation helpers -------------------------------------------------------------------------------------------
     def __set_chit_card_draw_properties(self) -> None:
         """Initialise the clickable chit cards to draw randomly within the inner zone (square) of the game board.
 
@@ -117,6 +118,21 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 next_x, next_y = random.randint(cur_x, cur_x + chit_card_rand_factor), random.randint(cur_y, cur_y + chit_card_rand_factor)
                 self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), chit_card_size))
                 chit_card_i += 1
+
+    def move_characters_to_position_indexes(self, pos: list[int]) -> None:
+        """Move characters in order to position indexes as indicated by the position list.
+
+        Args:
+            pos: The list containing the position indexes
+
+        Raises:
+            Exception if the number of elements in the position exceeds the number of characters on the board
+        """
+        if len(pos) > len(self.__playable_characters):
+            raise Exception(f"The number of positions {len(self.__playable_characters)} exceeds the number of characters.")
+        
+        for i, char in enumerate(self.__playable_characters):
+            self.__move_character_to_tile(char, pos[i])
 
     # ------ GameBoard abstract class & Moving --------------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:

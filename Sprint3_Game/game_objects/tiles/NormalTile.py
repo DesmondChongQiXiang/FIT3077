@@ -1,3 +1,4 @@
+from __future__ import annotations
 from game_objects.tiles.Tile import Tile
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.animals.Animal import Animal
@@ -70,3 +71,18 @@ class NormalTile(Tile):
         if animal is None:
             raise Exception("Animal was none for NormalTile when attempting to save.")
         return {"type": ClassTypeIdentifier.tile_normal.value, "animal": animal.value}
+
+    @classmethod
+    def create_from_json_save(cls, save_data: dict[str, Any]) -> NormalTile:
+        """Create a cave tile based on a normal tile type json save data object.
+
+        Args:
+            save_data: The dictionary representing the JSON save data object for a normal tile type
+
+        Returns:
+            A normal tile matching the save data
+        """
+        try:
+            return cls(Animal(save_data["animal"]))
+        except:
+            raise Exception(f"Save data must have attributes 'animal'. Passed in={save_data}")

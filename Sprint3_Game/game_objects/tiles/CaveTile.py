@@ -1,3 +1,4 @@
+from __future__ import annotations
 from game_objects.tiles.Tile import Tile
 from game_objects.tiles.CaveTileVariant import CaveTileVariant
 from game_objects.characters.PlayableCharacter import PlayableCharacter
@@ -79,3 +80,18 @@ class CaveTile(Tile):
         if animal is None:
             raise Exception("Animal was none for CaveTile when attempting to save.")
         return {"type": ClassTypeIdentifier.tile_cave.value, "variant": self.__variant.value, "animal": animal.value}
+
+    @classmethod
+    def create_from_json_save(cls, save_data: dict[str, Any]) -> CaveTile:
+        """Create a cave tile based on a cave tile type json save data object.
+
+        Args:
+            save_data: The dictionary representing the JSON save data object for a cave tile type
+
+        Returns:
+            A cave tile matching the save data
+        """
+        try:
+            return cls(Animal(save_data["animal"]), CaveTileVariant(save_data["variant"]))
+        except:
+            raise Exception(f"Save data must have attributes 'animal', 'symbol_count' and 'flipped'. Passed in={save_data}")

@@ -119,7 +119,8 @@ class PowerChitCard(ChitCard):
             A power chit card matching the save data, with the power passed in
         """
         try:
-            return cls(power, save_data["asset_path"])
+            instance: PowerChitCard = cls(power, save_data["asset_path"])
+            instance.set_flipped(save_data["flipped"])
+            return instance
         except:
-            raise Exception(f"Save data must have attributes 'asset_path'. Passed in={save_data}")
-
+            raise Exception(f"Save data must have attributes 'asset_path' and 'flipped'. Passed in={save_data}")

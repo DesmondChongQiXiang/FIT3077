@@ -120,7 +120,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 chit_card_i += 1
 
     def move_characters_to_position_indexes(self, pos: list[int]) -> None:
-        """Move characters in order to position indexes as indicated by the position list.
+        """Move characters in order to the position indexes as indicated by the position list.
 
         Args:
             pos: The list containing the position indexes

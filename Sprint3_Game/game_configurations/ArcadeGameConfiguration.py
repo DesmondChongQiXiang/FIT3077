@@ -177,33 +177,40 @@ class ArcadeGameConfiguration(GameConfiguration):
             Exception if the structure of the JSON dict was altered in an incompatible way
         """
         class_factory: JSONSaveClassFactory = JSONSaveClassFactory()
-        playable_chars: list[PlayableCharacter] = []
-        turn_manager: TurnManager
+        playable_characters: list[PlayableCharacter] = []
+        playable_character_positions: list[int] = []  # positions as indexes
         main_tiles: list[Tile] = []
-        starting_tiles: list[tuple[Tile, int]] = []  # (starting tile, connected tile index for main tile)
+        starting_tiles: list[tuple[Tile, Tile]] = []  # (starting tile, connected tile)
+        chit_cards: list[ChitCard] = []
         powers: list[Power] = []
 
-        # initialise players
+        ### initialise players
+        # guard variable
         try:
             players_save_dict: list[Any] = save_data["player_data"]["players"]
         except:
             raise Exception("player_data.players did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
 
+        # create players
         for player_data in players_save_dict:
             player: PlayableCharacter = class_factory.create_concrete_class(ClassTypeIdentifier(player_data["type"]), player_data)
-            playable_chars.append(player)
+            playable_characters.append(player)
+            playable_character_positions.append(player_data["location"])
 
-        # initialise turn manager
+        ### initialise turn manager
         current_player_i: int = save_data["player_data"]["currently_playing"]
-        turn_manager = DefaultTurnManger(playable_chars, current_player_i)
 
-        # initialise tiles + caves from volcano cards
+        turn_manager: TurnManager = DefaultTurnManger(playable_characters, current_player_i)
+
+        ### initialise tiles + caves from volcano cards
+        # variables
         cur_tile_i: int = 0
         try:
             volcano_card_seq_save_dict: list[dict[str, Any]] = save_data["volcano_card_sequence"]
         except:
             raise Exception("volcano_card_sequence did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
 
+        # create the tiles + caves
         for volcano_card in volcano_card_seq_save_dict:
             volcano_card_main_seq: list[dict[str, Any]] = volcano_card["sequence"]
             volcano_card_start_tiles: Optional[list[dict[str, Any]]] = volcano_card["starting_tiles"]
@@ -217,8 +224,28 @@ class ArcadeGameConfiguration(GameConfiguration):
             if volcano_card_start_tiles is not None:
                 for start_tile_data in volcano_card_start_tiles:
                     starting_tile: Tile = class_factory.create_concrete_class(ClassTypeIdentifier(start_tile_data["type"]), start_tile_data)
-                    starting_tiles.append((starting_tile, start_tile_data["location"] + cur_tile_i))
+                    starting_tiles.append((starting_tile, main_tiles[start_tile_data["location"] + cur_tile_i]))
 
             cur_tile_i += len(volcano_card_main_seq)
 
-        # initialise chit cards
+        ### initialise chit cards
+        # variables
+        try:
+            chit_card_seq_save_dict: list[dict[str, Any]] = save_data["chit_card_sequence"]
+        except:
+            raise Exception("chit_card_sequence did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
+        deferred_chit_card_data: list[tuple[dict[str, Any], int]] = []  # [(data, position its at)]
+
+        # creating non deferred chit cards. Saving deferred chit card data for later initialisation
+        for i, chit_card_data in enumerate(chit_card_seq_save_dict):
+            if not chit_card_data["deferred"]:
+                chit_card: ChitCard = class_factory.create_concrete_class(ClassTypeIdentifier(chit_card_data["type"]), chit_card_data)
+            else:
+                deferred_chit_card_data.append((chit_card_data, i))
+
+        ### initialise game board
+        game_board: DefaultGameBoard = DefaultGameBoard(main_tiles, starting_tiles, chit_cards, playable_characters)
+        game_board.move_characters_to_position_indexes(playable_character_positions)
+
+        ### perform deferred initialisations
+        # Initialise dependencies

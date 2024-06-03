@@ -32,39 +32,47 @@
   },
 
   "volcano_card_sequence": [
-    [
-      {
-        "type": "tile_normal",
-        "animal": "salamander"
-      },
-      {
-        "type": "tile_normal",
-        "animal": "baby_dragon"
-      },
-      {
-        "type": "tile_cave",
-        "variant": "blue",
-        "animal": "spider"
-      },
-      {
-        "type": "tile_normal",
-        "animal": "spider"
-      }
-    ],
-    [
-      {
-        "type": "tile_normal",
-        "animal": "spider"
-      },
-      {
-        "type": "tile_normal",
-        "animal": "salamander"
-      },
-      {
-        "type": "tile_normal",
-        "animal": "bat"
-      }
-    ]
+    {
+      "sequence": [
+        {
+          "type": "tile_normal",
+          "animal": "salamander"
+        },
+        {
+          "type": "tile_normal",
+          "animal": "baby_dragon"
+        },
+        {
+          "type": "tile_normal",
+          "animal": "spider"
+        }
+      ],
+      "starting_tiles": [
+        {
+          "type": "tile_cave",
+          "variant": "blue",
+          "animal": "spider",
+          "position": 1
+        }
+      ]
+    },
+    {
+      "sequence": [
+        {
+          "type": "tile_normal",
+          "animal": "spider"
+        },
+        {
+          "type": "tile_normal",
+          "animal": "salamander"
+        },
+        {
+          "type": "tile_normal",
+          "animal": "bat"
+        }
+      ],
+      "starting_tile": null
+    }
   ],
 
   "chit_card_sequence": [

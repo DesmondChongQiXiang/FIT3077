@@ -133,7 +133,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             raise Exception(f"The number of positions {len(self.__playable_characters)} exceeds the number of characters.")
 
         for i, char in enumerate(self.__playable_characters):
-            self.__move_character_to_tile(char, pos[i])
+            self.__move_character_to_tile(char, perform_tile_effect, pos[i])
 
     def add_chit_card(self, chit_card: ChitCard, random_mode: bool, position: int = -1) -> None:
         """Adds a chit card to the default game board either randomly or at a specified position.

@@ -8,13 +8,13 @@ from game_objects.tiles.Tile import Tile
 from game_objects.chit_cards.ChitCard import ChitCard
 from screen.DrawProperties import DrawProperties
 from screen.DrawableByAsset import DrawableByAsset
-from screen.menu.Menu import Menu
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
 from core.GameWorld import GameWorld
+from screen.buttons.Button import Button
+from screen.buttons.Button import ButtonType
 from utils.math_utils import *
-
 import random
 
 
@@ -59,7 +59,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # ------ INITIALISATION ------------------------------------------------------------------------------------------------------------------------------------------------
         # initialise chit card position & size. Also set delegate
         self.__set_chit_card_draw_properties()
-        self.__set_menu_draw_properties()
+        self._set_save_button_properties()
 
         for chit_card in self.__chit_cards:
             chit_card.set_game_board_delegate(self)
@@ -122,10 +122,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), chit_card_size))
                 chit_card_i += 1
     
-    def __set_menu_draw_properties(self) -> None:
-        menu = Menu()
-        menu.set_draw_properties(DrawProperties((600,0),(50,50)))
-        self.__clickables.append(menu)
+    def _set_save_button_properties(self) -> None:
+        save_button = Button(ButtonType.SAVE, DrawProperties((600,25),(50,50)))
+        self.__clickables.append(save_button)
 
 
     # ------ GameBoard abstract class & Moving --------------------------------------------------------------------------------------------

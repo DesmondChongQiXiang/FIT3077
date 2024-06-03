@@ -130,9 +130,38 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """
         if len(pos) > len(self.__playable_characters):
             raise Exception(f"The number of positions {len(self.__playable_characters)} exceeds the number of characters.")
-        
+
         for i, char in enumerate(self.__playable_characters):
             self.__move_character_to_tile(char, pos[i])
+
+    def add_chit_card(self, chit_card: ChitCard, random_mode: bool, position: int = -1) -> None:
+        """Adds a chit card to the default game board either randomly or at a specified position. If not adding randomly,
+        the position to can be set. If not set, the chit card is added to the end of the chit card sequence. Adding to a
+        specified position moves all chit cards from that position onwards to the right.
+
+        Args:
+            chit_card: The chit card to add
+            random_mode: Whether to add it randomly (if set, position does nothing.)
+            position: The position (0-indexed) the chit card replaces, shifting chit cards at that position onward to the right.
+                Default is add to the back.
+
+        Raises:
+            Exception if position is beyond the number of chit cards - 1
+        """
+        chit_card_max_i: int = len(self.__chit_cards) - 1
+
+        # check position doesn't exceed the max valid index for chit cards
+        if position > chit_card_max_i:
+            raise Exception(f"Position {position} exceeded max index for chit cards ({chit_card_max_i})")
+
+        # add the chit card
+        if not random_mode:
+            if position == -1:
+                self.__chit_cards.append(chit_card)
+            else:
+                self.__chit_cards.insert(position, chit_card)
+        else:
+            self.__chit_cards.insert(random.randint(0, chit_card_max_i), chit_card)
 
     # ------ GameBoard abstract class & Moving --------------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:

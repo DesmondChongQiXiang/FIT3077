@@ -185,7 +185,6 @@ class ArcadeGameConfiguration(GameConfiguration):
         deferred_chit_card_data: list[tuple[dict[str, Any], int]] = (
             []
         )  # Deferred (initialised after GameBoard initialisation) chit card data. [(data, index position it should be at)]
-        powers: list[Power] = []
 
         ### initialise players
         # guard variable
@@ -241,6 +240,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         for i, chit_card_data in enumerate(chit_card_seq_save_data):
             if not chit_card_data["deferred"]:
                 chit_card: ChitCard = class_factory.create_concrete_class(ClassTypeIdentifier(chit_card_data["type"]), chit_card_data)
+                chit_cards.append(chit_card)
             else:
                 deferred_chit_card_data.append((chit_card_data, i))
 
@@ -254,7 +254,7 @@ class ArcadeGameConfiguration(GameConfiguration):
             ClassTypeIdentifier.turn_manager: turn_manager,
             ClassTypeIdentifier.game_board: game_board,
         }
-        dependencies: dict[str, Any] = {}  # contains dependency class instances mapped by their id
+        dependencies: dict[str, Any] = {}  # contains id mapped to dependency class instances 
         dependencies_save_data: dict[str, dict[str, Any]] = save_data["dependencies"]
 
         # initialise dependencies
@@ -266,3 +266,4 @@ class ArcadeGameConfiguration(GameConfiguration):
             dependencies[dependency_id] = class_factory.create_concrete_class(ClassTypeIdentifier(dependency_type), dependency_data, *dependency_arg_list)
 
         # Deferred: Chit cards
+        print("ok")

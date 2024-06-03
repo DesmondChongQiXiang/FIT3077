@@ -119,7 +119,13 @@ class PowerChitCard(ChitCard):
         try:
             save_class_factory: JSONSaveClassFactory = JSONSaveClassFactory()
             power_data: dict[str, Any] = save_data["power"]
+            flipped: bool = save_data["flipped"]
+
             power: Power = save_class_factory.create_concrete_class(power_data["type"], power_data)
+            instance: PowerChitCard = cls(power, save_data["asset_path"])
+            instance.set_flipped(flipped)
+
             return cls(power, save_data["asset_path"])
+
         except Exception as e:
             raise Exception(f"Error={e}, Passed in={save_data}")

@@ -28,6 +28,9 @@ from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVa
 from utils.os_utils import *
 
 
+# TODO: In the future, save and load need to be refactored into several helper functions to reduce cognitive load
+
+
 class ArcadeGameConfiguration(GameConfiguration):
     """The default fiery dragons game configuration but with a more arcade style due to the addition of extra powers.
     This configuration includes the the following extensions: swap chit cards, skip chit cards, universal tiles.
@@ -131,7 +134,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         player_data_save_dict["currently_playing"] = self.__turn_manager.on_save(to_write)  # add currently playing character index
 
         # ================================================================
-        # ---------------- save volcano cards + caves --------------------
+        # ---------- save volcano cards + starting tiles -----------------
         # ================================================================
         # variables
         volcano_card_seq_save_dict: list[Any] = to_write["volcano_card_sequence"]
@@ -213,7 +216,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         turn_manager: TurnManager = DefaultTurnManger(playable_characters, current_player_i)
 
         # ================================================================
-        # ------------- initialise caves + volcano cards -----------------
+        # ------- initialise starting tiles + volcano cards --------------
         # ================================================================
         # variables
         main_tiles: list[Tile] = []
@@ -257,6 +260,12 @@ class ArcadeGameConfiguration(GameConfiguration):
         # ================================================================
         # ------------------ initialise game board -----------------------
         # ================================================================
+        # initially place all playable characters on the board
+        for i, character in enumerate(playable_characters):
+            starting_tile: Tile = starting_tiles[i][0]
+            starting_tile.set_character_on_tile(character)
+
+        # initialise game board and move character to correct positions
         game_board: DefaultGameBoard = DefaultGameBoard(main_tiles, starting_tiles, chit_cards, playable_characters)
         game_board.move_characters_to_position_indexes(playable_character_positions, False)
 

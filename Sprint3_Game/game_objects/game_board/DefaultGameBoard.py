@@ -135,9 +135,11 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             self.__move_character_to_tile(char, pos[i])
 
     def add_chit_card(self, chit_card: ChitCard, random_mode: bool, position: int = -1) -> None:
-        """Adds a chit card to the default game board either randomly or at a specified position. If not adding randomly,
-        the position to can be set. If not set, the chit card is added to the end of the chit card sequence. Adding to a
-        specified position moves all chit cards from that position onwards to the right.
+        """Adds a chit card to the default game board either randomly or at a specified position.
+
+        If not adding randomly, the position to can be set. Adding to a specified position moves all chit cards from that position onwards to the right.
+
+        If position is not set, the chit card is added to the end of the chit card sequence.
 
         Args:
             chit_card: The chit card to add

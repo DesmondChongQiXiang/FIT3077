@@ -177,42 +177,41 @@ class ArcadeGameConfiguration(GameConfiguration):
             Exception if the structure of the JSON dict was altered in an incompatible way
         """
         class_factory: JSONSaveClassFactory = JSONSaveClassFactory()
-        playable_characters: list[PlayableCharacter] = []
-        playable_character_positions: list[int] = []  # positions as indexes
-        main_tiles: list[Tile] = []
-        starting_tiles: list[tuple[Tile, Tile]] = []  # (starting tile, connected tile)
-        chit_cards: list[ChitCard] = []
-        deferred_chit_card_data: list[tuple[dict[str, Any], int]] = (
+        deferred_chit_card_object_data: list[tuple[dict[str, Any], int]] = (
             []
         )  # Deferred (initialised after GameBoard initialisation) chit card data. [(data, index position it should be at)]
 
-        ### initialise players
-        # guard variable
-        try:
-            players_save_data: list[Any] = save_data["player_data"]["players"]
-        except:
-            raise Exception("player_data.players did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
+        # ================================================================
+        # --------------------- initialise players -----------------------
+        # ================================================================
+        # variables
+        playable_characters: list[PlayableCharacter] = []
+        playable_character_positions: list[int] = []  # positions as indexes
+         players_save_dict: list[Any] = save_data["player_data"]["players"]
 
         # create players
-        for player_data in players_save_data:
+        for player_data in players_save_dict:
             player: PlayableCharacter = class_factory.create_concrete_class(ClassTypeIdentifier(player_data["type"]), player_data)
             playable_characters.append(player)
             playable_character_positions.append(player_data["location"])
 
-        ### initialise turn manager
+        # ================================================================
+        # ------------------ initialise turn manager ---------------------
+        # ================================================================
         current_player_i: int = save_data["player_data"]["currently_playing"]
         turn_manager: TurnManager = DefaultTurnManger(playable_characters, current_player_i)
 
-        ### initialise tiles + caves from volcano cards
+        # ================================================================
+        # ------------- initialise caves + volcano cards -----------------
+        # ================================================================
         # variables
+        main_tiles: list[Tile] = []
+        starting_tiles: list[tuple[Tile, Tile]] = []  # (starting tile, connected tile)
+        volcano_card_seq_save_dict: list[dict[str, Any]] = save_data["volcano_card_sequence"]
         cur_tile_i: int = 0
-        try:
-            volcano_card_seq_save_data: list[dict[str, Any]] = save_data["volcano_card_sequence"]
-        except:
-            raise Exception("volcano_card_sequence did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
 
         # create the tiles + caves
-        for volcano_card in volcano_card_seq_save_data:
+        for volcano_card in volcano_card_seq_save_dict:
             volcano_card_main_seq: list[dict[str, Any]] = volcano_card["sequence"]
             volcano_card_start_tiles: Optional[list[dict[str, Any]]] = volcano_card["starting_tiles"]
 
@@ -229,41 +228,58 @@ class ArcadeGameConfiguration(GameConfiguration):
 
             cur_tile_i += len(volcano_card_main_seq)
 
-        ### initialise chit cards
+        # ===============================================================
+        # ------------------ initialise chit cards ----------------------
+        # ===============================================================
         # variables
-        try:
-            chit_card_seq_save_data: list[dict[str, Any]] = save_data["chit_card_sequence"]
-        except:
-            raise Exception("chit_card_sequence did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
+        chit_cards: list[ChitCard] = []
+        chit_card_seq_save_dict: list[dict[str, Any]] = save_data["chit_card_sequence"]
 
         # creating non deferred chit cards. Saving deferred chit card data for later initialisation
-        for i, chit_card_data in enumerate(chit_card_seq_save_data):
+        for i, chit_card_data in enumerate(chit_card_seq_save_dict):
             if not chit_card_data["deferred"]:
                 chit_card: ChitCard = class_factory.create_concrete_class(ClassTypeIdentifier(chit_card_data["type"]), chit_card_data)
                 chit_cards.append(chit_card)
             else:
-                deferred_chit_card_data.append((chit_card_data, i))
+                deferred_chit_card_object_data.append((chit_card_data, i))
 
-        ### initialise game board
+        # ================================================================
+        # ------------------ initialise game board -----------------------
+        # ================================================================
         game_board: DefaultGameBoard = DefaultGameBoard(main_tiles, starting_tiles, chit_cards, playable_characters)
         game_board.move_characters_to_position_indexes(playable_character_positions)
 
-        ### perform deferred initialisations
+        # ================================================================
+        # ------------- perform deferred initialisations -----------------
+        # ================================================================
         # variables
         dependency_map: dict[ClassTypeIdentifier, Any] = {
             ClassTypeIdentifier.turn_manager: turn_manager,
             ClassTypeIdentifier.game_board: game_board,
         }
-        dependencies: dict[str, Any] = {}  # contains id mapped to dependency class instances 
-        dependencies_save_data: dict[str, dict[str, Any]] = save_data["dependencies"]
+        dependency_instances: dict[str, Any] = {}  # contains dependency id mapped to dependency class concrete instance
+        dependencies_save_dict: dict[str, dict[str, Any]] = save_data["dependencies"]
 
         # initialise dependencies
-        for dependency_id, dependency_data in dependencies_save_data.items():
+        for dependency_id, dependency_data in dependencies_save_dict.items():
             dependency_type: str = dependency_data["type"]
             dependency_arg_identifiers: list[str] = dependency_data["required"]
             dependency_arg_list: list[Any] = [dependency_map[ClassTypeIdentifier(required_type)] for required_type in dependency_arg_identifiers]
 
-            dependencies[dependency_id] = class_factory.create_concrete_class(ClassTypeIdentifier(dependency_type), dependency_data, *dependency_arg_list)
+            dependency_instances[dependency_id] = class_factory.create_concrete_class(ClassTypeIdentifier(dependency_type), dependency_data, *dependency_arg_list)
 
-        # Deferred: Chit cards
-        print("ok")
+        # ============ DEFERRED: Chit cards
+        # getting deferred chit card instances and adding to game board
+        for chit_card_data, pos in deferred_chit_card_object_data:
+            chit_card_type: str = chit_card_data["type"]
+            chit_card_dependency_ids: list[str] = chit_card_data["dependencies"]
+            chit_card_dependency_instances: list[Any] = [dependency_instances[id] for id in chit_card_dependency_ids]
+
+            game_board.add_chit_card(
+                class_factory.create_concrete_class(ClassTypeIdentifier(chit_card_type), chit_card_data, *chit_card_dependency_instances), False, pos
+            )
+
+        # ================================================================
+        # ----------------------- GAME WORLD -----------------------------
+        # ================================================================
+        return GameWorld(game_board, turn_manager)

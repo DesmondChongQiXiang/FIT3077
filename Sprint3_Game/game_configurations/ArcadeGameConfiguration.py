@@ -1,12 +1,16 @@
+from __future__ import annotations
 from typing import Any, Optional
 from presets import *
 from settings import *
 from core.GameWorld import GameWorld
 from codec.saves.JSONSaveCodec import JSONSaveCodec
 from codec.saves.JSONSavable import JSONSavable
+from factories.saves.JSONSaveClassFactory import JSONSaveClassFactory
+from factories.ClassTypeIdentifier import ClassTypeIdentifier
 from game_configurations.GameConfiguration import GameConfiguration
 from game_concepts.turns.DefaultTurnManager import DefaultTurnManger
 from game_concepts.turns.TurnManager import TurnManager
+from game_concepts.powers.Power import Power
 from game_concepts.powers.SkipTurnPower import SkipTurnPower
 from game_concepts.powers.SwapPower import SwapPower
 from game_objects.characters.PlayableCharacter import PlayableCharacter
@@ -150,3 +154,44 @@ class ArcadeGameConfiguration(GameConfiguration):
         if self.__game_board is None:
             raise Exception("Game board not defined before save. Run generate_game_world() first.")
         self.__game_board.on_save(to_write)
+
+    @staticmethod
+    def create_game_world_from_json_save(save_data: dict[str, Any]) -> GameWorld:
+        """Create a game world from JSON save data saved with an Arcade configuration.
+
+        Args:
+            save_data: The dictionary representing the JSON save data from an Arcade configuration
+
+        Returns:
+            A game world configured with
+
+        Raises:
+            Exception if the structure of the JSON dict was altered in an incompatible way
+        """
+        class_factory: JSONSaveClassFactory = JSONSaveClassFactory()
+        playable_chars: list[PlayableCharacter] = []
+        tiles: list[Tile] = []
+        powers: list[Power] = []
+
+        # initialise players
+        try:
+            players_save_dict: list[Any] = save_data["player_data"]["players"]
+        except:
+            raise Exception("player_data.players did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.") 
+        
+        for player_data in players_save_dict:
+            player_data: dict[str, Any] = player_data
+            player: PlayableCharacter = class_factory.create_concrete_class(ClassTypeIdentifier(player_data["type"]), player_data)
+            playable_chars.append(player)
+
+        # initialise tiles + caves from volcano cards
+        try:
+            volcano_card_seq_save_dict: list[list[Any]] = save_data["volcano_card_sequence"]
+        except:
+            raise Exception("volcano_card_sequence did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
+        
+        vc_counter: int = 0
+        for volcano_card in volcano_card_seq_save_dict:
+            for tile in volcano_card:
+                ...
+

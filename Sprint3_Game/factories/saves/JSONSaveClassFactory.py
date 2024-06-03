@@ -56,5 +56,9 @@ class JSONSaveClassFactory:
 
         Returns:
             Class of the type bound to the class type identifier as defined by JSONSaveFactory.MAPPING
+
+        Raises:
+            Exception if the passed in arguments were incompatible with the associated with identifier concrete class's
+            create_from_save() method
         """
         return self.MAPPING[identifier](save_data, *args)

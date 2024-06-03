@@ -288,7 +288,7 @@ class ArcadeGameConfiguration(GameConfiguration):
 
             dependency_instances[dependency_id] = class_factory.create_concrete_class(ClassTypeIdentifier(dependency_type), dependency_data, *dependency_arg_list)
 
-        # ============ DEFERRED: Chit cards
+        # ============ DEFERRED: Chit cards ================================
         # getting deferred chit card instances and adding to game board
         for chit_card_data, pos in deferred_chit_card_object_data:
             chit_card_type: str = chit_card_data["type"]

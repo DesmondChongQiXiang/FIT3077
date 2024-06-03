@@ -187,7 +187,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         # variables
         playable_characters: list[PlayableCharacter] = []
         playable_character_positions: list[int] = []  # positions as indexes
-         players_save_dict: list[Any] = save_data["player_data"]["players"]
+        players_save_dict: list[Any] = save_data["player_data"]["players"]
 
         # create players
         for player_data in players_save_dict:

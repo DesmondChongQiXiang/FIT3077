@@ -42,5 +42,6 @@ if __name__ == "__main__":
     # ----- GAME INSTANCE ------------------------------------------------------------------------------------------
     game_world: GameWorld = GAME_CONFIG.generate_game_world()
     SAVE_CODEC.save()
+    test = SAVE_CODEC.load()
     
     game_world.run()

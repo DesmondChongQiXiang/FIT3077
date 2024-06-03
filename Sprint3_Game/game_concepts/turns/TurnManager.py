@@ -47,6 +47,23 @@ class TurnManager(ABC, JSONSavable):
         """
         return self._current_player
 
+    def get_tracked_player_characters(self) -> list[PlayableCharacter]:
+        """Get the list of player characters tracked by this turn manager.
+
+        Returns:
+            The list of player characters tracked.
+        """
+        return self._player_characters
+
+    @abstractmethod
+    def skip_to_players_turn(self, player_char: PlayableCharacter) -> None:
+        """Skip to the playable character's turn immediately.
+
+        Args:
+            player_char: The player's character to skip to
+        """
+        ...
+
     @abstractmethod
     def skip_to_player_on_turn_end(self, player_char: PlayableCharacter) -> None:
         """Skip to the playable character's turn once the current player's turn ends.

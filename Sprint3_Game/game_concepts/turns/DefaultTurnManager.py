@@ -24,6 +24,14 @@ class DefaultTurnManger(TurnManager):
         """
         super().__init__(player_characters, starting_player_i)
 
+    def skip_to_players_turn(self, player_char: PlayableCharacter) -> None:
+        """Skip to the playable character's turn immediately.
+
+        Args:
+            player_char: The player's character to skip to
+        """
+        player_char.set_should_continue_turn(False)
+
     def skip_to_player_on_turn_end(self, player_char: PlayableCharacter) -> None:
         """Skip to the playable character's turn once the current player's turn ends.
 

@@ -15,3 +15,6 @@ class ClassTypeIdentifier(Enum):
     chit_card_power = "chit_card_power"
     power_skip = "power_skip"
     power_swap = "power_swap"
+
+    turn_manager = "turn_manager"
+    game_board = "game_board"

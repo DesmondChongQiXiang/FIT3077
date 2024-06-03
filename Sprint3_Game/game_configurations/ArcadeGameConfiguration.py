@@ -116,8 +116,12 @@ class ArcadeGameConfiguration(GameConfiguration):
         """
         to_write["player_data"] = dict()
         to_write["player_data"]["players"] = []
+        to_write["dependencies"] = dict()
         to_write["volcano_card_sequence"] = []
-        to_write["chit_card_sequence"] = []
+        to_write["chit_card_sequence"] = {
+            "on_load": [],
+            "deferred_load": [],
+        }
 
         # add player data to the save dictionary
         players_save_dict: list[Any] = to_write["player_data"]["players"]
@@ -154,9 +158,9 @@ class ArcadeGameConfiguration(GameConfiguration):
             )
 
         # add chit card sequence to save dictionary
-        chit_card_seq_save_dict: list[Any] = to_write["chit_card_sequence"]
+        chit_card_seq_save_dict: dict[str, Any] = to_write["chit_card_sequence"]
         for chit_card in self.__chit_cards:
-            chit_card_seq_save_dict.append(chit_card.on_save(to_write))
+            chit_card.on_save(to_write)
 
         # allow default game board to perform any configuration on existing data in save dictionary
         if self.__game_board is None:
@@ -178,7 +182,8 @@ class ArcadeGameConfiguration(GameConfiguration):
         """
         class_factory: JSONSaveClassFactory = JSONSaveClassFactory()
         playable_chars: list[PlayableCharacter] = []
-        tiles: list[Tile] = []
+        main_tiles: list[Tile] = []
+        starting_tiles: list[Tile] = []
         powers: list[Power] = []
 
         # initialise players
@@ -188,17 +193,18 @@ class ArcadeGameConfiguration(GameConfiguration):
             raise Exception("player_data.players did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
 
         for player_data in players_save_dict:
-            player_data: dict[str, Any] = player_data
             player: PlayableCharacter = class_factory.create_concrete_class(ClassTypeIdentifier(player_data["type"]), player_data)
             playable_chars.append(player)
 
         # initialise tiles + caves from volcano cards
         try:
-            volcano_card_seq_save_dict: list[list[Any]] = save_data["volcano_card_sequence"]
+            volcano_card_seq_save_dict: list[dict[str, Any]] = save_data["volcano_card_sequence"]
         except:
             raise Exception("volcano_card_sequence did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
 
-        vc_counter: int = 0
         for volcano_card in volcano_card_seq_save_dict:
-            for tile in volcano_card:
-                ...
+            volcano_card_main_seq = volcano_card["sequence"]
+            volcano_card_start_tiles = volcano_card["starting_tiles"]
+
+            for tile_data in volcano_card_main_seq:
+                tile: Tile = class_factory.create_concrete_class(ClassTypeIdentifier(tile_data["type"]), tile_data)

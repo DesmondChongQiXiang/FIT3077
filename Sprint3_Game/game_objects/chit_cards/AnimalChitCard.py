@@ -89,7 +89,7 @@ class AnimalChitCard(ChitCard):
             self.set_flipped(not self.get_flipped())
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
-        """When requested on save, return a JSON compatible object describing this animal chit card.
+        """When requested on save, add the JSON compatible object describing this animal chit card to the save dictionary.
 
         Warning: The dictionary must remain in json encodable format.
 
@@ -97,10 +97,20 @@ class AnimalChitCard(ChitCard):
             to_write: The dictionary that will be converted to the JSON save file.
 
         Returns:
-            A JSON compatible object describing the animal chit card.
+            None
+
+        Raises:
+            Exception if chit_card_sequence.on_load did not exist
         """
-        return {"type": ClassTypeIdentifier.chit_card_animal.value, "animal": self.__animal.value, "symbol_count": self._symbol_count, "flipped": self.get_flipped()}
-    
+        to_write["chit_card_sequence"]["on_load"].append(
+            {
+                "type": ClassTypeIdentifier.chit_card_animal.value,
+                "animal": self.__animal.value,
+                "symbol_count": self._symbol_count,
+                "flipped": self.get_flipped(),
+            }
+        )
+
     @classmethod
     def create_from_json_save(cls, save_data: dict[str, Any]) -> AnimalChitCard:
         """Create an animal chit card based on a animal chit card type json save data object.

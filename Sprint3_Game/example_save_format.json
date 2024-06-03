@@ -75,7 +75,19 @@
     }
   ],
 
-  "runtime_dependencies": {},
+  "dependencies": {
+    "1XniwjafFNJwjkj92nj#Fn2": {
+      "type": "power_skip",
+      "skip_value": 2,
+      "required": ["turn_manager"],
+      "instance": "<determined at runtime>"
+    },
+    "CzaFWnkFMW&81nFjwnfaoOs": {
+      "type": "power_swap",
+      "required": ["game_board"],
+      "instance": "<determined at runtime>"
+    }
+  },
 
   "chit_card_sequence": {
     "on_load": [
@@ -91,39 +103,21 @@
         "flipped": true
       }
     ],
-    "deferred": {
-      "dependencies": [
-        {
-          "1XniwjafFNJwjkj92nj#Fn2": {
-            "type": "power_skip",
-            "skip_value": 2,
-            "required": ["turn_manager"],
-            "instance": "<determined at runtime>"
-          },
-          "CzaFWnkFMW&81nFjwnfaoOs": {
-            "type": "power_swap",
-            "required": ["game_board"],
-            "instance": "<determined at runtime>"
-          }
-        }
-      ],
-      "to_load": [
-        {
-          "type": "chit_card_power",
-          "dependencies": ["1XniwjafFNJwjkj92nj#Fn2"],
-          "asset_path": "assets/chit_cards/...",
-          "add_randomly": true,
-          "flipped": false
-        },
-        {
-          "type": "chit_card_power",
-          "dependencies": ["1XniwjafFNJwjkj92nj#Fn2"],
-          "power": "CzaFWnkFMW&81nFjwnfaoOs",
-          "asset_path": "assets/chit_cards/...",
-          "add_randomly": true,
-          "flipped": true
-        }
-      ]
-    }
+    "deferred_load": [
+      {
+        "type": "chit_card_power",
+        "dependencies": ["1XniwjafFNJwjkj92nj#Fn2"],
+        "asset_path": "assets/chit_cards/...",
+        "position": 1,
+        "flipped": false
+      },
+      {
+        "type": "chit_card_power",
+        "dependencies": ["CzaFWnkFMW&81nFjwnfaoOs"],
+        "asset_path": "assets/chit_cards/...",
+        "position": 4,
+        "flipped": true
+      }
+    ]
   }
 }

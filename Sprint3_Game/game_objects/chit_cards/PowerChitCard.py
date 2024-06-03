@@ -85,7 +85,7 @@ class PowerChitCard(ChitCard):
             raise Exception("Board delegate was not set when on_click() called.")
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
-        """When requested on save, return a JSON compatible object describing this power chit card.
+        """When requested on save, add a JSON compatible object describing this power chit card.
 
         Warning: The dictionary must remain in json encodable format.
 
@@ -93,14 +93,20 @@ class PowerChitCard(ChitCard):
             to_write: The dictionary that will be converted to the JSON save file.
 
         Returns:
-            A JSON compatible object describing this power chit card.
+            None
+
+        Raises:
+            Exception if chit_card_sequence.deferred.to_load did not exist
         """
-        return {
-            "type": ClassTypeIdentifier.chit_card_power.value,
-            "power": self.__power.on_save(to_write),
-            "asset_path": self.__image_path,
-            "flipped": self.get_flipped(),
-        }
+        to_write["chit_card_sequence"]["deferred_load"].append(
+            {
+                "type": ClassTypeIdentifier.chit_card_power.value,
+                "dependencies": [self.__power.on_save(to_write)],
+                "asset_path": self.__image_path,
+                "position": None,
+                "flipped": self.get_flipped(),
+            }
+        )
 
     @classmethod
     def create_from_json_save(cls, save_data: dict[str, Any]) -> PowerChitCard:

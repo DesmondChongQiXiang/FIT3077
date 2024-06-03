@@ -40,6 +40,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         Raises:
             Exception if the number of players to be playing on the board is less than 2.
+            Exception if the number of players on the starting tiles was less than 2
         """
         if len(playable_characters) < 2:
             raise Exception("The number of players must be at least 2 for the default game board.")
@@ -80,17 +81,25 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 self.__tile_sequence.append(dest_to_start_tile[tile])
             self.__tile_sequence.append(tile)
 
-        # Initialise character starting location, character location dictionaries to initial game board state
+        # Initialise character starting location,
         for tile in self.__starting_tiles:
             char_on_tile = tile.get_character_on_tile()
             if char_on_tile is not None:
                 self.__character_starting_tiles[char_on_tile] = tile
 
+        # Initialise character location dictionaries to initial game board state
+        player_count: int = 0
+
         for i, tile in enumerate(self.__tile_sequence):
             potential_char: Optional[PlayableCharacter] = tile.get_character_on_tile()
             if potential_char is not None:
                 self.__character_location[potential_char] = i
+                player_count += 1
 
+        if player_count < 2:
+            raise Exception(f"The starting tiles had in total {player_count} players. There must be at least 2.")
+
+    # ----------- Initialisation helpers -------------------------------------------------------------------------------------------
     def __set_chit_card_draw_properties(self) -> None:
         """Initialise the clickable chit cards to draw randomly within the inner zone (square) of the game board.
 
@@ -126,6 +135,59 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         save_button = Button(ButtonType.SAVE, DrawProperties((600,25),(50,50)))
         self.__clickables.append(save_button)
 
+
+    def move_characters_to_position_indexes(self, pos: list[int], perform_tile_effect: bool) -> None:
+        """Move characters in order to the tiles corresponding to the position indexes as indicated by the position list.
+
+        Args:
+            pos: The list containing the position indexes
+            perform_tile_effect: Whether to perform any effect the tile has if any when moving the character to the tile
+
+        Raises:
+            Exception if the number of elements in the position exceeds the number of characters on the board
+        """
+        if len(pos) > len(self.__playable_characters):
+            raise Exception(f"The number of positions {len(self.__playable_characters)} exceeds the number of characters.")
+
+        for i, char in enumerate(self.__playable_characters):
+            self.__move_character_to_tile(char, perform_tile_effect, pos[i])
+
+    def add_chit_card(self, chit_card: ChitCard, random_mode: bool, position: int = -1) -> None:
+        """Adds a chit card to the default game board either randomly or at a specified position.
+
+        Adding to a specified position moves all chit cards from that position onwards to the right. If position is not
+        set, the chit card is added to the end of the chit card sequence.
+
+        Random adding takes priority over position adding.
+
+        Args:
+            chit_card: The chit card to add
+            random_mode: Whether to add it randomly (if set, position does nothing.)
+            position: The position (0-indexed) the chit card replaces, shifting chit cards at that position onward to the right.
+                Default is add to the back.
+
+        Raises:
+            Exception if position corresponds to adding past the end of the list
+        """
+        chit_card_last_i: int = len(self.__chit_cards) - 1
+
+        # check position doesn't exceed the max valid index for chit cards
+        if position > chit_card_last_i + 1:
+            raise Exception(f"Position {position} exceeded max index for inserting for chit cards ({chit_card_last_i+1})")
+
+        # add the chit card
+        if not random_mode:
+            if position == -1:
+                self.__chit_cards.append(chit_card)
+            else:
+                self.__chit_cards.insert(position, chit_card)
+        else:
+            self.__chit_cards.insert(random.randint(0, chit_card_last_i), chit_card)
+
+        chit_card.set_game_board_delegate(self)
+
+        # re-initialise drawing properties accounting for new chit cards,
+        self.__set_chit_card_draw_properties()
 
     # ------ GameBoard abstract class & Moving --------------------------------------------------------------------------------------------
     def move_character_by_steps(self, character: PlayableCharacter, steps: int) -> None:
@@ -182,7 +244,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             character.set_should_continue_turn(False)
             return
 
-        self.__move_character_to_tile(character, final_tile_i)
+        self.__move_character_to_tile(character, True, final_tile_i)
 
     def get_closest_character(self, character: PlayableCharacter) -> Optional[PlayableCharacter]:
         """
@@ -269,7 +331,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         GameWorld.instance().disable_mouse_clicks()
 
     @overload
-    def __move_character_to_tile(self, character: PlayableCharacter, tile: Tile) -> None:
+    def __move_character_to_tile(self, character: PlayableCharacter, perform_tile_effect: bool, tile: Tile) -> None:
         """Move a character to the specified tile.
 
         Warning:
@@ -277,31 +339,33 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         Args:
             character: The character to move
+            perform_tile_effect: Whether to perform any effect the tile has if any when moving the character to the tile
             tile: The tile to move the character to
         """
         ...
 
     @overload
-    def __move_character_to_tile(self, character: PlayableCharacter, tile: int) -> None:
+    def __move_character_to_tile(self, character: PlayableCharacter, perform_tile_effect: bool, tile: int) -> None:
         """Move a character to the specified tile along the tile sequence.
 
         Args:
             character: The character to move
+            perform_tile_effect: Whether to perform any effect the tile has if any when moving the character to the tile
             tile: The index of the tile along the tile sequence
         """
         ...
 
-    def __move_character_to_tile(self, character: PlayableCharacter, tile: Tile | int) -> None:
+    def __move_character_to_tile(self, character: PlayableCharacter, perform_tile_effect: bool, tile: Tile | int) -> None:
         """Overload implementation of __move_character_to_tile."""
         match tile:
             case int():
-                self.__tile_sequence[tile].place_character_on_tile(character)
                 self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
+                self.__tile_sequence[tile].place_character_on_tile(character, perform_tile_effect)
                 self.__character_location[character] = tile
 
             case Tile():
-                tile.place_character_on_tile(character)
                 self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)
+                tile.place_character_on_tile(character, perform_tile_effect)
                 for i in range(len(self.__tile_sequence)):
                     if self.__tile_sequence[i] == tile:
                         self.__character_location[character] = i

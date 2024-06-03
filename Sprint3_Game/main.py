@@ -40,7 +40,10 @@ if __name__ == "__main__":
     
 
     # ----- GAME INSTANCE ------------------------------------------------------------------------------------------
-    game_world: GameWorld = GAME_CONFIG.generate_game_world()
-    SAVE_CODEC.save()
-    
+    # game_world: GameWorld = GAME_CONFIG.generate_game_world()
+
+    # SAVE_CODEC.save()
+    load_data = SAVE_CODEC.load()
+    game_world: GameWorld = ArcadeGameConfiguration.create_game_world_from_json_save(load_data)
+
     game_world.run()

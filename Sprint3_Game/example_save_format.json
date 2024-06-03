@@ -32,69 +32,92 @@
   },
 
   "volcano_card_sequence": [
-    [
-      {
-        "type": "tile_normal",
-        "animal": "salamander"
-      },
-      {
-        "type": "tile_normal",
-        "animal": "baby_dragon"
-      },
-      {
-        "type": "tile_cave",
-        "variant": "blue",
-        "animal": "spider"
-      },
-      {
-        "type": "tile_normal",
-        "animal": "spider"
-      }
-    ],
-    [
-      {
-        "type": "tile_normal",
-        "animal": "spider"
-      },
-      {
-        "type": "tile_normal",
-        "animal": "salamander"
-      },
-      {
-        "type": "tile_normal",
-        "animal": "bat"
-      }
-    ]
+    {
+      "sequence": [
+        {
+          "type": "tile_normal",
+          "animal": "salamander"
+        },
+        {
+          "type": "tile_normal",
+          "animal": "baby_dragon"
+        },
+        {
+          "type": "tile_normal",
+          "animal": "spider"
+        }
+      ],
+      "starting_tiles": [
+        {
+          "type": "tile_cave",
+          "variant": "blue",
+          "animal": "spider",
+          "position": 1
+        }
+      ]
+    },
+    {
+      "sequence": [
+        {
+          "type": "tile_normal",
+          "animal": "spider"
+        },
+        {
+          "type": "tile_normal",
+          "animal": "salamander"
+        },
+        {
+          "type": "tile_normal",
+          "animal": "bat"
+        }
+      ],
+      "starting_tile": null
+    }
   ],
+
+  "dependencies": {
+    "1XniwjafFNJwjkj92nj#Fn2": {
+      "type": "power_skip",
+      "skip_value": 2,
+      "required": ["turn_manager"],
+      "instance": "<determined at runtime>"
+    },
+    "CzaFWnkFMW&81nFjwnfaoOs": {
+      "type": "power_swap",
+      "required": ["game_board"],
+      "instance": "<determined at runtime>"
+    }
+  },
 
   "chit_card_sequence": [
     {
       "type": "chit_card_animal",
+      "deferred": false,
       "animal": "salamander",
       "symbol_count": 2,
       "flipped": true
     },
     {
-      "type": "chit_card_pirate",
-      "symbol_count": 1,
-      "flipped": true
-    },
-    {
       "type": "chit_card_power",
-      "power": {
-        "type": "power_skip",
-        "skip_value": 2
-      },
+      "deferred": true,
+      "dependencies": ["1XniwjafFNJwjkj92nj#Fn2"],
       "asset_path": "assets/chit_cards/...",
+      "position": null,
       "flipped": false
     },
     {
       "type": "chit_card_power",
-      "power": {
-        "type": "power_swap"
-      },
+      "deferred": true,
+      "dependencies": ["CzaFWnkFMW&81nFjwnfaoOs"],
       "asset_path": "assets/chit_cards/...",
+      "position": 4,
       "flipped": true
-    }
+    },
+    {
+      "type": "chit_card_pirate",
+      "deferred": true,
+      "symbol_count": 1,
+      "flipped": true
+    } 
   ]
 }

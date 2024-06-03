@@ -1,3 +1,4 @@
+from __future__ import annotations
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
@@ -74,16 +75,13 @@ class PowerChitCard(ChitCard):
             raise Exception("Board delegate was not set when on_click() called.")
 
         # flip logic
-        if self._board_delegate is not None:
-            if not self.get_flipped():
-                self.__power.set_user(character)
-                self.__power.execute()
-                self.set_flipped(not self.get_flipped())
-        else:
-            raise Exception("Board delegate was not set when on_click() called.")
+        if not self.get_flipped():
+            self.__power.set_user(character)
+            self.__power.execute()
+            self.set_flipped(not self.get_flipped())
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
-        """When requested on save, return a JSON compatible object describing this power chit card.
+        """When requested on save, add a JSON compatible object describing this power chit card.
 
         Warning: The dictionary must remain in json encodable format.
 
@@ -91,11 +89,35 @@ class PowerChitCard(ChitCard):
             to_write: The dictionary that will be converted to the JSON save file.
 
         Returns:
-            A JSON compatible object describing this power chit card.
+            None
+
+        Raises:
+            Exception if chit_card_sequence did not exist
         """
-        return {
-            "type": ClassTypeIdentifier.chit_card_power.value,
-            "power": self.__power.on_save(to_write),
-            "asset_path": self.__image_path,
-            "flipped": self.get_flipped(),
-        }
+        to_write["chit_card_sequence"].append(
+            {
+                "type": ClassTypeIdentifier.chit_card_power.value,
+                "deferred": True,
+                "dependencies": [self.__power.on_save(to_write)],
+                "asset_path": self.__image_path,
+                "flipped": self.get_flipped(),
+            }
+        )
+
+    @classmethod
+    def create_from_json_save(cls, save_data: dict[str, Any], power: Power) -> PowerChitCard:
+        """Create a power chit card based on a power chit card json save data object, and a power.
+
+        Args:
+            save_data: The dictionary representing the JSON save data object for a power chit card type
+            power: The power for the power chit card
+
+        Returns:
+            A power chit card matching the save data, with the power passed in
+        """
+        try:
+            instance: PowerChitCard = cls(power, save_data["asset_path"])
+            instance.set_flipped(save_data["flipped"])
+            return instance
+        except:
+            raise Exception(f"Save data must have attributes 'asset_path' and 'flipped'. Passed in={save_data}")

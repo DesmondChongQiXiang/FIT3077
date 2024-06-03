@@ -1,3 +1,4 @@
+from __future__ import annotations
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
@@ -77,7 +78,7 @@ class PirateChitCard(ChitCard):
             self.set_flipped(not self.get_flipped())
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
-        """When requested on save, return a JSON compatible object describing this pirate chit card.
+        """When requested on save, add the JSON compatible object describing this pirate chit card to the save dictionary.
 
         Warning: The dictionary must remain in json encodable format.
 
@@ -85,6 +86,33 @@ class PirateChitCard(ChitCard):
             to_write: The dictionary that will be converted to the JSON save file.
 
         Returns:
-            A JSON compatible object describing the pirate chit card.
+            None
+
+        Raises:
+            Exception if chit_card_sequence did not exist
         """
-        return {"type": ClassTypeIdentifier.chit_card_pirate.value, "symbol_count": self._symbol_count, "flipped": self.get_flipped()}
+        to_write["chit_card_sequence"].append(
+            {
+                "type": ClassTypeIdentifier.chit_card_pirate.value,
+                "deferred": False,
+                "symbol_count": self._symbol_count,
+                "flipped": self.get_flipped(),
+            }
+        )
+
+    @classmethod
+    def create_from_json_save(cls, save_data: dict[str, Any]) -> PirateChitCard:
+        """Create a pirate chit card based on a pirate chit card type json save data object.
+
+        Args:
+            save_data: The dictionary representing the JSON save data object for a pirate chit card type
+
+        Returns:
+            A pirate chit card matching the save data
+        """
+        try:
+            instance: PirateChitCard = cls(save_data["symbol_count"])
+            instance.set_flipped(save_data["flipped"])
+            return instance
+        except:
+            raise Exception(f"Save data must have attributes 'symbol_count' and 'flipped'. Passed in={save_data}")

@@ -59,11 +59,12 @@ class Tile(ABC, DrawableByAsset, JSONSavable):
         self.__character = character
 
     @abstractmethod
-    def place_character_on_tile(self, character: PlayableCharacter) -> None:
-        """Place the character on the tile and perform any functionalities.
+    def place_character_on_tile(self, character: PlayableCharacter, perform_effect: bool) -> None:
+        """Place the character on the tile and perform any effect.
 
         Args:
             character: The character to be placed on the tile.
+            perform_effect: Whether to perform the effect the tile has if any
         """
         ...
 

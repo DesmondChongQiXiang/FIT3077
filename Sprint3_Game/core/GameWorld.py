@@ -10,6 +10,7 @@ from game_concepts.events.WinEventPublisher import WinEventPublisher
 from game_concepts.turns.TurnManager import TurnManager
 from metaclasses.SingletonMeta import SingletonMeta
 from threading import Timer
+from screen.Menu import Menu
 
 import pygame
 
@@ -44,6 +45,8 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
         """
         clock = pygame.time.Clock()
+        menu = Menu()
+        menu.run(self.__turn_manager.get_currently_playing_character())
 
         #### GAME LOOP
         while self.__should_game_run:

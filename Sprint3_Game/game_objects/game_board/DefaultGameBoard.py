@@ -12,8 +12,9 @@ from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
 from core.GameWorld import GameWorld
+from screen.buttons.Button import Button
+from screen.buttons.Button import ButtonType
 from utils.math_utils import *
-
 import random
 
 
@@ -50,6 +51,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         self.__starting_tiles_set: set[Tile] = set()
         self.__starting_tiles_destinations_set: set[Tile] = set()  # stores the tiles that are the destinations for starting tiles
         self.__chit_cards: list[ChitCard] = chit_cards
+        self.__clickables: list[ModularClickableSprite] = []
+        self.__clickables.extend(self.__chit_cards)
         self.__playable_characters: list[PlayableCharacter] = playable_characters
         self.__character_location: dict[PlayableCharacter, int] = dict()  # K = character, V = index along main tile sequence
         self.__character_starting_tiles: dict[PlayableCharacter, Tile] = dict()  # K = character, V = their starting tile
@@ -57,6 +60,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         # ------ INITIALISATION ------------------------------------------------------------------------------------------------------------------------------------------------
         # initialise chit card position & size. Also set delegate
         self.__set_chit_card_draw_properties()
+        self._set_save_button_properties()
 
         for chit_card in self.__chit_cards:
             chit_card.set_game_board_delegate(self)
@@ -126,6 +130,11 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 next_x, next_y = random.randint(cur_x, cur_x + chit_card_rand_factor), random.randint(cur_y, cur_y + chit_card_rand_factor)
                 self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), chit_card_size))
                 chit_card_i += 1
+    
+    def _set_save_button_properties(self) -> None:
+        save_button = Button(ButtonType.SAVE, DrawProperties((600,25),(50,50)))
+        self.__clickables.append(save_button)
+
 
     def move_characters_to_position_indexes(self, pos: list[int], perform_tile_effect: bool) -> None:
         """Move characters in order to the tiles corresponding to the position indexes as indicated by the position list.
@@ -367,7 +376,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         Returns:
             A read-only list containing all the clickable sprites.
         """
-        return self.__chit_cards
+        return self.__clickables
 
     # ------ DrawableByAsset interface & Drawing --------------------------------------------------------------------------------------
     def get_draw_assets_instructions(self) -> list[DrawAssetInstruction]:

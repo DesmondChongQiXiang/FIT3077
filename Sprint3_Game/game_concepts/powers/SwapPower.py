@@ -54,7 +54,7 @@ class SwapPower(Power):
         self.__game_board = game_board
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
-        """When requested on save, return the identifier of this swap power, and add the data describing the swap power to a 
+        """When requested on save, return the identifier of this swap power, and add the data describing the swap power to a
         dependencies object at the root.
 
         Warning: The dictionary must remain in json encodable format.
@@ -76,10 +76,8 @@ class SwapPower(Power):
         return str(id(self))
 
     @classmethod
-    def create_from_json_save(cls, save_data: dict[str, Any]) -> SwapPower:
+    def create_from_json_save(cls, save_data: dict[str, Any], game_board: GameBoard) -> SwapPower:
         """Create a swap power based on a swap power type json save data object.
-
-        Warning: The save data object must have been modified to include the game board object in the attribute "game_board".
 
         Args:
             save_data: The dictionary representing the JSON save data object for a skip power
@@ -87,11 +85,5 @@ class SwapPower(Power):
 
         Returns:
             A swap power
-
-        Raises:
-            Exception if the structure was not
         """
-        try:
-            return cls(save_data["game_board"])
-        except Exception as e:
-            raise Exception(f"Save data must have attributes 'game_board'. Passed in={save_data}. Error={e}")
+        return cls(game_board)

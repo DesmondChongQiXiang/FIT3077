@@ -34,25 +34,31 @@ class JSONSaveClassFactory:
     # MAPPING
     # Defines the mapping from class type identifier to lambdas that create concrete classes using JSON dictionary save
     # data and other required data.
-    MAPPING: dict[ClassTypeIdentifier, Callable[[dict[str, Any]], Any]] = {
+    MAPPING: dict[ClassTypeIdentifier, Callable[..., Any]] = {
         ClassTypeIdentifier.tile_cave: lambda data: CaveTile.create_from_json_save(data),
         ClassTypeIdentifier.tile_normal: lambda data: NormalTile.create_from_json_save(data),
         ClassTypeIdentifier.player_dragon: lambda data: Dragon.create_from_json_save(data),
         ClassTypeIdentifier.chit_card_animal: lambda data: AnimalChitCard.create_from_json_save(data),
         ClassTypeIdentifier.chit_card_pirate: lambda data: PirateChitCard.create_from_json_save(data),
-        ClassTypeIdentifier.chit_card_power: lambda data: PowerChitCard.create_from_json_save(data),
-        ClassTypeIdentifier.power_skip: lambda data: SkipTurnPower.create_from_json_save(data),
-        ClassTypeIdentifier.power_swap: lambda data: SwapPower.create_from_json_save(data),
+        ClassTypeIdentifier.chit_card_power: lambda data, power: PowerChitCard.create_from_json_save(data, power),
+        ClassTypeIdentifier.power_skip: lambda data, turn_manager: SkipTurnPower.create_from_json_save(data, turn_manager),
+        ClassTypeIdentifier.power_swap: lambda data, game_board: SwapPower.create_from_json_save(data, game_board),
     }
 
-    def create_concrete_class(self, identifier: ClassTypeIdentifier, save_data: dict[str, Any]) -> Any:
-        """Create a concrete class based on the class identifier and save data.
+    def create_concrete_class(self, identifier: ClassTypeIdentifier, save_data: dict[str, Any], *args: Any) -> Any:
+        """Create a concrete class based on the class identifier, save data and any other required parameters as
+        specified in the same order as each concrete class's create_from_json_save() method.
 
         Args;
             identifier: The identifier for the concrete class
             save_data: Save data to initialise the class using
+            *args: Any other required arguments in the same order as the associated class's create_from_save() method
 
         Returns:
             Class of the type bound to the class type identifier as defined by JSONSaveFactory.MAPPING
+
+        Raises:
+            Exception if the passed in arguments were incompatible with the associated with identifier concrete class's
+            create_from_save() method
         """
-        return self.MAPPING[identifier](save_data)
+        return self.MAPPING[identifier](save_data, *args)

@@ -35,7 +35,7 @@ class SkipTurnPower(Power):
         self.__turn_manager.skip_to_player_on_turn_end(self.__turn_manager.get_player_character_n_turns_downstream(self.__players_to_skip + 1, user))
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
-        """When requested on save, return the identifier of this skip power, and add the data describing the skip power to a 
+        """When requested on save, return the identifier of this skip power, and add the data describing the skip power to a
         dependencies object at the root.
 
         Warning: The dictionary must remain in json encodable format.
@@ -58,10 +58,8 @@ class SkipTurnPower(Power):
         return str(id(self))
 
     @classmethod
-    def create_from_json_save(cls, save_data: dict[str, Any]) -> SkipTurnPower:
-        """Create a skip power based on a skip power type json save data object.
-
-        Warning: The save data object must have been modified to include the turn manager object in the attribute "turn_manager".
+    def create_from_json_save(cls, save_data: dict[str, Any], turn_manager: TurnManager) -> SkipTurnPower:
+        """Create a skip power based on a skip power type json save data object. Must also receive a turn manager.
 
         Args:
             save_data: The dictionary representing the JSON save data object for a skip power
@@ -69,11 +67,8 @@ class SkipTurnPower(Power):
 
         Returns:
             A skip turn power
-
-        Raises:
-            Exception if the structure of the json save data object was not as expected.
         """
         try:
-            return cls(save_data["turn_manager"], save_data["skip_value"])
-        except Exception as e:
-            raise Exception(f"Save data must have attributes 'skip_value', 'turn_manager'. Passed in={save_data}. Error={e}")
+            return cls(turn_manager, save_data["skip_value"])
+        except:
+            raise Exception(f"Save data must have attributes 'skip_value'. Passed in={save_data}")

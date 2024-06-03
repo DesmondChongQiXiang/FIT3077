@@ -6,7 +6,6 @@ from game_objects.characters.PlayableCharacter import PlayableCharacter
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_concepts.powers.Power import Power
 from factories.ClassTypeIdentifier import ClassTypeIdentifier
-from factories.saves.JSONSaveClassFactory import JSONSaveClassFactory
 
 from typing import Optional, Any
 
@@ -109,29 +108,18 @@ class PowerChitCard(ChitCard):
         )
 
     @classmethod
-    def create_from_json_save(cls, save_data: dict[str, Any]) -> PowerChitCard:
-        """Create a power chit card based on a power chit card json save data object.
+    def create_from_json_save(cls, save_data: dict[str, Any], power: Power) -> PowerChitCard:
+        """Create a power chit card based on a power chit card json save data object, and a power.
 
         Args:
             save_data: The dictionary representing the JSON save data object for a power chit card type
             power: The power for the power chit card
 
         Returns:
-            A power chit card matching the save data.
-
-        Raises:
-            Exception if the power chit card JSON save data object strucutre was not as expected.
+            A power chit card matching the save data, with the power passed in
         """
         try:
-            save_class_factory: JSONSaveClassFactory = JSONSaveClassFactory()
-            power_data: dict[str, Any] = save_data["power"]
-            flipped: bool = save_data["flipped"]
-
-            power: Power = save_class_factory.create_concrete_class(power_data["type"], power_data)
-            instance: PowerChitCard = cls(power, save_data["asset_path"])
-            instance.set_flipped(flipped)
-
             return cls(power, save_data["asset_path"])
+        except:
+            raise Exception(f"Save data must have attributes 'asset_path'. Passed in={save_data}")
 
-        except Exception as e:
-            raise Exception(f"Error={e}, Passed in={save_data}")

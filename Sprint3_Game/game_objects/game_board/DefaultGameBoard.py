@@ -119,11 +119,12 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 self.__chit_cards[chit_card_i].set_draw_properties(DrawProperties((next_x, next_y), chit_card_size))
                 chit_card_i += 1
 
-    def move_characters_to_position_indexes(self, pos: list[int]) -> None:
-        """Move characters in order to the position indexes as indicated by the position list.
+    def move_characters_to_position_indexes(self, pos: list[int], perform_tile_effect: bool) -> None:
+        """Move characters in order to the tiles corresponding to the position indexes as indicated by the position list.
 
         Args:
             pos: The list containing the position indexes
+            perform_tile_effect: Whether to perform any effect the tile has if any when moving the character to the tile
 
         Raises:
             Exception if the number of elements in the position exceeds the number of characters on the board
@@ -220,7 +221,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             character.set_should_continue_turn(False)
             return
 
-        self.__move_character_to_tile(character, final_tile_i)
+        self.__move_character_to_tile(character, True, final_tile_i)
 
     def get_closest_character(self, character: PlayableCharacter) -> Optional[PlayableCharacter]:
         """
@@ -307,7 +308,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         GameWorld.instance().disable_mouse_clicks()
 
     @overload
-    def __move_character_to_tile(self, character: PlayableCharacter, tile: Tile) -> None:
+    def __move_character_to_tile(self, character: PlayableCharacter, perform_tile_effect: bool, tile: Tile) -> None:
         """Move a character to the specified tile.
 
         Warning:
@@ -315,30 +316,32 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         Args:
             character: The character to move
+            perform_tile_effect: Whether to perform any effect the tile has if any when moving the character to the tile
             tile: The tile to move the character to
         """
         ...
 
     @overload
-    def __move_character_to_tile(self, character: PlayableCharacter, tile: int) -> None:
+    def __move_character_to_tile(self, character: PlayableCharacter, perform_tile_effect: bool, tile: int) -> None:
         """Move a character to the specified tile along the tile sequence.
 
         Args:
             character: The character to move
+            perform_tile_effect: Whether to perform any effect the tile has if any when moving the character to the tile
             tile: The index of the tile along the tile sequence
         """
         ...
 
-    def __move_character_to_tile(self, character: PlayableCharacter, tile: Tile | int) -> None:
+    def __move_character_to_tile(self, character: PlayableCharacter, perform_tile_effect: bool, tile: Tile | int) -> None:
         """Overload implementation of __move_character_to_tile."""
         match tile:
             case int():
-                self.__tile_sequence[tile].place_character_on_tile(character)
+                self.__tile_sequence[tile].place_character_on_tile(character, perform_tile_effect)
                 self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
                 self.__character_location[character] = tile
 
             case Tile():
-                tile.place_character_on_tile(character)
+                tile.place_character_on_tile(character, perform_tile_effect)
                 self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)
                 for i in range(len(self.__tile_sequence)):
                     if self.__tile_sequence[i] == tile:

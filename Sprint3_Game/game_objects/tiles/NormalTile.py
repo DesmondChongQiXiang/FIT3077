@@ -27,11 +27,12 @@ class NormalTile(Tile):
         super().__init__(draw_data, character, animal)
 
     # ------- Tile abstract class --------------------------------------------------------------------------
-    def place_character_on_tile(self, character: PlayableCharacter) -> None:
+    def place_character_on_tile(self, character: PlayableCharacter, perform_effect: bool) -> None:
         """Place a character on the tile.
 
         Args:
             character: The character to place on the tile
+            perform_effect: Whether to perform the effect the tile has if any
         """
         self.set_character_on_tile(character)
 

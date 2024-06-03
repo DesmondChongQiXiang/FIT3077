@@ -31,14 +31,18 @@ class CaveTile(Tile):
         self.__variant = variant
 
     # ------- Tile abstract class --------------------------------------------------------------------------
-    def place_character_on_tile(self, character: PlayableCharacter) -> None:
+    def place_character_on_tile(self, character: PlayableCharacter, perform_effect: bool) -> None:
         """Places the character on the tile and triggers a win for the character.
 
         Args:
             character: The character to place on the tile
+            perform_effect: Whether to perform the effect the tile has if any
         """
         self.set_character_on_tile(character)
-        WinEventPublisher.instance().notify_subscribers(character)
+
+        # notify of win if effect should be performed
+        if perform_effect:
+            WinEventPublisher.instance().notify_subscribers(character)
 
     def _on_draw_request(self, draw_properties: DrawProperties) -> list[DrawAssetInstruction]:
         """On draw request, return instructions to draw the cave tile, animal and character on top if there is one.

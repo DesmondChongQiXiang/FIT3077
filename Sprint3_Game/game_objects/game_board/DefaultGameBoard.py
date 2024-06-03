@@ -175,7 +175,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         else:
             self.__chit_cards.insert(random.randint(0, chit_card_last_i), chit_card)
 
-        # re-initialise drawing properties accounting for new chit cards
+        chit_card.set_game_board_delegate(self)
+
+        # re-initialise drawing properties accounting for new chit cards,
         self.__set_chit_card_draw_properties()
 
     # ------ GameBoard abstract class & Moving --------------------------------------------------------------------------------------------

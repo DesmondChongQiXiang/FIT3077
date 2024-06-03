@@ -75,13 +75,10 @@ class PowerChitCard(ChitCard):
             raise Exception("Board delegate was not set when on_click() called.")
 
         # flip logic
-        if self._board_delegate is not None:
-            if not self.get_flipped():
-                self.__power.set_user(character)
-                self.__power.execute()
-                self.set_flipped(not self.get_flipped())
-        else:
-            raise Exception("Board delegate was not set when on_click() called.")
+        if not self.get_flipped():
+            self.__power.set_user(character)
+            self.__power.execute()
+            self.set_flipped(not self.get_flipped())
 
     def on_save(self, to_write: dict[str, Any]) -> Optional[Any]:
         """When requested on save, add a JSON compatible object describing this power chit card.

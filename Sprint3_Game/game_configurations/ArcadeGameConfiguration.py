@@ -258,7 +258,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         # ------------------ initialise game board -----------------------
         # ================================================================
         game_board: DefaultGameBoard = DefaultGameBoard(main_tiles, starting_tiles, chit_cards, playable_characters)
-        game_board.move_characters_to_position_indexes(playable_character_positions)
+        game_board.move_characters_to_position_indexes(playable_character_positions, False)
 
         # ================================================================
         # ------------- perform deferred initialisations -----------------

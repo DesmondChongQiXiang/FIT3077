@@ -120,7 +120,9 @@ class ArcadeGameConfiguration(GameConfiguration):
         to_write["volcano_card_sequence"] = []
         to_write["chit_card_sequence"] = []
 
-        # add player data to the save dictionary
+        # ================================================================
+        # ---------------------- save player data ------------------------
+        # ================================================================
         players_save_dict: list[Any] = to_write["player_data"]["players"]
         for player in self.PLAYABLE_CHARACTERS:
             players_save_dict.append(player.on_save(to_write))
@@ -128,10 +130,14 @@ class ArcadeGameConfiguration(GameConfiguration):
         player_data_save_dict: dict[str, Any] = to_write["player_data"]
         player_data_save_dict["currently_playing"] = self.__turn_manager.on_save(to_write)  # add currently playing character index
 
-        # add volcano card sequence (including caves) data to the save dictionary
+        # ================================================================
+        # ---------------- save volcano cards + caves --------------------
+        # ================================================================
+        # variables
         volcano_card_seq_save_dict: list[Any] = to_write["volcano_card_sequence"]
         starting_tile_i: int = 0  # tracks starting tile to ask saving data from
 
+        # saving
         for i in range(0, len(self.__main_tiles), 3):  # volcano cards are in groups of 3
             current_volcano_card_sequence: list[Any] = []
             current_volcano_card_start_tiles: list[Any] = []
@@ -154,10 +160,15 @@ class ArcadeGameConfiguration(GameConfiguration):
                 {"sequence": current_volcano_card_sequence, "starting_tiles": current_volcano_card_start_tiles if len(current_volcano_card_start_tiles) > 0 else None}
             )
 
-        # add chit card sequence to save dictionary
+        # ================================================================
+        # ---------------------- save chit cards -------------------------
+        # ================================================================
         for chit_card in self.__chit_cards:
             chit_card.on_save(to_write)
 
+        # ================================================================
+        # -------------- game board dynamic save config ------------------
+        # ================================================================
         # allow default game board to perform any configuration on existing data in save dictionary
         if self.__game_board is None:
             raise Exception("Game board not defined before save. Run generate_game_world() first.")

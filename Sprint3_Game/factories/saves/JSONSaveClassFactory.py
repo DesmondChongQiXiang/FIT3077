@@ -26,7 +26,7 @@ from utils.os_utils import *
 
 
 class JSONSaveClassFactory:
-    """Represents a factory that can create concrete classes from passed in JSON dictionary save data.
+    """Represents a factory that can create concrete classes from passed in JSON dictionary save data and other arguments.
 
     Author: Shen
     """

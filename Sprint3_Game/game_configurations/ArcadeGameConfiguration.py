@@ -182,36 +182,38 @@ class ArcadeGameConfiguration(GameConfiguration):
         main_tiles: list[Tile] = []
         starting_tiles: list[tuple[Tile, Tile]] = []  # (starting tile, connected tile)
         chit_cards: list[ChitCard] = []
+        deferred_chit_card_data: list[tuple[dict[str, Any], int]] = (
+            []
+        )  # Deferred (initialised after GameBoard initialisation) chit card data. [(data, index position it should be at)]
         powers: list[Power] = []
 
         ### initialise players
         # guard variable
         try:
-            players_save_dict: list[Any] = save_data["player_data"]["players"]
+            players_save_data: list[Any] = save_data["player_data"]["players"]
         except:
             raise Exception("player_data.players did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
 
         # create players
-        for player_data in players_save_dict:
+        for player_data in players_save_data:
             player: PlayableCharacter = class_factory.create_concrete_class(ClassTypeIdentifier(player_data["type"]), player_data)
             playable_characters.append(player)
             playable_character_positions.append(player_data["location"])
 
         ### initialise turn manager
         current_player_i: int = save_data["player_data"]["currently_playing"]
-
         turn_manager: TurnManager = DefaultTurnManger(playable_characters, current_player_i)
 
         ### initialise tiles + caves from volcano cards
         # variables
         cur_tile_i: int = 0
         try:
-            volcano_card_seq_save_dict: list[dict[str, Any]] = save_data["volcano_card_sequence"]
+            volcano_card_seq_save_data: list[dict[str, Any]] = save_data["volcano_card_sequence"]
         except:
             raise Exception("volcano_card_sequence did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
 
         # create the tiles + caves
-        for volcano_card in volcano_card_seq_save_dict:
+        for volcano_card in volcano_card_seq_save_data:
             volcano_card_main_seq: list[dict[str, Any]] = volcano_card["sequence"]
             volcano_card_start_tiles: Optional[list[dict[str, Any]]] = volcano_card["starting_tiles"]
 
@@ -231,13 +233,12 @@ class ArcadeGameConfiguration(GameConfiguration):
         ### initialise chit cards
         # variables
         try:
-            chit_card_seq_save_dict: list[dict[str, Any]] = save_data["chit_card_sequence"]
+            chit_card_seq_save_data: list[dict[str, Any]] = save_data["chit_card_sequence"]
         except:
             raise Exception("chit_card_sequence did not exist when trying to load from a JSON save data dictionary. From: ArcadeGameConfiguration.")
-        deferred_chit_card_data: list[tuple[dict[str, Any], int]] = []  # [(data, position its at)]
 
         # creating non deferred chit cards. Saving deferred chit card data for later initialisation
-        for i, chit_card_data in enumerate(chit_card_seq_save_dict):
+        for i, chit_card_data in enumerate(chit_card_seq_save_data):
             if not chit_card_data["deferred"]:
                 chit_card: ChitCard = class_factory.create_concrete_class(ClassTypeIdentifier(chit_card_data["type"]), chit_card_data)
             else:
@@ -248,4 +249,20 @@ class ArcadeGameConfiguration(GameConfiguration):
         game_board.move_characters_to_position_indexes(playable_character_positions)
 
         ### perform deferred initialisations
-        # Initialise dependencies
+        # variables
+        dependency_map: dict[ClassTypeIdentifier, Any] = {
+            ClassTypeIdentifier.turn_manager: turn_manager,
+            ClassTypeIdentifier.game_board: game_board,
+        }
+        dependencies: dict[str, Any] = {}  # contains dependency class instances mapped by their id
+        dependencies_save_data: dict[str, dict[str, Any]] = save_data["dependencies"]
+
+        # initialise dependencies
+        for dependency_id, dependency_data in dependencies_save_data.items():
+            dependency_type: str = dependency_data["type"]
+            dependency_arg_identifiers: list[str] = dependency_data["required"]
+            dependency_arg_list: list[Any] = [dependency_map[ClassTypeIdentifier(required_type)] for required_type in dependency_arg_identifiers]
+
+            dependencies[dependency_id] = class_factory.create_concrete_class(ClassTypeIdentifier(dependency_type), dependency_data, *dependency_arg_list)
+
+        # Deferred: Chit cards

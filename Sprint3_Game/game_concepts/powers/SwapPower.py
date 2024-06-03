@@ -71,7 +71,6 @@ class SwapPower(Power):
         to_write["dependencies"][str(id(self))] = {
             "type": ClassTypeIdentifier.power_swap.value,
             "required": [ClassTypeIdentifier.game_board.value],
-            "instance": None,
         }
         return str(id(self))
 

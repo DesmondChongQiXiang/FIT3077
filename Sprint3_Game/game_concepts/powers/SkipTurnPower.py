@@ -53,7 +53,6 @@ class SkipTurnPower(Power):
             "type": ClassTypeIdentifier.power_skip.value,
             "skip_value": self.__players_to_skip,
             "required": [ClassTypeIdentifier.turn_manager.value],
-            "instance": None,
         }
         return str(id(self))
 

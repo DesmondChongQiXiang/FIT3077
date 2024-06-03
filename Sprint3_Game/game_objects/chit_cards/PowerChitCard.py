@@ -1,3 +1,4 @@
+from __future__ import annotations
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
@@ -99,3 +100,19 @@ class PowerChitCard(ChitCard):
             "asset_path": self.__image_path,
             "flipped": self.get_flipped(),
         }
+
+    @classmethod
+    def create_from_json_save(cls, save_data: dict[str, Any], power: Power) -> PowerChitCard:
+        """Create a power chit card based on a power chit card json save data object, and a power.
+
+        Args:
+            save_data: The dictionary representing the JSON save data object for a power chit card type
+            power: The power for the power chit card
+
+        Returns:
+            A power chit card matching the save data, with the power passed in
+        """
+        try:
+            return cls(power, save_data["asset_path"])
+        except:
+            raise Exception(f"Save data must have attributes 'asset_path'. Passed in={save_data}")

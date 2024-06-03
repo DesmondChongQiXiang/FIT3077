@@ -25,7 +25,7 @@ from factories.ClassTypeIdentifier import ClassTypeIdentifier
 from utils.os_utils import *
 
 
-class JSONSaveFactory:
+class JSONSaveClassFactory:
     """Represents a factory that can create concrete classes from passed in JSON dictionary save data.
 
     Author: Shen

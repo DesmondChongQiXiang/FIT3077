@@ -38,9 +38,13 @@ class ArcadeGameConfiguration(GameConfiguration):
     Author: Shen
     """
 
+    # MAIN_TILE_SEQUENCE
+    # The main tile sequence to use for the game board
+    MAIN_TILE_SEQUENCE: list[Tile] = randomised_volcano_card_sequence(8)
+
     # STARTING_TILE_POSITIONS
     # The starting tile positions as indexes along the start of the main tile sequence to use for each starting tile in order.
-    # Warning: Indexes must be within the bounds of the number of tiles - 1
+    # Warning: Indexes must be within the bounds of the main number of tiles - 1
     STARTING_TILE_POSITIONS: list[int] = [3, 9, 15, 21]
 
     # PLAYABLE_CHARACTERS
@@ -59,7 +63,6 @@ class ArcadeGameConfiguration(GameConfiguration):
         Args:
             save_codec: The codec to use for saving.
         """
-        self.__main_tiles: list[Tile] = randomised_volcano_card_sequence(8)
         self.__starting_tiles: list[Tile] = [
             CaveTile(Animal.BABY_DRAGON, CaveTileVariant.BLUE, character=self.PLAYABLE_CHARACTERS[0]),
             CaveTile(Animal.SALAMANDER, CaveTileVariant.GREEN, character=self.PLAYABLE_CHARACTERS[1]),
@@ -91,12 +94,12 @@ class ArcadeGameConfiguration(GameConfiguration):
 
         # game board
         self.__game_board = DefaultGameBoard(
-            self.__main_tiles,
+            self.MAIN_TILE_SEQUENCE,
             [
-                (self.__starting_tiles[0], self.__main_tiles[self.STARTING_TILE_POSITIONS[0]]),
-                (self.__starting_tiles[1], self.__main_tiles[self.STARTING_TILE_POSITIONS[1]]),
-                (self.__starting_tiles[2], self.__main_tiles[self.STARTING_TILE_POSITIONS[2]]),
-                (self.__starting_tiles[3], self.__main_tiles[self.STARTING_TILE_POSITIONS[3]]),
+                (self.__starting_tiles[0], self.MAIN_TILE_SEQUENCE[self.STARTING_TILE_POSITIONS[0]]),
+                (self.__starting_tiles[1], self.MAIN_TILE_SEQUENCE[self.STARTING_TILE_POSITIONS[1]]),
+                (self.__starting_tiles[2], self.MAIN_TILE_SEQUENCE[self.STARTING_TILE_POSITIONS[2]]),
+                (self.__starting_tiles[3], self.MAIN_TILE_SEQUENCE[self.STARTING_TILE_POSITIONS[3]]),
             ],
             self.__chit_cards,
             self.PLAYABLE_CHARACTERS,
@@ -141,12 +144,12 @@ class ArcadeGameConfiguration(GameConfiguration):
         starting_tile_i: int = 0  # tracks starting tile to ask saving data from
 
         # saving
-        for i in range(0, len(self.__main_tiles), 3):  # volcano cards are in groups of 3
+        for i in range(0, len(self.MAIN_TILE_SEQUENCE), 3):  # volcano cards are in groups of 3
             current_volcano_card_sequence: list[Any] = []
             current_volcano_card_start_tiles: list[Any] = []
 
             for j in range(i, i + 3):
-                cur_tile: JSONSavable = self.__main_tiles[j]
+                cur_tile: JSONSavable = self.MAIN_TILE_SEQUENCE[j]
                 current_volcano_card_sequence.append(cur_tile.on_save(to_write))
 
                 # write starting tile data if the starting tile is attached to this tile

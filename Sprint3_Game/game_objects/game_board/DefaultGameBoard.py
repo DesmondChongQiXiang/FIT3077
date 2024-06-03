@@ -350,13 +350,13 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """Overload implementation of __move_character_to_tile."""
         match tile:
             case int():
-                self.__tile_sequence[tile].place_character_on_tile(character, perform_tile_effect)
                 self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)  # remove char from its current tile
+                self.__tile_sequence[tile].place_character_on_tile(character, perform_tile_effect)
                 self.__character_location[character] = tile
 
             case Tile():
-                tile.place_character_on_tile(character, perform_tile_effect)
                 self.__tile_sequence[self.__character_location[character]].set_character_on_tile(None)
+                tile.place_character_on_tile(character, perform_tile_effect)
                 for i in range(len(self.__tile_sequence)):
                     if self.__tile_sequence[i] == tile:
                         self.__character_location[character] = i

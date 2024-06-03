@@ -1,3 +1,4 @@
+from __future__ import annotations
 from game_objects.chit_cards.ChitCard import ChitCard
 from game_objects.animals.Animal import Animal
 from game_objects.tiles.Tile import Tile
@@ -99,3 +100,20 @@ class AnimalChitCard(ChitCard):
             A JSON compatible object describing the animal chit card.
         """
         return {"type": ClassTypeIdentifier.chit_card_animal.value, "animal": self.__animal.value, "symbol_count": self._symbol_count, "flipped": self.get_flipped()}
+    
+    @classmethod
+    def create_from_json_save(cls, save_data: dict[str, Any]) -> AnimalChitCard:
+        """Create an animal chit card based on a animal chit card type json save data object.
+
+        Args:
+            save_data: The dictionary representing the JSON save data object for an animal chit card type type
+
+        Returns:
+            An animal chit card matching the save data
+        """
+        try:
+            instance: AnimalChitCard = cls(Animal(save_data["animal"]), save_data["symbol_count"])
+            instance.set_flipped(save_data["flipped"])
+            return instance
+        except:
+            raise Exception(f"Save data must have attributes 'animal', 'symbol_count' and 'flipped'. Passed in={save_data}")

@@ -62,10 +62,10 @@ class Dragon(PlayableCharacter):
 
     @classmethod
     def create_from_json_save(cls, save_data: dict[str, Any]) -> Dragon:
-        """Create a dragon based on player json save data.
+        """Create a dragon based on a dragon type json save data object.
 
         Args:
-            save_data: The dictionary representing the JSON save data object for a player
+            save_data: The dictionary representing the JSON save data object for a dragon type
 
         Returns:
             A dragon matching the save data

@@ -75,34 +75,55 @@
     }
   ],
 
-  "chit_card_sequence": [
-    {
-      "type": "chit_card_animal",
-      "animal": "salamander",
-      "symbol_count": 2,
-      "flipped": true
-    },
-    {
-      "type": "chit_card_pirate",
-      "symbol_count": 1,
-      "flipped": true
-    },
-    {
-      "type": "chit_card_power",
-      "power": {
-        "type": "power_skip",
-        "skip_value": 2
+  "runtime_dependencies": {},
+
+  "chit_card_sequence": {
+    "on_load": [
+      {
+        "type": "chit_card_animal",
+        "animal": "salamander",
+        "symbol_count": 2,
+        "flipped": true
       },
-      "asset_path": "assets/chit_cards/...",
-      "flipped": false
-    },
-    {
-      "type": "chit_card_power",
-      "power": {
-        "type": "power_swap"
-      },
-      "asset_path": "assets/chit_cards/...",
-      "flipped": true
+      {
+        "type": "chit_card_pirate",
+        "symbol_count": 1,
+        "flipped": true
+      }
+    ],
+    "deferred": {
+      "dependencies": [
+        {
+          "1XniwjafFNJwjkj92nj#Fn2": {
+            "type": "power_skip",
+            "skip_value": 2,
+            "required": ["turn_manager"],
+            "instance": "<determined at runtime>"
+          },
+          "CzaFWnkFMW&81nFjwnfaoOs": {
+            "type": "power_swap",
+            "required": ["game_board"],
+            "instance": "<determined at runtime>"
+          }
+        }
+      ],
+      "to_load": [
+        {
+          "type": "chit_card_power",
+          "dependencies": ["1XniwjafFNJwjkj92nj#Fn2"],
+          "asset_path": "assets/chit_cards/...",
+          "add_randomly": true,
+          "flipped": false
+        },
+        {
+          "type": "chit_card_power",
+          "dependencies": ["1XniwjafFNJwjkj92nj#Fn2"],
+          "power": "CzaFWnkFMW&81nFjwnfaoOs",
+          "asset_path": "assets/chit_cards/...",
+          "add_randomly": true,
+          "flipped": true
+        }
+      ]
     }
-  ]
+  }
 }

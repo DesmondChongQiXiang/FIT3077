@@ -39,6 +39,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
         Raises:
             Exception if the number of players to be playing on the board is less than 2.
+            Exception if the number of players on the starting tiles was less than 2
         """
         if len(playable_characters) < 2:
             raise Exception("The number of players must be at least 2 for the default game board.")
@@ -76,16 +77,23 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
                 self.__tile_sequence.append(dest_to_start_tile[tile])
             self.__tile_sequence.append(tile)
 
-        # Initialise character starting location, character location dictionaries to initial game board state
+        # Initialise character starting location,
         for tile in self.__starting_tiles:
             char_on_tile = tile.get_character_on_tile()
             if char_on_tile is not None:
                 self.__character_starting_tiles[char_on_tile] = tile
 
+        # Initialise character location dictionaries to initial game board state
+        player_count: int = 0
+
         for i, tile in enumerate(self.__tile_sequence):
             potential_char: Optional[PlayableCharacter] = tile.get_character_on_tile()
             if potential_char is not None:
                 self.__character_location[potential_char] = i
+                player_count += 1
+
+        if player_count < 2:
+            raise Exception(f"The starting tiles had in total {player_count} players. There must be at least 2.")
 
     # ----------- Initialisation helpers -------------------------------------------------------------------------------------------
     def __set_chit_card_draw_properties(self) -> None:

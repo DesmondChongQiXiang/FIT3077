@@ -100,11 +100,12 @@ class AnimalChitCard(ChitCard):
             None
 
         Raises:
-            Exception if chit_card_sequence.on_load did not exist
+            Exception if chit_card_sequence did not exist
         """
-        to_write["chit_card_sequence"]["on_load"].append(
+        to_write["chit_card_sequence"].append(
             {
                 "type": ClassTypeIdentifier.chit_card_animal.value,
+                "deferred": False,
                 "animal": self.__animal.value,
                 "symbol_count": self._symbol_count,
                 "flipped": self.get_flipped(),

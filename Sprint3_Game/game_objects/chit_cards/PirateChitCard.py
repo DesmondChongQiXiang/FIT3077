@@ -89,11 +89,12 @@ class PirateChitCard(ChitCard):
             None
 
         Raises:
-            Exception if chit_card_sequence.on_load did not exist
+            Exception if chit_card_sequence did not exist
         """
-        to_write["chit_card_sequence"]["on_load"].append(
+        to_write["chit_card_sequence"].append(
             {
                 "type": ClassTypeIdentifier.chit_card_pirate.value,
+                "deferred": False,
                 "symbol_count": self._symbol_count,
                 "flipped": self.get_flipped(),
             }

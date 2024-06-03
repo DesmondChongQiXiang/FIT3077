@@ -96,14 +96,14 @@ class PowerChitCard(ChitCard):
             None
 
         Raises:
-            Exception if chit_card_sequence.deferred.to_load did not exist
+            Exception if chit_card_sequence did not exist
         """
-        to_write["chit_card_sequence"]["deferred_load"].append(
+        to_write["chit_card_sequence"].append(
             {
                 "type": ClassTypeIdentifier.chit_card_power.value,
+                "deferred": True,
                 "dependencies": [self.__power.on_save(to_write)],
                 "asset_path": self.__image_path,
-                "position": None,
                 "flipped": self.get_flipped(),
             }
         )

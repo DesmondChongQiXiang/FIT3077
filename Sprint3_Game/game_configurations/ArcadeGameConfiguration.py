@@ -118,10 +118,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         to_write["player_data"]["players"] = []
         to_write["dependencies"] = dict()
         to_write["volcano_card_sequence"] = []
-        to_write["chit_card_sequence"] = {
-            "on_load": [],
-            "deferred_load": [],
-        }
+        to_write["chit_card_sequence"] = []
 
         # add player data to the save dictionary
         players_save_dict: list[Any] = to_write["player_data"]["players"]
@@ -158,7 +155,6 @@ class ArcadeGameConfiguration(GameConfiguration):
             )
 
         # add chit card sequence to save dictionary
-        chit_card_seq_save_dict: dict[str, Any] = to_write["chit_card_sequence"]
         for chit_card in self.__chit_cards:
             chit_card.on_save(to_write)
 

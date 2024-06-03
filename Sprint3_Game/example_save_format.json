@@ -89,35 +89,35 @@
     }
   },
 
-  "chit_card_sequence": {
-    "on_load": [
-      {
-        "type": "chit_card_animal",
-        "animal": "salamander",
-        "symbol_count": 2,
-        "flipped": true
-      },
-      {
-        "type": "chit_card_pirate",
-        "symbol_count": 1,
-        "flipped": true
-      }
-    ],
-    "deferred_load": [
-      {
-        "type": "chit_card_power",
-        "dependencies": ["1XniwjafFNJwjkj92nj#Fn2"],
-        "asset_path": "assets/chit_cards/...",
-        "position": 1,
-        "flipped": false
-      },
-      {
-        "type": "chit_card_power",
-        "dependencies": ["CzaFWnkFMW&81nFjwnfaoOs"],
-        "asset_path": "assets/chit_cards/...",
-        "position": 4,
-        "flipped": true
-      }
-    ]
-  }
+  "chit_card_sequence": [
+    {
+      "type": "chit_card_animal",
+      "deferred": false,
+      "animal": "salamander",
+      "symbol_count": 2,
+      "flipped": true
+    },
+    {
+      "type": "chit_card_power",
+      "deferred": true,
+      "dependencies": ["1XniwjafFNJwjkj92nj#Fn2"],
+      "asset_path": "assets/chit_cards/...",
+      "position": null,
+      "flipped": false
+    },
+    {
+      "type": "chit_card_power",
+      "deferred": true,
+      "dependencies": ["CzaFWnkFMW&81nFjwnfaoOs"],
+      "asset_path": "assets/chit_cards/...",
+      "position": 4,
+      "flipped": true
+    },
+    {
+      "type": "chit_card_pirate",
+      "deferred": true,
+      "symbol_count": 1,
+      "flipped": true
+    } 
+  ]
 }

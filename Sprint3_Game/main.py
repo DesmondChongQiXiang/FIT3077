@@ -17,9 +17,9 @@ if __name__ == "__main__":
     # The codec to use for encoding/decoding save files
     SAVE_CODEC: SaveCodec = JSONSaveCodec("saves")
 
-    # GAME_CONFIG
+    # GAME_CONFIGURATION
     # The game configuration the game is to use
-    GAME_CONFIG: GameConfiguration = ArcadeGameConfiguration(SAVE_CODEC)
+    GAME_CONFIGURATION: GameConfiguration = ArcadeGameConfiguration(SAVE_CODEC)
 
     # ----- PYGAME INIT -------------------------------------------------------------------------------------------------
     # Initialise pygame
@@ -41,9 +41,9 @@ if __name__ == "__main__":
 
     # ----- GAME INSTANCE ------------------------------------------------------------------------------------------
     # game_world: GameWorld = GAME_CONFIG.generate_game_world()
-
     # SAVE_CODEC.save()
+    
     load_data = SAVE_CODEC.load()
-    game_world: GameWorld = ArcadeGameConfiguration.create_game_world_from_json_save(load_data)
+    game_world: GameWorld = GAME_CONFIGURATION.create_game_world_from_json_save(load_data)
 
     game_world.run()

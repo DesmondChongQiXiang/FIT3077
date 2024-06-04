@@ -29,53 +29,53 @@
         "currently_playing": 0
     },
     "dependencies": {
-        "1204183987664": {
+        "1815596123152": {
             "type": "power_skip",
             "skip_value": 2,
             "required": [
                 "turn_manager"
             ]
         },
-        "1204184059408": {
+        "1815596129744": {
             "type": "power_swap",
             "required": [
                 "game_board"
             ]
         },
-        "1204185412304": {
+        "1815597915472": {
             "type": "power_skip",
             "skip_value": 2,
             "required": [
                 "turn_manager"
             ]
         },
-        "1204183876176": {
+        "1815597912336": {
             "type": "power_swap",
             "required": [
                 "game_board"
             ]
         },
-        "1204185514384": {
+        "1815597915792": {
             "type": "power_skip",
             "skip_value": 2,
             "required": [
                 "turn_manager"
             ]
         },
-        "1204184055888": {
+        "1815597911888": {
             "type": "power_swap",
             "required": [
                 "game_board"
             ]
         },
-        "1204185514768": {
+        "1815597916176": {
             "type": "power_skip",
             "skip_value": 2,
             "required": [
                 "turn_manager"
             ]
         },
-        "1204185410640": {
+        "1815597912016": {
             "type": "power_swap",
             "required": [
                 "game_board"
@@ -87,15 +87,15 @@
             "sequence": [
                 {
                     "type": "tile_normal",
+                    "animal": "bat"
+                },
+                {
+                    "type": "tile_normal",
                     "animal": "baby_dragon"
                 },
                 {
                     "type": "tile_normal",
                     "animal": "salamander"
-                },
-                {
-                    "type": "tile_normal",
-                    "animal": "bat"
                 }
             ],
             "starting_tiles": null
@@ -104,7 +104,7 @@
             "sequence": [
                 {
                     "type": "tile_normal",
-                    "animal": "bat"
+                    "animal": "salamander"
                 },
                 {
                     "type": "tile_normal",
@@ -112,7 +112,7 @@
                 },
                 {
                     "type": "tile_normal",
-                    "animal": "salamander"
+                    "animal": "spider"
                 }
             ],
             "starting_tiles": [
@@ -128,15 +128,15 @@
             "sequence": [
                 {
                     "type": "tile_normal",
-                    "animal": "baby_dragon"
-                },
-                {
-                    "type": "tile_normal",
-                    "animal": "bat"
-                },
-                {
-                    "type": "tile_normal",
                     "animal": "spider"
+                },
+                {
+                    "type": "tile_normal",
+                    "animal": "salamander"
+                },
+                {
+                    "type": "tile_normal",
+                    "animal": "baby_dragon"
                 }
             ],
             "starting_tiles": null
@@ -145,11 +145,11 @@
             "sequence": [
                 {
                     "type": "tile_normal",
-                    "animal": "spider"
+                    "animal": "bat"
                 },
                 {
                     "type": "tile_normal",
-                    "animal": "salamander"
+                    "animal": "spider"
                 },
                 {
                     "type": "tile_normal",
@@ -169,15 +169,15 @@
             "sequence": [
                 {
                     "type": "tile_normal",
-                    "animal": "salamander"
-                },
-                {
-                    "type": "tile_normal",
                     "animal": "spider"
                 },
                 {
                     "type": "tile_normal",
                     "animal": "bat"
+                },
+                {
+                    "type": "tile_normal",
+                    "animal": "salamander"
                 }
             ],
             "starting_tiles": null
@@ -190,11 +190,11 @@
                 },
                 {
                     "type": "tile_normal",
-                    "animal": "baby_dragon"
+                    "animal": "spider"
                 },
                 {
                     "type": "tile_normal",
-                    "animal": "spider"
+                    "animal": "bat"
                 }
             ],
             "starting_tiles": [
@@ -210,15 +210,15 @@
             "sequence": [
                 {
                     "type": "tile_normal",
-                    "animal": "spider"
-                },
-                {
-                    "type": "tile_normal",
-                    "animal": "bat"
+                    "animal": "baby_dragon"
                 },
                 {
                     "type": "tile_normal",
                     "animal": "salamander"
+                },
+                {
+                    "type": "tile_normal",
+                    "animal": "bat"
                 }
             ],
             "starting_tiles": null
@@ -227,15 +227,15 @@
             "sequence": [
                 {
                     "type": "tile_normal",
+                    "animal": "baby_dragon"
+                },
+                {
+                    "type": "tile_normal",
                     "animal": "bat"
                 },
                 {
                     "type": "tile_normal",
                     "animal": "spider"
-                },
-                {
-                    "type": "tile_normal",
-                    "animal": "baby_dragon"
                 }
             ],
             "starting_tiles": [
@@ -273,7 +273,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1204183987664"
+                "1815596123152"
             ],
             "asset_path": "assets/chit_cards/chit_card_skip_2.png",
             "flipped": false
@@ -282,7 +282,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1204184059408"
+                "1815596129744"
             ],
             "asset_path": "assets/chit_cards/chit_card_swap.png",
             "flipped": false
@@ -311,7 +311,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1204185412304"
+                "1815597915472"
             ],
             "asset_path": "assets/chit_cards/chit_card_skip_2.png",
             "flipped": false
@@ -320,7 +320,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1204183876176"
+                "1815597912336"
             ],
             "asset_path": "assets/chit_cards/chit_card_swap.png",
             "flipped": false
@@ -349,7 +349,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1204185514384"
+                "1815597915792"
             ],
             "asset_path": "assets/chit_cards/chit_card_skip_2.png",
             "flipped": false
@@ -358,7 +358,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1204184055888"
+                "1815597911888"
             ],
             "asset_path": "assets/chit_cards/chit_card_swap.png",
             "flipped": false
@@ -387,7 +387,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1204185514768"
+                "1815597916176"
             ],
             "asset_path": "assets/chit_cards/chit_card_skip_2.png",
             "flipped": false
@@ -396,7 +396,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1204185410640"
+                "1815597912016"
             ],
             "asset_path": "assets/chit_cards/chit_card_swap.png",
             "flipped": false

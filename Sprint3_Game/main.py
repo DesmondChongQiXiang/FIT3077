@@ -40,7 +40,6 @@ if __name__ == "__main__":
     else:
         # For all other OS: Use requested screen size
         pygame.display.set_mode((REQUESTED_SCREEN_SIZE, REQUESTED_SCREEN_SIZE))
-    
 
     # ----- GAME INSTANCE ------------------------------------------------------------------------------------------
     # game_world: GameWorld = GAME_CONFIG.generate_game_world()

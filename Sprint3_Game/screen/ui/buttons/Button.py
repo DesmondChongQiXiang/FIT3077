@@ -5,20 +5,41 @@ from screen.DrawAssetInstruction import DrawAssetInstruction
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.ui.buttons.ButtonType import ButtonType
 
-
 class Button(ModularClickableSprite):
-    """A class that represents the buttons other than gameo_bjects. 
+    """A class that represents the buttons other than game_objects. 
 
     Author: Desmond
     """
-    def __init__(self, button_type: ButtonType, draw_properties: Optional[DrawProperties] = None) -> None:
+    def __init__(self, button_type: ButtonType, draw_properties: Optional[DrawProperties] = None, enabled_click:bool = True) -> None:
         """
         Args:
             button_type: the type of button
             draw_properties (optional): Properties specifying how and where the button should be drawn
+            enabled_click: 
         """
         self._button_type: ButtonType = button_type
+        self.__enabled_click: bool = enabled_click
+        self.__clicked: bool = False
         self._draw_properties: Optional[DrawProperties] = draw_properties
+
+    def disable_clicks(self) -> None:
+        """Disable user interaction with the button by mouse clicks."""
+        self.__enabled = False
+
+    def enable_mouse_clicks(self) -> None:
+        """Enable user interaction with the button by mouse clicks."""
+        self.__enabled = True
+
+    def set_clicked(self, state: bool):
+        """set the state of clicked"""
+        self.__clicked = state
+    
+    def get_clicked(self):
+        """return the state of clicked"""
+        return self.__clicked
+    
+    def get_enabled_clicked(self):
+        return self.__enabled_click
 
     def set_draw_properties(self, draw_properties: DrawProperties) -> None:
         """Set how the button should be drawn.
@@ -73,6 +94,7 @@ class Button(ModularClickableSprite):
         Args:
             character: The character who clicked the sprite
         """
+        self.__clicked = True
         if self._button_type.value == "new_game":
             pass
         elif self._button_type.value == "continue":
@@ -81,4 +103,5 @@ class Button(ModularClickableSprite):
         elif self._button_type.value == "save":
             # todo: saving current state of game
             pass
+        
 

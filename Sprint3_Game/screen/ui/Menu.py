@@ -1,3 +1,4 @@
+from __future__ import annotations
 from screen.PygameScreenController import PygameScreenController
 from settings import FRAMES_PER_SECOND
 from screen.ui.buttons.Button import Button
@@ -7,6 +8,7 @@ from screen.ModularClickableSprite import ModularClickableSprite
 from game_objects.characters.PlayableCharacter import PlayableCharacter
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from typing import Optional
+from typing import cast
 import pygame
 
 class Menu():
@@ -23,8 +25,8 @@ class Menu():
         Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
         """
         clock = pygame.time.Clock()
-        running = True
         #### GAME LOOP
+        running = True
         while running:
             # Handle Drawing
             PygameScreenController.instance().fill_screen_with_colour((0,0,0))
@@ -40,7 +42,11 @@ class Menu():
 
                     case pygame.MOUSEBUTTONDOWN:  # handle mouse click
                         self.__fire_onclick_for_clicked_hitboxes(clickable_hitboxes, character)
-                        return
+                        if not self.is_player_click_disabled_button():
+                            return
+            
+            self.reinitialise_button()
+                    
 
             # Update screen & Set FPS
             pygame.display.flip()  # update screen
@@ -57,7 +63,7 @@ class Menu():
         screen_size: tuple[int, int] = PygameScreenController.instance().get_screen_size()
         menu_button_size: tuple[int,int] = (screen_size[0]//2,screen_size[1]//5)
         new_game_button = Button(ButtonType.NEW_GAME,DrawProperties((screen_size[0]//2-menu_button_size[0]//2,screen_size[0]//2 - menu_button_size[0]//3),(menu_button_size[0],menu_button_size[1])))
-        continue_button = Button(ButtonType.CONTINUE,DrawProperties((screen_size[0]//2-menu_button_size[0]//2,screen_size[0]//2 + menu_button_size[0]//3),(menu_button_size[0],menu_button_size[1])))
+        continue_button = Button(ButtonType.CONTINUE,DrawProperties((screen_size[0]//2-menu_button_size[0]//2,screen_size[0]//2 + menu_button_size[0]//3),(menu_button_size[0],menu_button_size[1])),False)
         # storing the button object into buttons list
         self.buttons.append(new_game_button)
         self.buttons.append(continue_button)
@@ -81,6 +87,19 @@ class Menu():
             pos = pygame.mouse.get_pos()
             if rect.collidepoint(pos):
                 clickable.on_click(player)
-
-
-
+    
+    def is_player_click_disabled_button(self):
+        """
+        check if the player's clicked button is a disabled button
+        """
+        for button in self.buttons:
+            if button.get_clicked() is True and button.get_enabled_clicked() is False:
+                return True
+        return False
+    
+    def reinitialise_button(self):
+        """
+        revert back the state of the button after checking
+        """
+        for button in self.buttons:
+            button.set_clicked(False)

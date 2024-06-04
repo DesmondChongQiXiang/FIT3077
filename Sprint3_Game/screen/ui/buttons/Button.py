@@ -22,14 +22,6 @@ class Button(ModularClickableSprite):
         self.__clicked: bool = False
         self._draw_properties: Optional[DrawProperties] = draw_properties
 
-    def disable_clicks(self) -> None:
-        """Disable user interaction with the button by mouse clicks."""
-        self.__enabled = False
-
-    def enable_mouse_clicks(self) -> None:
-        """Enable user interaction with the button by mouse clicks."""
-        self.__enabled = True
-
     def set_clicked(self, state: bool) -> None:
         """set the state of clicked"""
         self.__clicked = state

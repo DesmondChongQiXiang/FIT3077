@@ -60,7 +60,7 @@ class PowerChitCard(ChitCard):
             )
         ]
 
-    def on_click(self, character: PlayableCharacter) -> None:
+    def on_click(self, character: Optional[PlayableCharacter]) -> None:
         """On click, reveal the chit card if its not flipped. Once revealed, the chit card cannot be flipped back by
         clicking. Move the player in the negative direction based on the symbol count
 
@@ -69,8 +69,11 @@ class PowerChitCard(ChitCard):
 
         Raises:
             Exception if the game board delegate was not set before calling
+            Exception if there was no playable character clicking this sprite
         """
         # guard statements
+        if character is None:
+            raise Exception("No playable character clicked this chit card. cls=PowerChitCard")
         if self._board_delegate is None:
             raise Exception("Board delegate was not set when on_click() called.")
 

@@ -3,7 +3,7 @@ from abc import abstractmethod
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from game_objects.tiles.Tile import Tile
 from game_objects.characters.PlayableCharacter import PlayableCharacter
-from typing import Protocol
+from typing import Protocol, Optional
 
 
 class ModularClickableSprite(Protocol):
@@ -23,10 +23,10 @@ class ModularClickableSprite(Protocol):
         ...
 
     @abstractmethod
-    def on_click(self, character: PlayableCharacter) -> None:
+    def on_click(self, character: Optional[PlayableCharacter]) -> None:
         """When the sprite is clicked on, do something.
 
         Args:
-            character: The character who clicked the sprite
+            character: The character who clicked the sprite if there was one.
         """
         ...

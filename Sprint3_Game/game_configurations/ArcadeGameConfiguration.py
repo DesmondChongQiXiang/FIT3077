@@ -180,15 +180,14 @@ class ArcadeGameConfiguration(GameConfiguration):
             raise Exception("Game board not defined before save. Run generate_game_world() first.")
         self.__game_board.on_save(to_write)
 
-    @staticmethod
-    def create_game_world_from_json_save(save_data: dict[str, Any]) -> GameWorld:
+    def create_game_world_from_json_save(self, save_data: dict[str, Any]) -> GameWorld:
         """Create a game world from JSON save data saved with an Arcade configuration.
 
         Args:
             save_data: The dictionary representing the JSON save data from an Arcade configuration
 
         Returns:
-            A game world configured with
+            A game world configured with the passed in Arcade configuration JSON save data
 
         Raises:
             Exception if the structure of the JSON dict was altered in an incompatible way

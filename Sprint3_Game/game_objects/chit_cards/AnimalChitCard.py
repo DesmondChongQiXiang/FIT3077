@@ -60,7 +60,7 @@ class AnimalChitCard(ChitCard):
             )
         ]
 
-    def on_click(self, character: PlayableCharacter) -> None:
+    def on_click(self, character: Optional[PlayableCharacter]) -> None:
         """On click, reveal the chit card if its not flipped. Once revealed, the chit card cannot be flipped back by
         clicking. Ends the player's turn if the animal on the chit card flipped does not match with the animal on its
         current tile it's standing on.
@@ -70,8 +70,11 @@ class AnimalChitCard(ChitCard):
 
         Raises:
             Exception if the game board delegate was not set before calling
+            Exception if there was no playable character clicking this sprite
         """
         # guard statements
+        if character is None:
+            raise Exception("No playable character clicked this chit card. cls=AnimalChitCard")
         if self._board_delegate is None:
             raise Exception("Board delegate was not set when on_click() called.")
         if self._symbol_count is None:

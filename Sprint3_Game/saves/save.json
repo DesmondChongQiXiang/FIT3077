@@ -5,7 +5,7 @@
                 "type": "player_dragon",
                 "variant": "blue",
                 "name": "Blue",
-                "location": 4
+                "location": 5
             },
             {
                 "type": "player_dragon",
@@ -285,14 +285,14 @@
                 "1815596129744"
             ],
             "asset_path": "assets/chit_cards/chit_card_swap.png",
-            "flipped": false
+            "flipped": true
         },
         {
             "type": "chit_card_animal",
             "deferred": false,
             "animal": "salamander",
             "symbol_count": 1,
-            "flipped": false
+            "flipped": true
         },
         {
             "type": "chit_card_animal",

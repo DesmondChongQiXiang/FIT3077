@@ -88,11 +88,11 @@ class Button(ModularClickableSprite):
             )
         ]
 
-    def on_click(self, character: PlayableCharacter) -> None:
+    def on_click(self, character: Optional[PlayableCharacter]) -> None:
         """On click, perform different effect based on the type of the current button
 
         Args:
-            character: The character who clicked the sprite
+            character: The character who clicked the sprite if any
         """
         self.__clicked = True
         if self._button_type.value == "new_game":

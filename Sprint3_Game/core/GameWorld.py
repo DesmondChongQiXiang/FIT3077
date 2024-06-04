@@ -46,7 +46,7 @@ class GameWorld(WinEventListener, metaclass=SingletonMeta):
         """
         clock = pygame.time.Clock()
         menu = Menu()
-        menu.run(self.__turn_manager.get_currently_playing_character())
+        menu.run(self.__turn_manager.get_currently_playing_character(),)
 
         #### GAME LOOP
         while self.__should_game_run:

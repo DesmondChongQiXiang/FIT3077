@@ -16,8 +16,9 @@ class Menu():
 
     Author: Desmond
     """
-    def __init__(self):
-        self.buttons:list[Button] = []
+    def __init__(self, is_saving_file_exist:bool = False):
+        self.__buttons:list[Button] = []
+        self.__is_saving_file_exist = is_saving_file_exist
 
     def run(self,character):
         """Display the menu of the game
@@ -32,7 +33,7 @@ class Menu():
             PygameScreenController.instance().fill_screen_with_colour((0,0,0))
             self.__create_menu_button()
             self.__display_title()
-            clickable_hitboxes = PygameScreenController.instance().draw_modular_clickable_sprites(self.buttons)
+            clickable_hitboxes = PygameScreenController.instance().draw_modular_clickable_sprites(self.__buttons)
             # Handle Events
             for event in pygame.event.get():
                 match event.type:
@@ -42,10 +43,10 @@ class Menu():
 
                     case pygame.MOUSEBUTTONDOWN:  # handle mouse click
                         self.__fire_onclick_for_clicked_hitboxes(clickable_hitboxes, character)
-                        if not self.is_player_click_disabled_button():
+                        if not self.__is_player_click_disabled_button():
                             return
             
-            self.reinitialise_button()
+            self.__reinitialise_button()
                     
 
             # Update screen & Set FPS
@@ -59,14 +60,18 @@ class Menu():
         """
         create buttons object of the menu
         """
-        # create new_game and continue button
+        # create new_game button
         screen_size: tuple[int, int] = PygameScreenController.instance().get_screen_size()
         menu_button_size: tuple[int,int] = (screen_size[0]//2,screen_size[1]//5)
         new_game_button = Button(ButtonType.NEW_GAME,DrawProperties((screen_size[0]//2-menu_button_size[0]//2,screen_size[0]//2 - menu_button_size[0]//3),(menu_button_size[0],menu_button_size[1])))
-        continue_button = Button(ButtonType.CONTINUE,DrawProperties((screen_size[0]//2-menu_button_size[0]//2,screen_size[0]//2 + menu_button_size[0]//3),(menu_button_size[0],menu_button_size[1])),False)
+        # create enabled continue button if the saving file exist. Otherwise, create a disabled continue button
+        if self.__is_saving_file_exist:
+            continue_button = Button(ButtonType.CONTINUE,DrawProperties((screen_size[0]//2-menu_button_size[0]//2,screen_size[0]//2 + menu_button_size[0]//3),(menu_button_size[0],menu_button_size[1])))
+        else:
+            continue_button = Button(ButtonType.CONTINUE,DrawProperties((screen_size[0]//2-menu_button_size[0]//2,screen_size[0]//2 + menu_button_size[0]//3),(menu_button_size[0],menu_button_size[1])),False)
         # storing the button object into buttons list
-        self.buttons.append(new_game_button)
-        self.buttons.append(continue_button)
+        self.__buttons.append(new_game_button)
+        self.__buttons.append(continue_button)
 
     def __display_title(self):
         """
@@ -88,18 +93,18 @@ class Menu():
             if rect.collidepoint(pos):
                 clickable.on_click(player)
     
-    def is_player_click_disabled_button(self):
+    def __is_player_click_disabled_button(self):
         """
         check if the player's clicked button is a disabled button
         """
-        for button in self.buttons:
+        for button in self.__buttons:
             if button.get_clicked() is True and button.get_enabled_clicked() is False:
                 return True
         return False
     
-    def reinitialise_button(self):
+    def __reinitialise_button(self):
         """
         revert back the state of the button after checking
         """
-        for button in self.buttons:
+        for button in self.__buttons:
             button.set_clicked(False)

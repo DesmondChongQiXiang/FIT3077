@@ -18,11 +18,11 @@ class Menu:
     Author: Desmond
     """
 
-    def __init__(self, is_saving_file_exist: bool = False):
+    def __init__(self, is_saving_file_exist: bool = False) -> None:
         self.__buttons: list[Button] = []
         self.__is_saving_file_exist = is_saving_file_exist
 
-    def run(self):
+    def run(self) -> None:
         """Display the menu of the game
 
         Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
@@ -56,7 +56,7 @@ class Menu:
         # Quit game once game loop broken
         pygame.quit()
 
-    def __create_menu_button(self):
+    def __create_menu_button(self) -> None:
         """
         create buttons object of the menu
         """
@@ -87,7 +87,7 @@ class Menu:
         self.__buttons.append(new_game_button)
         self.__buttons.append(continue_button)
 
-    def __display_title(self):
+    def __display_title(self) -> None:
         """
         display the title of the game
         """
@@ -111,7 +111,7 @@ class Menu:
                 return True
         return False
 
-    def __reinitialise_button(self):
+    def __reinitialise_button(self) -> None:
         """
         revert back the state of the button after checking
         """

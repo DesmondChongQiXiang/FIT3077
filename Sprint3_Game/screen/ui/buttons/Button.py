@@ -30,15 +30,15 @@ class Button(ModularClickableSprite):
         """Enable user interaction with the button by mouse clicks."""
         self.__enabled = True
 
-    def set_clicked(self, state: bool):
+    def set_clicked(self, state: bool) -> None:
         """set the state of clicked"""
         self.__clicked = state
     
-    def get_clicked(self):
+    def get_clicked(self) -> bool:
         """return the state of clicked"""
         return self.__clicked
     
-    def get_enabled_clicked(self):
+    def get_enabled_clicked(self) -> bool:
         return self.__enabled_click
 
     def set_draw_properties(self, draw_properties: DrawProperties) -> None:

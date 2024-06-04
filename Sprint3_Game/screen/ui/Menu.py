@@ -26,12 +26,12 @@ class Menu():
         Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
         """
         clock = pygame.time.Clock()
+        self.__create_menu_button()
         #### GAME LOOP
         running = True
         while running:
             # Handle Drawing
             PygameScreenController.instance().fill_screen_with_colour((0,0,0))
-            self.__create_menu_button()
             self.__display_title()
             clickable_hitboxes = PygameScreenController.instance().draw_modular_clickable_sprites(self.__buttons)
             # Handle Events
@@ -92,6 +92,7 @@ class Menu():
             pos = pygame.mouse.get_pos()
             if rect.collidepoint(pos):
                 clickable.on_click(player)
+                return
     
     def __is_player_click_disabled_button(self):
         """

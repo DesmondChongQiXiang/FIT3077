@@ -8,6 +8,8 @@ from core.GameWorld import GameWorld
 from codec.saves.SaveCodec import SaveCodec
 from codec.saves.JSONSaveCodec import JSONSaveCodec
 from screen.ui.Menu import Menu
+from game_objects.characters.Dragon import Dragon
+from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVariant
 
 import pygame
 import os
@@ -43,12 +45,13 @@ if __name__ == "__main__":
     # ----- GAME INSTANCE ------------------------------------------------------------------------------------------
     # game_world: GameWorld = GAME_CONFIG.generate_game_world()
 
+    
     menu = Menu()
-    menu.run(ArcadeGameConfiguration.PLAYABLE_CHARACTERS[0])
+    menu.run(Dragon(PlayableCharacterVariant.BLUE,"dummy dragon"))
 
     # SAVE_CODEC.save()
     load_data = SAVE_CODEC.load()
-    
+
     game_world: GameWorld = ArcadeGameConfiguration.create_game_world_from_json_save(load_data)
     menu = Menu()
     game_world.run()

@@ -3,7 +3,7 @@ from screen.ModularClickableSprite import ModularClickableSprite
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from game_objects.characters.PlayableCharacter import PlayableCharacter
-from screen.buttons.ButtonType import ButtonType
+from screen.ui.buttons.ButtonType import ButtonType
 
 
 class Button(ModularClickableSprite):

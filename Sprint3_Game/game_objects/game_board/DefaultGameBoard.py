@@ -12,8 +12,8 @@ from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
 from core.GameWorld import GameWorld
-from screen.buttons.Button import Button
-from screen.buttons.Button import ButtonType
+from screen.ui.buttons.Button import Button
+from screen.ui.buttons.Button import ButtonType
 from utils.math_utils import *
 import random
 
@@ -135,7 +135,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
 
     def __configure_and_add_save_button(self) -> None:
         """Configure and add the save button to the top right of the screen where the default game board is located."""
-        save_button = Button(ButtonType.SAVE, DrawProperties((600, 25), (50, 50)))
+        screen_size: tuple[int, int] = PygameScreenController.instance().get_screen_size()
+        save_button_size: tuple[int,int] = (screen_size[0]//10,screen_size[1]//10)
+        save_button = Button(ButtonType.SAVE, DrawProperties((screen_size[0]-save_button_size[1], 0), (save_button_size[0], save_button_size[1])))
         self.__clickables.append(save_button)
 
     def move_characters_to_position_indexes(self, pos: list[int], perform_tile_effect: bool) -> None:

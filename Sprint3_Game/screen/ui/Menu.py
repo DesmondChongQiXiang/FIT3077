@@ -1,7 +1,7 @@
 from screen.PygameScreenController import PygameScreenController
 from settings import FRAMES_PER_SECOND
-from screen.buttons.Button import Button
-from screen.buttons.Button import ButtonType
+from screen.ui.buttons.Button import Button
+from screen.ui.buttons.Button import ButtonType
 from screen.DrawProperties import DrawProperties
 from screen.ModularClickableSprite import ModularClickableSprite
 from game_objects.characters.PlayableCharacter import PlayableCharacter
@@ -54,8 +54,10 @@ class Menu():
         create buttons object of the menu
         """
         # create new_game and continue button
-        new_game_button = Button(ButtonType.NEW_GAME,DrawProperties((250,280),(200,100)))
-        continue_button = Button(ButtonType.CONTINUE,DrawProperties((250,480),(200,100)))
+        screen_size: tuple[int, int] = PygameScreenController.instance().get_screen_size()
+        menu_button_size: tuple[int,int] = (screen_size[0]//2,screen_size[1]//5)
+        new_game_button = Button(ButtonType.NEW_GAME,DrawProperties((screen_size[0]//2-menu_button_size[0]//2,screen_size[0]//2 - menu_button_size[0]//3),(menu_button_size[0],menu_button_size[1])))
+        continue_button = Button(ButtonType.CONTINUE,DrawProperties((screen_size[0]//2-menu_button_size[0]//2,screen_size[0]//2 + menu_button_size[0]//3),(menu_button_size[0],menu_button_size[1])))
         # storing the button object into buttons list
         self.buttons.append(new_game_button)
         self.buttons.append(continue_button)
@@ -64,7 +66,9 @@ class Menu():
         """
         display the title of the game
         """
-        PygameScreenController.instance().draw_asset("assets/menu/title.png",200,100,(300,100))
+        screen_size: tuple[int, int] = PygameScreenController.instance().get_screen_size()
+        title_size: tuple[int,int] = (screen_size[0]//2,screen_size[1]//4)
+        PygameScreenController.instance().draw_asset("assets/menu/title.png",screen_size[0]//2-title_size[0]//2,0,(title_size[0],title_size[1]))
 
     def __fire_onclick_for_clicked_hitboxes(self, hitboxes: list[tuple[pygame.Rect, ModularClickableSprite]], player: PlayableCharacter) -> None:
         """Fires on_click() for any objects containing hitboxes under the user's current cursor position.

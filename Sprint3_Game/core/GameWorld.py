@@ -10,7 +10,7 @@ from game_concepts.events.WinEventPublisher import WinEventPublisher
 from game_concepts.turns.TurnManager import TurnManager
 from metaclasses.SingletonMeta import SingletonMeta
 from threading import Timer
-from screen.Menu import Menu
+from screen.ui.Menu import Menu
 
 import pygame
 

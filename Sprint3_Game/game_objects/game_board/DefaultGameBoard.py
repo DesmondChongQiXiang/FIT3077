@@ -136,8 +136,8 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     def __configure_and_add_save_button(self) -> None:
         """Configure and add the save button to the top right of the screen where the default game board is located."""
         screen_size: tuple[int, int] = PygameScreenController.instance().get_screen_size()
-        save_button_size: tuple[int,int] = (screen_size[0]//10,screen_size[1]//10)
-        save_button = Button(ButtonType.SAVE, DrawProperties((screen_size[0]-save_button_size[1], 0), (save_button_size[0], save_button_size[1])))
+        save_button_size: tuple[int, int] = (screen_size[0] // 10, screen_size[1] // 10)
+        save_button = Button(ButtonType.SAVE, DrawProperties((screen_size[0] - save_button_size[1], 0), (save_button_size[0], save_button_size[1])))
         self.__clickables.append(save_button)
 
     def move_characters_to_position_indexes(self, pos: list[int], perform_tile_effect: bool) -> None:

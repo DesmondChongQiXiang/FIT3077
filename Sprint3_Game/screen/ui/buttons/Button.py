@@ -3,35 +3,25 @@ from screen.ModularClickableSprite import ModularClickableSprite
 from screen.DrawProperties import DrawProperties
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from game_objects.characters.PlayableCharacter import PlayableCharacter
-from screen.ui.buttons.ButtonType import ButtonType
+from commands.Command import Command
+
 
 class Button(ModularClickableSprite):
-    """A class that represents the buttons other than game_objects. 
+    """A class that represents the buttons other than game_objects.
 
     Author: Desmond
     """
-    def __init__(self, button_type: ButtonType, draw_properties: Optional[DrawProperties] = None, enabled_click:bool = True) -> None:
+
+    def __init__(self, asset_path: str, command: Command, draw_properties: Optional[DrawProperties] = None) -> None:
         """
         Args:
-            button_type: the type of button
+            asset_path: The asset relative to the root of the project to use for drawing the button
+            command: The command for the button to execute on click
             draw_properties (optional): Properties specifying how and where the button should be drawn
-            enabled_click: 
         """
-        self._button_type: ButtonType = button_type
-        self.__enabled_click: bool = enabled_click
-        self.__clicked: bool = False
+        self.__asset_path = asset_path
+        self.__command: Command = command
         self._draw_properties: Optional[DrawProperties] = draw_properties
-
-    def set_clicked(self, state: bool) -> None:
-        """set the state of clicked"""
-        self.__clicked = state
-    
-    def get_clicked(self) -> bool:
-        """return the state of clicked"""
-        return self.__clicked
-    
-    def get_enabled_clicked(self) -> bool:
-        return self.__enabled_click
 
     def set_draw_properties(self, draw_properties: DrawProperties) -> None:
         """Set how the button should be drawn.
@@ -65,13 +55,12 @@ class Button(ModularClickableSprite):
             A list containing tuples in the form of (drawing instruction, object to return when clicking on
             graphic represented by instruction)
         """
-        asset_path: str = "assets/menu"
         coord_x, coord_y = draw_properties.get_coordinates()
 
         return [
             (
                 DrawAssetInstruction(
-                    f"{asset_path}/{self._button_type.value}.png",
+                    self.__asset_path,
                     x=coord_x,
                     y=coord_y,
                     size=draw_properties.get_size(),
@@ -86,14 +75,5 @@ class Button(ModularClickableSprite):
         Args:
             character: The character who clicked the sprite if any
         """
-        self.__clicked = True
-        if self._button_type.value == "new_game":
-            pass
-        elif self._button_type.value == "continue":
-            # todo: loading saved game
-            pass
-        elif self._button_type.value == "save":
-            # todo: saving current state of game
-            pass
-        
-
+        if self.__command is not None:  # TEMP: Placeholder for once loading is figured out
+            self.__command.execute()

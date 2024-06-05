@@ -11,9 +11,10 @@ from screen.DrawableByAsset import DrawableByAsset
 from screen.DrawAssetInstruction import DrawAssetInstruction
 from screen.ModularClickableSprite import ModularClickableSprite
 from screen.PygameScreenController import PygameScreenController
-from core.GameWorld import GameWorld
 from screen.ui.buttons.Button import Button
-from screen.ui.buttons.Button import ButtonType
+from codec.saves.SaveCodec import SaveCodec
+from core.GameWorld import GameWorld
+from commands.saving.SaveCommand import SaveCommand
 from utils.math_utils import *
 import random
 
@@ -29,7 +30,12 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     TURN_END_RESET_DELAY: float = 2.0  # Seconds to delay resetting game board on player turn end
 
     def __init__(
-        self, main_tile_sequence: Sequence[Tile], starting_tiles: list[tuple[Tile, Tile]], chit_cards: list[ChitCard], playable_characters: list[PlayableCharacter]
+        self,
+        main_tile_sequence: Sequence[Tile],
+        starting_tiles: list[tuple[Tile, Tile]],
+        chit_cards: list[ChitCard],
+        playable_characters: list[PlayableCharacter],
+        save_codec: SaveCodec[dict[str, Any]],
     ):
         """
         Args:
@@ -37,6 +43,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             starting_tiles: The starting tiles. In form: (starting tile, next tile)
             chit_cards: The chit cards to use for the game board. Will be placed in order from left to right, top to bottom.
             playable_characters: The playable characters to play on the game board
+            save_codec: JSON type save codec to use to save to
 
         Raises:
             Exception if the number of players to be playing on the board is less than 2.
@@ -55,6 +62,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         self.__playable_characters: list[PlayableCharacter] = playable_characters
         self.__character_location: dict[PlayableCharacter, int] = dict()  # K = character, V = index along main tile sequence
         self.__character_starting_tiles: dict[PlayableCharacter, Tile] = dict()  # K = character, V = their starting tile
+        self.__save_codec: SaveCodec[dict[str, Any]] = save_codec
 
         # ------ INITIALISATION ------------------------------------------------------------------------------------------------------------------------------------------------
         # initialise chit card position & size and add to clickables. Also set delegate
@@ -137,7 +145,9 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
         """Configure and add the save button to the top right of the screen where the default game board is located."""
         screen_size: tuple[int, int] = PygameScreenController.instance().get_screen_size()
         save_button_size: tuple[int, int] = (screen_size[0] // 10, screen_size[1] // 10)
-        save_button = Button(ButtonType.SAVE, DrawProperties((screen_size[0] - save_button_size[1], 0), (save_button_size[0], save_button_size[1])))
+        save_button = Button(
+            "assets/menu/save.png", SaveCommand(self.__save_codec), DrawProperties((screen_size[0] - save_button_size[1], 0), (save_button_size[0], save_button_size[1]))
+        )
         self.__clickables.append(save_button)
 
     def move_characters_to_position_indexes(self, pos: list[int], perform_tile_effect: bool) -> None:

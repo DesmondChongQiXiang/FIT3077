@@ -42,11 +42,11 @@ if __name__ == "__main__":
         pygame.display.set_mode((REQUESTED_SCREEN_SIZE, REQUESTED_SCREEN_SIZE))
 
     # ----- GAME INSTANCE ------------------------------------------------------------------------------------------
-    # game_world: GameWorld = GAME_CONFIG.generate_game_world()
+    # game_world: GameWorld = GAME_CONFIGURATION.generate_game_world()
     # SAVE_CODEC.save()
 
     # Menu
-    menu = Menu(False)
+    menu = Menu(False, None)
     menu.run()
 
     # Game world

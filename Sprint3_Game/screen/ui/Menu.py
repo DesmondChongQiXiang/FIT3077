@@ -2,52 +2,66 @@ from __future__ import annotations
 from screen.PygameScreenController import PygameScreenController
 from settings import FRAMES_PER_SECOND
 from screen.ui.buttons.Button import Button
-from screen.ui.buttons.Button import ButtonType
 from screen.DrawProperties import DrawProperties
 from screen.ModularClickableSprite import ModularClickableSprite
-from game_objects.characters.PlayableCharacter import PlayableCharacter
-from screen.DrawAssetInstruction import DrawAssetInstruction
-from typing import Optional
-from typing import cast
+from commands.saving.SaveCommand import SaveCommand
+from codec.saves.SaveCodec import SaveCodec
+from typing import cast, Optional, Any
 import pygame
 
 
 class Menu:
     """A class represent menu that show before the game start
 
-    Author: Desmond
+    Author: Desmond, Shen
     """
 
-    def __init__(self, is_saving_file_exist: bool = False) -> None:
-        self.__buttons: list[Button] = []
-        self.__is_saving_file_exist = is_saving_file_exist
+    def __init__(self, show_continue_button: bool, save_codec: Optional[SaveCodec[dict[str, Any]]]) -> None:
+        """Constructor.
+
+        Args:
+            show_continue_button: Whether the continue button is shown
+            save_codec: The save codec to use for a continue button. Not optional if continue show_continue_button is True.
+
+        Raises:
+            Exception if save codec was not set when the continue button should be shown.
+        """
+        self.__save_codec: Optional[SaveCodec[dict[str, Any]]] = save_codec
+        self.__button_clickables: list[ModularClickableSprite] = []
+        self.__show_continue_button = show_continue_button
+
+        if self.__show_continue_button and self.__save_codec is None:
+            raise Exception("Save codec must be set when show continue button is shown.")
 
     def run(self) -> None:
         """Display the menu of the game
 
         Warning: Pygame and its display must be initialised through pygame.init() and pygame.display.set_mode() before running.
         """
-        clock = pygame.time.Clock()
+        clock: pygame.time.Clock = pygame.time.Clock()
         self.__create_menu_button()
+
         #### GAME LOOP
         running = True
         while running:
+
             # Handle Drawing
             PygameScreenController.instance().fill_screen_with_colour((0, 0, 0))
             self.__display_title()
-            clickable_hitboxes = PygameScreenController.instance().draw_modular_clickable_sprites([button for button in self.__buttons if button.get_enabled_clicked()])
+            clickable_hitboxes = PygameScreenController.instance().draw_modular_clickable_sprites(self.__button_clickables)
+
             # Handle Events
             for event in pygame.event.get():
                 match event.type:
-                    case pygame.QUIT:  # handle when X pressed on window
+                    # handle when X pressed on window
+                    case pygame.QUIT:
                         running = False
                         break
 
-                    case pygame.MOUSEBUTTONDOWN:  # handle mouse click
+                    # handle mouse click
+                    case pygame.MOUSEBUTTONDOWN:
                         if self.__fire_onclick_for_clicked_hitboxes(clickable_hitboxes):
                             return
-
-            self.__reinitialise_button()
 
             # Update screen & Set FPS
             pygame.display.flip()  # update screen
@@ -60,32 +74,33 @@ class Menu:
         """
         create buttons object of the menu
         """
-        # create new_game button
         screen_size: tuple[int, int] = PygameScreenController.instance().get_screen_size()
         menu_button_size: tuple[int, int] = (screen_size[0] // 2, screen_size[1] // 5)
-        new_game_button = Button(
-            ButtonType.NEW_GAME,
-            DrawProperties((screen_size[0] // 2 - menu_button_size[0] // 2, screen_size[0] // 2 - menu_button_size[0] // 3), (menu_button_size[0], menu_button_size[1])),
+        button_draw_properties: DrawProperties = DrawProperties(
+            (screen_size[0] // 2 - menu_button_size[0] // 2, screen_size[0] // 2 - menu_button_size[0] // 3), (menu_button_size[0], menu_button_size[1])
         )
-        # create enabled continue button if the saving file exist. Otherwise, create a disabled continue button
-        if self.__is_saving_file_exist:
-            continue_button = Button(
-                ButtonType.CONTINUE,
-                DrawProperties(
-                    (screen_size[0] // 2 - menu_button_size[0] // 2, screen_size[0] // 2 + menu_button_size[0] // 3), (menu_button_size[0], menu_button_size[1])
-                ),
+
+        # creating new game button
+        self.__button_clickables.append(
+            Button(
+                "assets/menu/new_game.png",
+                None,
+                draw_properties=button_draw_properties,
             )
-        else:
-            continue_button = Button(
-                ButtonType.CONTINUE,
-                DrawProperties(
-                    (screen_size[0] // 2 - menu_button_size[0] // 2, screen_size[0] // 2 + menu_button_size[0] // 3), (menu_button_size[0], menu_button_size[1])
-                ),
-                False,
+        )
+
+        # create continue button
+        if self.__show_continue_button:
+            if self.__save_codec is None:
+                raise Exception("Save codec was none when trying to add continue button.")
+
+            self.__button_clickables.append(
+                Button(
+                    "assets/menu/continue.png",
+                    None,
+                    draw_properties=button_draw_properties,
+                )
             )
-        # storing the button object into buttons list
-        self.__buttons.append(new_game_button)
-        self.__buttons.append(continue_button)
 
     def __display_title(self) -> None:
         """
@@ -110,10 +125,3 @@ class Menu:
                 clickable.on_click(None)
                 return True
         return False
-
-    def __reinitialise_button(self) -> None:
-        """
-        revert back the state of the button after checking
-        """
-        for button in self.__buttons:
-            button.set_clicked(False)

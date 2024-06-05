@@ -73,6 +73,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         self.__chit_cards: list[ChitCard] = []
         self.__turn_manager: TurnManager = DefaultTurnManger(self.PLAYABLE_CHARACTERS, 0)
         self.__game_board: Optional[GameBoard] = None
+        self.__save_codec: JSONSaveCodec = save_codec
 
         save_codec.register_saveable(self)
 
@@ -103,6 +104,7 @@ class ArcadeGameConfiguration(GameConfiguration):
             ],
             self.__chit_cards,
             self.PLAYABLE_CHARACTERS,
+            self.__save_codec,
         )
 
         # configure all powers who need a game board
@@ -177,7 +179,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         # ================================================================
         # allow default game board to perform any configuration on existing data in save dictionary
         if self.__game_board is None:
-            raise Exception("Game board not defined before save. Run generate_game_world() first.")
+            raise Exception("Game board not defined before save. Run generate_game_world() or create_game_world_from_json_save() first.")
         self.__game_board.on_save(to_write)
 
     def create_game_world_from_json_save(self, save_data: dict[str, Any]) -> GameWorld:
@@ -259,6 +261,8 @@ class ArcadeGameConfiguration(GameConfiguration):
             else:
                 deferred_chit_card_object_data.append((chit_card_data, i))
 
+        self.__chit_cards = chit_cards
+
         # ================================================================
         # ------------------ initialise game board -----------------------
         # ================================================================
@@ -268,7 +272,9 @@ class ArcadeGameConfiguration(GameConfiguration):
             starting_tile.set_character_on_tile(character)
 
         # initialise game board and move character to correct positions
-        game_board: DefaultGameBoard = DefaultGameBoard(main_tiles, starting_tiles, chit_cards, playable_characters)
+        game_board: DefaultGameBoard = DefaultGameBoard(main_tiles, starting_tiles, chit_cards, playable_characters, self.__save_codec)
+        self.__game_board = game_board
+
         game_board.move_characters_to_position_indexes(playable_character_positions, False)
 
         # ================================================================

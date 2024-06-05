@@ -43,7 +43,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             starting_tiles: The starting tiles. In form: (starting tile, next tile)
             chit_cards: The chit cards to use for the game board. Will be placed in order from left to right, top to bottom.
             playable_characters: The playable characters to play on the game board
-            save_codec: JSON type save codec to use to save to
+            save_codec: JSON type save codec to use for saving functionalities
 
         Raises:
             Exception if the number of players to be playing on the board is less than 2.

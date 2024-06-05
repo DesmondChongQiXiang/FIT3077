@@ -12,15 +12,15 @@ class Button(ModularClickableSprite):
     Author: Desmond
     """
 
-    def __init__(self, asset_path: str, command: Command, draw_properties: Optional[DrawProperties] = None) -> None:
+    def __init__(self, asset_path: str, command: Optional[Command], draw_properties: Optional[DrawProperties] = None) -> None:
         """
         Args:
             asset_path: The asset relative to the root of the project to use for drawing the button
-            command: The command for the button to execute on click
+            command (optional): The command for the button to execute on click
             draw_properties (optional): Properties specifying how and where the button should be drawn
         """
         self.__asset_path = asset_path
-        self.__command: Command = command
+        self.__command: Optional[Command] = command
         self._draw_properties: Optional[DrawProperties] = draw_properties
 
     def set_draw_properties(self, draw_properties: DrawProperties) -> None:
@@ -70,10 +70,10 @@ class Button(ModularClickableSprite):
         ]
 
     def on_click(self, character: Optional[PlayableCharacter]) -> None:
-        """On click, perform different effect based on the type of the current button
+        """On click, perform different effects based on the command. Does nothing if command was not set.
 
         Args:
             character: The character who clicked the sprite if any
         """
-        if self.__command is not None:  # TEMP: Placeholder for once loading is figured out
+        if self.__command is not None: 
             self.__command.execute()

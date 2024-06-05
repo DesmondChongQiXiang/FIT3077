@@ -5,7 +5,7 @@
                 "type": "player_dragon",
                 "variant": "blue",
                 "name": "Blue",
-                "location": 5
+                "location": 10
             },
             {
                 "type": "player_dragon",
@@ -26,56 +26,56 @@
                 "location": 28
             }
         ],
-        "currently_playing": 0
+        "currently_playing": 1
     },
     "dependencies": {
-        "1815596123152": {
+        "2618189652304": {
             "type": "power_skip",
             "skip_value": 2,
             "required": [
                 "turn_manager"
             ]
         },
-        "1815596129744": {
+        "2618189652368": {
             "type": "power_swap",
             "required": [
                 "game_board"
             ]
         },
-        "1815597915472": {
+        "2618189652432": {
             "type": "power_skip",
             "skip_value": 2,
             "required": [
                 "turn_manager"
             ]
         },
-        "1815597912336": {
+        "2618189652496": {
             "type": "power_swap",
             "required": [
                 "game_board"
             ]
         },
-        "1815597915792": {
+        "2618189652560": {
             "type": "power_skip",
             "skip_value": 2,
             "required": [
                 "turn_manager"
             ]
         },
-        "1815597911888": {
+        "2618189652624": {
             "type": "power_swap",
             "required": [
                 "game_board"
             ]
         },
-        "1815597916176": {
+        "2618189652688": {
             "type": "power_skip",
             "skip_value": 2,
             "required": [
                 "turn_manager"
             ]
         },
-        "1815597912016": {
+        "2618189652752": {
             "type": "power_swap",
             "required": [
                 "game_board"
@@ -273,7 +273,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1815596123152"
+                "2618189652304"
             ],
             "asset_path": "assets/chit_cards/chit_card_skip_2.png",
             "flipped": false
@@ -282,17 +282,17 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1815596129744"
+                "2618189652368"
             ],
             "asset_path": "assets/chit_cards/chit_card_swap.png",
-            "flipped": true
+            "flipped": false
         },
         {
             "type": "chit_card_animal",
             "deferred": false,
             "animal": "salamander",
             "symbol_count": 1,
-            "flipped": true
+            "flipped": false
         },
         {
             "type": "chit_card_animal",
@@ -311,7 +311,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1815597915472"
+                "2618189652432"
             ],
             "asset_path": "assets/chit_cards/chit_card_skip_2.png",
             "flipped": false
@@ -320,7 +320,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1815597912336"
+                "2618189652496"
             ],
             "asset_path": "assets/chit_cards/chit_card_swap.png",
             "flipped": false
@@ -349,7 +349,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1815597915792"
+                "2618189652560"
             ],
             "asset_path": "assets/chit_cards/chit_card_skip_2.png",
             "flipped": false
@@ -358,7 +358,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1815597911888"
+                "2618189652624"
             ],
             "asset_path": "assets/chit_cards/chit_card_swap.png",
             "flipped": false
@@ -387,7 +387,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1815597916176"
+                "2618189652688"
             ],
             "asset_path": "assets/chit_cards/chit_card_skip_2.png",
             "flipped": false
@@ -396,7 +396,7 @@
             "type": "chit_card_power",
             "deferred": true,
             "dependencies": [
-                "1815597912016"
+                "2618189652752"
             ],
             "asset_path": "assets/chit_cards/chit_card_swap.png",
             "flipped": false

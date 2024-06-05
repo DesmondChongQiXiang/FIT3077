@@ -83,9 +83,12 @@ class AnimalChitCard(ChitCard):
         # flip logic
         tile_animal: Optional[Animal] = self._board_delegate.get_character_floor_tile(character).get_animal()
         if not self.get_flipped():
-            if tile_animal is not None and tile_animal != self.__animal:
+            if tile_animal is not None and tile_animal != (self.__animal ):
                 # failed match ends turn
-                character.set_should_continue_turn(False)
+                if tile_animal == Animal.UNIVERSAL: #If tile animal is universal, move the character by a number of steps
+                    self._board_delegate.move_character_by_steps(character, self._symbol_count)
+                else:
+                    character.set_should_continue_turn(False)
             else:
                 self._board_delegate.move_character_by_steps(character, self._symbol_count)
 

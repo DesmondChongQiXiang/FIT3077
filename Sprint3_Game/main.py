@@ -46,7 +46,7 @@ if __name__ == "__main__":
     # SAVE_CODEC.save()
 
     # Menu
-    menu = Menu(True)
+    menu = Menu(False)
     menu.run()
 
     # Game world

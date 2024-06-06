@@ -31,7 +31,7 @@ def __generate_volcano_card_tiles() -> list[tuple[Tile, Tile, Tile]]:
     ### VOLCANO_CARDS
     # The volcano cards used for generating the volcano cards. Edit to change
     VOLCANO_CARDS: list[tuple[Tile, Tile, Tile]] = [
-        (NormalTile(Animal.BABY_DRAGON), NormalTile(Animal.BAT), NormalTile(Animal.SPIDER)),
+        (NormalTile(Animal.UNIVERSAL), NormalTile(Animal.BAT), NormalTile(Animal.SPIDER)),
         (NormalTile(Animal.SALAMANDER), NormalTile(Animal.SPIDER), NormalTile(Animal.BAT)),
         (NormalTile(Animal.SPIDER), NormalTile(Animal.SALAMANDER), NormalTile(Animal.BABY_DRAGON)),
         (NormalTile(Animal.BAT), NormalTile(Animal.SPIDER), NormalTile(Animal.BABY_DRAGON)),

@@ -27,7 +27,7 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
     """
 
     ### CONFIG
-    TURN_END_RESET_DELAY: float = 2.0  # Seconds to delay resetting game board on player turn end
+    TURN_END_RESET_DELAY: float = 1.5  # Seconds to delay resetting game board on player turn end
 
     def __init__(
         self,

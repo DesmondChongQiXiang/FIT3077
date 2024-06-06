@@ -12,7 +12,8 @@ from typing import Optional, Any
 
 
 class AnimalChitCard(ChitCard):
-    """Represents a chit card that when flipped lets characters move when the animal matches the character's tile.
+    """Represents a chit card that when flipped lets characters move when the animal matches the character's tile. Ignores
+    matching check when the tile's animal is universal.
 
     Author: Shen
     """

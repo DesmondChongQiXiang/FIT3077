@@ -27,8 +27,9 @@ from game_objects.animals.Animal import Animal
 from game_objects.characters.PlayableCharacterVariant import PlayableCharacterVariant
 from utils.os_utils import *
 
+import random
 
-# TODO: In the future, save and load need to be refactored into several helper functions to reduce cognitive load
+# TODO: In the future, save and load need to be refactored into several helper functions to reduce cognitive load - Shen
 
 
 class ArcadeGameConfiguration(GameConfiguration):
@@ -51,7 +52,7 @@ class ArcadeGameConfiguration(GameConfiguration):
         Args:
             save_codec: The codec to use for saving.
         """
-        self.__main_tile_sequence = randomised_volcano_card_sequence(8)
+        self.__main_tile_sequence: list[Tile] = randomised_volcano_card_sequence(8)
         self.__playable_characters: list[PlayableCharacter] = [
             Dragon(PlayableCharacterVariant.BLUE, "Blue"),
             Dragon(PlayableCharacterVariant.GREEN, "Green"),
@@ -79,9 +80,8 @@ class ArcadeGameConfiguration(GameConfiguration):
             The generated game world
         """
 
-        # CHIT CARDS
-        # Generate in each row <animal 1> <animal 2> <animal 3> <pirate 1/2 alrernating> <skip 1/2 then swap>
-        swap_powers: list[SwapPower] = [SwapPower(None) for _ in range(len(Animal))]
+        # CHIT CARDS: Default
+        # Generate 12 animal chit cards, 4 pirate chit cards
         for i, animal in enumerate(Animal):
             # don't generate any universal matching chit cards
             if animal == Animal.UNIVERSAL:
@@ -91,11 +91,7 @@ class ArcadeGameConfiguration(GameConfiguration):
                 self.__chit_cards.append(AnimalChitCard(animal, j))
             self.__chit_cards.append(PirateChitCard(1 if i % 2 == 0 else 2))
 
-            if i < 2:
-                skip_strength: int = (i % 2) + 1
-                self.__chit_cards.append(PowerChitCard(SkipTurnPower(self.__turn_manager, skip_strength), f"assets/chit_cards/chit_card_skip_{skip_strength}.png"))
-            else:
-                self.__chit_cards.append(PowerChitCard(swap_powers[i], "assets/chit_cards/chit_card_swap.png"))
+        random.shuffle(self.__chit_cards)
 
         # GAME BOARD
         self.__game_board = DefaultGameBoard(
@@ -111,9 +107,12 @@ class ArcadeGameConfiguration(GameConfiguration):
             self.__save_codec,
         )
 
-        # configure all powers who need a game board
-        for power in swap_powers:
-            power.use_game_board(self.__game_board)
+        # CHIT CARDS: Powers
+        # Add 2 skip and 2 swap power chit cards
+        self.__game_board.add_chit_card(PowerChitCard(SkipTurnPower(self.__turn_manager, 1), "assets/chit_cards/chit_card_skip_1.png"), True)
+        self.__game_board.add_chit_card(PowerChitCard(SkipTurnPower(self.__turn_manager, 2), "assets/chit_cards/chit_card_skip_2.png"), True)
+        for _ in range(2):
+            self.__game_board.add_chit_card(PowerChitCard(SwapPower(self.__game_board), "assets/chit_cards/chit_card_swap.png"), True)
 
         # GAME WORLD
         return GameWorld(self.__game_board, self.__turn_manager)

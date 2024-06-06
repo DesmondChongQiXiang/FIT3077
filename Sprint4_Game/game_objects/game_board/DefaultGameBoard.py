@@ -196,7 +196,11 @@ class DefaultGameBoard(GameBoard, DrawableByAsset):
             else:
                 self.__chit_cards.insert(position, chit_card)
         else:
-            self.__chit_cards.insert(random.randint(0, chit_card_last_i), chit_card)
+            rand_i: int = random.randint(0, chit_card_last_i + 1)
+            if rand_i <= chit_card_last_i:
+                self.__chit_cards.insert(rand_i, chit_card)
+            else:
+                self.__chit_cards.append(chit_card)
 
         self.__clickables.append(chit_card)
         chit_card.set_game_board_delegate(self)

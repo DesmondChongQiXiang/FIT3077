@@ -4,5 +4,8 @@
 # ignore pycache
 __pycache__
 
+# ignore saves
+saves
+
 # ignore pyinstaller executable builds
 dist

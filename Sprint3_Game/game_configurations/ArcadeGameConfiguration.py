@@ -73,22 +73,31 @@ class ArcadeGameConfiguration(GameConfiguration):
         save_codec.register_saveable(self)
 
     def generate_game_world(self) -> GameWorld:
-        """Generate the game world with the default fiery dragons game configuration.
+        """Generate the game world with the default arcade fiery dragons game configuration.
 
         Returns:
             The generated game world
         """
 
-        # chit cards
+        # CHIT CARDS
+        # Generate in each row <animal 1> <animal 2> <animal 3> <pirate 1/2 alrernating> <skip 1/2 then swap>
         swap_powers: list[SwapPower] = [SwapPower(None) for _ in range(len(Animal))]
         for i, animal in enumerate(Animal):
-            for j in range(1, 3):
+            # don't generate any universal matching chit cards
+            if animal == Animal.UNIVERSAL:
+                continue
+
+            for j in range(1, 4):
                 self.__chit_cards.append(AnimalChitCard(animal, j))
             self.__chit_cards.append(PirateChitCard(1 if i % 2 == 0 else 2))
-            self.__chit_cards.append(PowerChitCard(SkipTurnPower(self.__turn_manager, 2), "assets/chit_cards/chit_card_skip_2.png"))
-            self.__chit_cards.append(PowerChitCard(swap_powers[i], "assets/chit_cards/chit_card_swap.png"))
 
-        # game board
+            if i < 2:
+                skip_strength: int = (i % 2) + 1
+                self.__chit_cards.append(PowerChitCard(SkipTurnPower(self.__turn_manager, skip_strength), f"assets/chit_cards/chit_card_skip_{skip_strength}.png"))
+            else:
+                self.__chit_cards.append(PowerChitCard(swap_powers[i], "assets/chit_cards/chit_card_swap.png"))
+
+        # GAME BOARD
         self.__game_board = DefaultGameBoard(
             self.__main_tile_sequence,
             [

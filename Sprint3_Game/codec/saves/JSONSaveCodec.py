@@ -4,6 +4,7 @@ from codec.saves.JSONSavable import JSONSavable
 from codec.saves.SaveCodec import SaveCodec
 
 import json
+import os
 
 
 class JSONSaveCodec(SaveCodec[dict[str, Any]]):
@@ -53,16 +54,24 @@ class JSONSaveCodec(SaveCodec[dict[str, Any]]):
 
     def save(self) -> None:
         """Notify all registered saveables of a save occuring, and pass in a json like dictionary that saveables
-        can use to modify what will be written. Finally, save to the configured save path.
+        can use to modify what will be written. Finally, save to the configured save path, whilst creating any
+        directories that don't exist.
 
         Raises:
             Exception when the final state of the json like dictionary cannot be encoded
         """
+        save_directory_path: str = f"{ROOT_PATH}/{self._save_path}"
+
+        # notify saveables to save
         for saveable in self.__saveables:
             saveable.on_save(self.__json_dict)
 
+        # if save directory doesn't exist, create the directory
+        if not os.path.exists(save_directory_path):
+            os.makedirs(save_directory_path)
+
         # encode json dict as JSON and save as file to path
-        with open(f"{ROOT_PATH}/{self._save_path}/{self.SAVE_FILE_NAME}.json", "w") as fp:
+        with open(f"{save_directory_path}/{self.SAVE_FILE_NAME}.json", "w") as fp:
             try:
                 json.dump(self.__json_dict, fp, indent=4)
             except Exception as e:

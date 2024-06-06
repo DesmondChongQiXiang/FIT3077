@@ -2,7 +2,7 @@
 
 **Deliverables**
 - Sprint 4 Video demonstration
-- Sprint 4 Documentation
+- Sprint 4 Reflections
 - Sprint 4 Executable zip
 
 [**Click to Navigate**](./Sprint4_Deliverables)
